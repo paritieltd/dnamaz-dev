@@ -1,0 +1,132 @@
+.navbar {
+  height: 90px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.2rem;
+  position: fixed;
+  top: 0;
+  left: 50%;
+  z-index: 1000;
+  transform: translateX(-50%);
+}
+
+.navbar_logo {
+  justify-self: start;
+  padding: 1rem;
+  cursor: pointer;
+  text-decoration: none;
+  font-size: 2rem;
+}
+
+.nav_menu {
+  display: grid;
+  grid-template-columns: repeat(5, auto);
+  grid-gap: 10px;
+  list-style: none;
+  text-align: center;
+  width: 70vw;
+  justify-content: end;
+  margin-right: 2rem;
+}
+
+.nav_item {
+  display: flex;
+  align-items: center;
+  height: 80px;
+}
+
+.nav_links {
+  text-decoration: none;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.nav_links:hover {
+  color: #1d5506;
+  border-radius: 4px;
+  transition: all 0.2s ease-out;
+  font-weight: 800;
+}
+
+
+.nav_links_mobile {
+  display: none;
+}
+
+.menu_icon {
+  display: none;
+}
+
+@media screen and (max-width: 960px) {
+  .NavbarItems {
+    position: relative;
+  }
+
+  .nav_menu {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 100%;
+    height: 80vh;
+    position: absolute;
+    top: 140px;
+    left: -100%;
+    opacity: 1;
+    transition: all 0.5s ease;
+  }
+
+  .active {
+    background: #242222;
+    left: 0;
+    opacity: 1;
+    transition: all 0.5s ease;
+    z-index: 1;
+  }
+  .nav_item {
+    display: flex;
+    align-items: center;
+    width: 80%;
+    margin-inline: auto;
+    height: 80px;
+  }
+  .nav_links {
+    text-align: center;
+    padding: 2rem;
+    color: #fff;
+    width: 100%;
+    display: table;
+  }
+
+  .nav_links:hover {
+    background: #1d5506;
+    border-radius: 0;
+    color: #fff;
+  }
+
+  .navbar_logo {
+    position: absolute;
+    /* top: -12px; */
+    left: 0;
+    transform: translate(-5%, 10%);
+  }
+
+  .menu_icon {
+    display: block;
+    position: absolute;
+    top: 20px;
+    right: 0;
+    transform: translate(-40%, 50%);
+    font-size: 1.8rem;
+    cursor: pointer;
+  }
+
+
+  .nav_links_mobile:hover {
+    background: #fff;
+    color: #1888ff;
+    transition: 250ms;
+  }
+}

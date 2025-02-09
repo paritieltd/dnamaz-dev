@@ -1,0 +1,32 @@
+.areaImage {
+  box-shadow: -2px -90px 34px 6px rgba(2,0,0,1) inset;
+    -webkit-box-shadow: -2px -90px 34px 6px rgba(2,0,0,1) inset;
+    -moz-box-shadow: -2px -90px 34px 6px rgba(2,0,0,1) inset;
+}
+.articleImage {
+    box-shadow: -2px -90px 34px 6px rgba(29, 85, 6, 0.65) inset;
+    -webkit-box-shadow: -2px -90px 34px 6px rgba(29, 85, 6, 0.65) inset;
+    -moz-box-shadow: -2px -90px 34px 6px rgba(29, 85, 6, 0.65) inset;
+}
+
+.exp {
+  background: url('../../public/images/Integrity2.jpg');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+}
+
+.exp1 {
+  background: url(../../public/images/Business2.jpg);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+}
+
+.exp2 {
+  background: url(../../public/images/Digital2.jpg);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+}
+

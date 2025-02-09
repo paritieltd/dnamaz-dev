@@ -1,0 +1,19 @@
+.listItems:last-of-type{
+    border-bottom: 0 !important;
+}
+.listItems::before{
+    position: absolute;
+    top: 0;
+    left: -28px;
+    width: 8px;
+    height: 100%;
+    display: block;
+    background-color: transparent;
+    content: '';
+}
+
+
+.active::before{
+    background-color: #1D5506;
+
+}

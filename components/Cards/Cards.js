@@ -56,7 +56,7 @@ export const AdvertCard = ({ item, i, handleModalOpen }) => {
       <div
         className={`w-[85%] mx-[7.5%] h-[200px]  md:h-[30vw] lg:h-[35vw] cursor-pointer rounded-xl mt-8`}
       >
-        <img src={item.image} className="h-full w-full rounded-2xl" alt="" />
+        <img src={item.image} className="h-full w-full rounded-2xl object-cover" alt="" />
       </div>
       <div className="flex flex-col gap-2 lg:flex-row lg:gap-8 justify-center items-center my-4">
         <h2 className="font-bold text-center text-sm md:text-base lg:text-xl text-[#2C393F]">
@@ -64,7 +64,8 @@ export const AdvertCard = ({ item, i, handleModalOpen }) => {
         </h2>
         <motion.button whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
           <span
-            className="flex items-center justify-center space-x-3 transition-all px-3 py-1 md:px-6 md:py-2 rounded-xl duration-300  font-medium bg-primary hover:bg-white hover:text-primary hover:border border-primary text-white"
+          // md:px-6 md:py-2
+            className="flex items-center justify-center space-x-3 transition-all px-[92px] py-[24px]  rounded-xl duration-300  font-medium bg-primary hover:bg-white hover:text-primary hover:border border-primary text-white"
             onClick={handleModalOpen}
           >
             {item.button}

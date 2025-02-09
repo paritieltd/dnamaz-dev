@@ -185,17 +185,21 @@ const Card = () => {
   return (
     <div id="about" className="relative font-lex">
       <Modal isOpen={modalOpen} onClose={handleModalClose} />
-      <div className="relative px-2 bg-white shadow-lg rounded-xl mx-2 lg:mx-10 -mt-20 md:-mt-36 lg:-mt-48 xl:-mt-60 mb-20 z-40 border-2 py-20">
-        <Marquee direction="right" delay="2" gradient="false" gradientWidth={0}>
+      {/* md:mt-36 lg:mt-48 xl:mt-60 lg:mx-10*/}
+      {/* bg-[linear-gradient(to_right,#DDFFF7,#FAFFF8,#FAFFF8,#FBFFFA,#DDEFFF)] */}
+      {/* bg-[linear-gradient(to_bottom, rgba(255, 255, 255, 0.6), #fff)] */}
+      {/* bg-gradient-to-b from-[rgba(255, 255, 255, 0.6)]  to-[#fff]*/}
+      <div className="relative w-[90%] px-1 bg-gradient-to-b from-[#ffffff99] backdrop-blur-3xl to-[#fff] shadow-lg rounded-xl mx-auto  -mt-[20.5rem]   z-15 border-2 py-10">
+        {/* <Marquee direction="right" delay="2" gradient="false" gradientWidth={0}> */}
           <div className="hidden md:block">
-            <h2 className="text-center font-bold text-2xl md:text-5xl font-mont">
+            <h2 className="text-center font-extrabold text-2xl md:text-5xl font-mont">
               Creating Extraordinary Customer Experience.
             </h2>
-            <p className="text-center mt-3 text-xl font-mont">
+            <p className="text-center font-medium mt-3 text-xl font-mont">
               We Are a Shariah Compliant Fund Management Company
             </p>
           </div>
-        </Marquee>
+        {/* </Marquee>   */}
         <div className="block md:hidden px-6 md:px-0">
           <h2 className=" text-center font-bold text-2xl font-mont">
             Creating Extraordinary Customer Experience.
@@ -378,8 +382,11 @@ const Card = () => {
       </div>
       <div className="mt-20 md:mt-96 bg-white">
         <div className="flex justify-between items-center w-full md:mr-48">
-          <div className="w-1/2 hidden md:flex">
+        {/* hidden md:flex */}
+          <div className="w-1/2 hidden md:flex flex-col ">
             <img src="images/women.png" alt="women" />
+            {/* <div className="relative w-0 h-0 border-t-[100px] border-b-[100px] border-l-[100px] border-transparent block rotate-[14deg] -mt-[33rem] ml-[42rem] z-15 border-l-blue-500"></div> */}
+            {/* <div className=" relative z-15 bg-white w-[13em] h-[35em] block rotate-[14deg] rounded-br-[7em] -mt-[33rem] ml-[40rem]"></div> */}
           </div>
           <div className="md:max-w-sm grid gap-10  mx-auto py-10 md:py-0 px-5 md:px-0 md:text-left">
             <p className="text-2xl md:text-3xl font-lex font-bold">

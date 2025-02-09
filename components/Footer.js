@@ -41,7 +41,7 @@ const Footer = () => {
           </div>
         </div>
       </div>
-      <div className="bg-gradient-to-br from-[#2E9F00] to-[#F7BD01] h-8" />
+      <div className="bg-gradient-to-r from-[#2E9F00] to-[#F7BD01] h-8" />
       <div className=" pt-20 pb-10 px-5 md:px-20 bg-footer">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 text-white pb-12">
           <div className="">

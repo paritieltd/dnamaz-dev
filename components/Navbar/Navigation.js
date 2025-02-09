@@ -55,7 +55,7 @@ const Navigation = () => {
     <nav
       className={`${
         navBg && "bg-white z-50"
-      } flex items-center justify-between py-4 px-5 lg:px-20 font-semibold fixed w-full my-0`}
+      } flex items-center justify-between py-6 pt-6 px-5 lg:px-20 font-semibold fixed w-full my-0 z-20`}
     >
       <div className="flex w-full lg:w-auto justify-between items-center">
         <a href="/">
@@ -92,8 +92,8 @@ const Navigation = () => {
       </div>
 
       <ul className="hidden lg:flex items-center space-x-10 text-nav font-lex">
-        <li className="hover:font-extrabold hover:text-primary">
-          <Link href="/">Home</Link>
+        <li className="font-extrabold hover:text-primary">
+          <Link href="/" className=" cursor-pointer">Home</Link>
         </li>
         <li onMouseEnter={onMouseEnterAbout} onMouseLeave={onMouseLeaveAbout}>
           <div className={`!flex lg:block justify-center`}>
@@ -114,7 +114,7 @@ const Navigation = () => {
                   : ""
               }`}
             >
-              <span className="hover:font-extrabold hover:text-primary">
+              <span className="font-extrabold hover:text-primary cursor-pointer">
                 About
               </span>
               <span className={`${rotateCheveronAbout ? "-rotate-90" : ""}`}>
@@ -125,7 +125,7 @@ const Navigation = () => {
           {aboutDropdown && <Dropdown menuItems={AboutMenuItems} />}
         </li>
         <li onMouseEnter={onMouseEnterAFocus} onMouseLeave={onMouseLeaveFocus}>
-          <a className={`!flex lg:block justify-center`}>
+          <a className={`!flex lg:block justify-center `}>
             <div
               className={`flex items-center ${
                 router.pathname === "/our-focus/portfolio"
@@ -145,7 +145,7 @@ const Navigation = () => {
                   : ""
               }`}
             >
-              <span className="hover:font-extrabold hover:text-primary">
+              <span className="font-extrabold hover:text-primary cursor-pointer">
                 Our Focus{" "}
               </span>
               <span className={`${rotateCheveronFocus ? "-rotate-90" : ""}`}>
@@ -160,7 +160,7 @@ const Navigation = () => {
             />
           )}
         </li>
-        <li className="hover:font-extrabold hover:text-primary">
+        <li className="font-extrabold hover:text-primary">
           <Link href="/blog">Blog</Link>
         </li>
         <li>

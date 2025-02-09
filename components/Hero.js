@@ -8,12 +8,12 @@ import Image from "next/image";
 
 const  Hero = () => {
   const router = useRouter();
-  console.log("This component is working");
+  // console.log("This component is working");
   
     return (
       <div id="home">
-        <div className="flex justify-center text-center z-10 h-full px-10 lg:px-0">
-          <div>
+        <div className=" relative flex justify-center text-center z-10 h-full px-10 lg:px-0 pt-14">
+          <div className=" relative z-10 ">
             <p className="text-2xl md:text-7xl text-gray-800 font-lato font-bold leading-snug mt-44">
               <span>
                 Earn More... <br />
@@ -30,17 +30,21 @@ const  Hero = () => {
             </a>
           </div>
         </div>
-        <div className="flex justify-between relative w-full">
-          <div className="w-[30%]">
+        {/* relative */}
+        <div className=" relative flex justify-between items-center gap-4 -mt-40 w-full z-0  ">
+          <div className=" relative w-[35%]  -ml-[4.5rem] z-10">
             <Image
-              src="/images/cash.png"
+              src="/images/walletCash.png"
               alt="cash"
-              layout="fill"
-              // width={"100%"} 
-              className="w-[100%] h-fit z-10"
+              // layout="fill"
+              width={700} 
+              height={700}
+              // bg-slate-500
+              className="object-contain "
             />
           </div>
-          <div className="mt-10 lg:mt-44 xl:mt-88">
+          {/* mt-10 lg:mt-44 xl:mt-88 relative bg-slate-100 bg-slate-800 text-[#322E29]/30*/}
+          <div className=" relative w-[10%] z-10">
             <p className="font-normal text-center font-Lex text-sm md:font-medium md:text-sm lg:text-sm xl:text-sm mb-1 text-[#322E29]/30">
               Follow us for more
             </p>
@@ -59,12 +63,17 @@ const  Hero = () => {
               </a>
             </div>
           </div>
-          <div className="w-[30%] relative">
+          {/* mt-10 lg:mt-44 xl:mt-88 relative*/}
+          {/* bg-slate-50 */}
+          <div className=" relative w-[35%] z-10 -mr-[9.5rem] ">
             <Image
-              src="/images/halalstamp.png"
+              src="/images/halalImage.png"
               alt="stamp"
-              layout="fill"
-              className="w-[80%] h-fit z-10 absolute right-0"
+           // layout="fill"
+           width={700} 
+           height={700}
+          //  bg-slate-600
+           className="object-contain right-0 "
             />
           </div>
         </div>

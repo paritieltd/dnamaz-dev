@@ -31,8 +31,8 @@ const  Hero = () => {
           </div>
         </div>
         {/* relative */}
-        <div className=" relative flex justify-between items-center gap-4 -mt-40 w-full z-0  ">
-          <div className=" relative w-[35%]  -ml-[4.5rem] z-10">
+        <div className=" relative flex justify-between items-center gap-4 lg:-mt-40 w-full z-0  ">
+          <div className=" relative w-[35%]   lg:-ml-[4.5rem] z-10">
             <Image
               src="/images/walletCash.png"
               alt="cash"
@@ -44,7 +44,7 @@ const  Hero = () => {
             />
           </div>
           {/* mt-10 lg:mt-44 xl:mt-88 relative bg-slate-100 bg-slate-800 text-[#322E29]/30*/}
-          <div className=" relative w-[10%] z-10">
+          <div className=" relative lg:w-[10%] z-10">
             <p className="font-normal text-center font-Lex text-sm md:font-medium md:text-sm lg:text-sm xl:text-sm mb-1 text-[#322E29]/30">
               Follow us for more
             </p>
@@ -65,7 +65,7 @@ const  Hero = () => {
           </div>
           {/* mt-10 lg:mt-44 xl:mt-88 relative*/}
           {/* bg-slate-50 */}
-          <div className=" relative w-[35%] z-10 -mr-[9.5rem] ">
+          <div className=" relative w-[35%] z-10 lg:-mr-[9.5rem] ">
             <Image
               src="/images/halalImage.png"
               alt="stamp"

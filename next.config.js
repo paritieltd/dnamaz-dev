@@ -10,4 +10,8 @@ module.exports = {
     // your project has ESLint errors.
     ignoreDuringBuilds: true,
   },
+  webpack: (config) => {
+    console.log(config); // Debugging Webpack config
+    return config;
+  },
 };

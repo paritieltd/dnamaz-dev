@@ -366,7 +366,7 @@ const CorporateInvestee = () => {
                         placeholder="Bank Verfication Number"
                         value={bvn}
                         onChange={(e) => {
-                          console.log(e);
+                          // console.log(e);
                           setErrorMsg("");
                           setFormData((prev) => ({
                             ...prev,

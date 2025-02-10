@@ -31,6 +31,7 @@ const Card = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [threeBlog, setAllBlog] = useState(null);
   const [activeIndex, setActiveIndex] = useState(0);
+  const API_ENABLED = false;
 
   useEffect(() => {
     AOS.init({ duration: 2000 });
@@ -49,13 +50,26 @@ const Card = () => {
   };
 
   useEffect(() => {
+    if(!API_ENABLED) return;
     async function fetchBlog() {
-      const response = await axios.get(
-        `https://dnamazcapital.blog/wp-json/wp/v2/blog?per_page=3`
-      );
-      setAllBlog(response.data);
+      try {
+        const controller = new AbortController();
+        const response = await axios.get(
+          `https://dnamazcapital.blog/wp-json/wp/v2/blog?per_page=3`
+        );
+        setAllBlog(response.data);
+        
+      } catch (error) {
+        // console.error("Error fetching blog data:", error.message);
+        if (error.name !== "AbortError") {
+          console.error("Error fetching blog data:", error.message);
+          setAllBlog(null); 
+        // setAllBlog([]);
+      }
+      }
     }
     fetchBlog();
+    return () => controller.abort();
   }, []);
 
   // if (!threeBlog) {
@@ -416,17 +430,27 @@ const Card = () => {
         <div className="mt-4 md:flex flex-col">
           <div className="my-8 hidden md:flex rounded-2xl">
             <Slider {...readmeSettings} className="mx-2">
-              {threeBlog?.map((oneBlog, i) => (
+            {threeBlog && threeBlog.length > 0 ? (
+              threeBlog.map((oneBlog, i) => <ArticleCard key={i} {...oneBlog} />)
+                ) : (
+                     ""
+                        )}
+              {/* {threeBlog?.map((oneBlog, i) => (
                 <ExclusiveVideo key={i} {...oneBlog} />
-              ))}
+              ))} */}
             </Slider>
           </div>
           {/* small screens */}
           <div className="md:hidden overflow-hidden rounded-2xl">
             <Slider {...settings}>
-              {threeBlog?.map((oneBlog, i) => (
+            {threeBlog && threeBlog.length > 0 ? (
+              threeBlog.map((oneBlog, i) => <ArticleCard key={i} {...oneBlog} />)
+                ) : (
+                     ""
+                        )}
+              {/* {threeBlog?.map((oneBlog, i) => (
                 <ArticleCard key={i} {...oneBlog} />
-              ))}
+              ))} */}
             </Slider>
           </div>
           <div

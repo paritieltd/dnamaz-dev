@@ -101,7 +101,9 @@ export const ArticleCard = ({
   featured_media,
 }) => {
   const [image, setImage] = useState(null);
+  const API_ENABLED = false;
   useEffect(() => {
+    if (!API_ENABLED) return;
     async function fetchMedia() {
       const mediaResponse = await axios.get(
         `https://dnamazcapital.blog/wp-json/wp/v2/media/${featured_media}`
@@ -113,8 +115,9 @@ export const ArticleCard = ({
   }, [featured_media]);
   const router = useRouter();
 
-  if (!image) {
-    return <div>Loading...</div>;
+  if (!API_ENABLED || !image) {
+    return null
+    // return <div>Loading...</div>;
   }
 
   const { media_details, alt_text } = image;
@@ -132,7 +135,7 @@ export const ArticleCard = ({
         onClick={() => router.push(`/blog/${id}`)}
       >
         <div className={`relative w-full h-full`}>
-          <img src={imageUrl} className="w-full h-full" alt={alt_text} />
+          {/* <img src={imageUrl} className="w-full h-full" alt={alt_text} /> */}
           <div className="absolute bottom-4  mx-auto text-white px-3 z-10">
             <div className="z-10">
               <div className="flex justify-between mb-2">
@@ -169,8 +172,10 @@ export const BlogPostCard = ({
   featured_media,
 }) => {
   const [image, setImage] = useState(null);
+  const API_ENABLED = false;
 
   useEffect(() => {
+    if (!API_ENABLED) return;
     async function fetchMedia() {
       const mediaResponse = await axios.get(
         `https://dnamazcapital.blog/wp-json/wp/v2/media/${featured_media}`
@@ -181,10 +186,12 @@ export const BlogPostCard = ({
     fetchMedia();
   }, [featured_media]);
   const router = useRouter();
-
-  if (!image) {
-    return <div>Loading...</div>;
+  if (!API_ENABLED || !image) {
+    return null; // Prevent rendering
   }
+  // if (!image) {
+  //   return <div>Loading...</div>;
+  // }
 
   const { media_details, alt_text } = image;
   const imageUrl = media_details.sizes.full.source_url;
@@ -197,7 +204,7 @@ export const BlogPostCard = ({
 
   return (
     <div className="max-h-[500px] mb-8 mr-4 rounded">
-      <img src={imageUrl} className="w-full h-[250px]" alt={alt_text} />
+      {/* <img src={imageUrl} className="w-full h-[250px]" alt={alt_text} /> */}
       <div className="mt-5 ml-3 sm:ml-0">
         <div>
           <span className="text-[#010206] font-bold">{title.rendered}</span>
@@ -229,7 +236,9 @@ export const ExclusiveVideo = ({
   featured_media,
 }) => {
   const [image, setImage] = useState(null);
+  const API_ENABLED = false;
   useEffect(() => {
+    if (!API_ENABLED) return;
     async function fetchMedia() {
       const mediaResponse = await axios.get(
         `https://dnamazcapital.blog/wp-json/wp/v2/media/${featured_media}`
@@ -240,10 +249,12 @@ export const ExclusiveVideo = ({
     fetchMedia();
   }, [featured_media]);
   const router = useRouter();
-
-  if (!image) {
-    return <div>Loading...</div>;
+  if (!API_ENABLED || !image) {
+    return null; // Prevent rendering
   }
+  // if (!image) {
+  //   return <div>Loading...</div>;
+  // }
 
   const { media_details, alt_text } = image;
   const imageUrl = media_details.sizes.full.source_url;
@@ -259,11 +270,11 @@ export const ExclusiveVideo = ({
       onClick={() => router.push(`/blog/${id}`)}
     >
       <div className={`relative w-full h-full rounded-lg`}>
-        <img
+        {/* <img
           src={imageUrl}
           alt={alt_text}
           className="md:w-[50vw] md:h-[40vw] lg:w-[40vw] lg:h-[25vw] rounded-lg"
-        />
+        /> */}
         <div className="absolute bottom-4 mx-auto text-white px-3 z-10 rounded-lg w-full font-Lex">
           <div className="z-10">
             <div className="flex justify-between mb-2">

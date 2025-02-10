@@ -14,15 +14,15 @@ const Footer = () => {
   const router = useRouter();
   return (
     <footer className="">
-      <div id="contact" className="max-lg:py-6">
-        <div className="relative text-gray-200 ">
-          <div className="h-10 max-lg:h-16 bg-primary" />
+      <div id="contact">
+        <div className="relative text-gray-200">
+          <div className="h-10 bg-primary" />
           <img
             src="images/rukayya.png"
             alt="woman"
             className="relative hidden md:flex"
           />
-          <div className="relative bg-footer md:bg-transparent  md:absolute md:inset-x-0 py-5 md:py-0 px-5 md:px-0 md:top-5 md:left-40 lg:left-52 max-w-full h-full md:max-w-2xl">
+          <div className="relative bg-footer md:bg-transparent md:absolute md:inset-x-0 py-5 md:py-0 px-5 md:px-0 md:top-5 md:left-40 lg:left-52 max-w-full h-full md:max-w-2xl">
             <p className="text-4xl lg:text-5xl xl:text-6xl leading-tight font-bold font-lex md:mt-5 lg:mt-20">
               Subscribe to Our <br />
               Newsletter

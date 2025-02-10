@@ -15,9 +15,13 @@ const Blog = () => {
   const router = useRouter();
   const [allBlog, setAllBlog] = useState(null);
   const [pageNumber, setPageNumber] = useState(0);
+  const API_ENABLED = false;
 
   useEffect(() => {
+    if (!API_ENABLED) return;
     async function fetchBlog() {
+
+
       const response = await axios.get(
         `https://dnamazcapital.blog/wp-json/wp/v2/blog`
       );
@@ -26,10 +30,11 @@ const Blog = () => {
     fetchBlog();
   }, []);
 
-  if (!allBlog) {
-    return <div></div>;
+  if (!allBlog || !API_ENABLED) {
+    // return <div></div>;
+    return null;
   }
-  console.log(allBlog);
+  // console.log(allBlog);
   {
     /* slider*/
   }
@@ -66,11 +71,12 @@ const Blog = () => {
   }
   const articlePerPage = 6;
   const articlePassed = articlePerPage * pageNumber;
-  const displayArticles = allBlog
-    .slice(articlePassed, articlePassed + articlePerPage)
+  const displayArticles = 
+  API_ENABLED && allBlog?
+    allBlog.slice(articlePassed, articlePassed + articlePerPage)
     .map((blog, i) => {
       return <BlogPostCard key={i} {...blog} />;
-    });
+    }): null;
   const pageCount = Math.ceil(allBlog.length / articlePerPage);
 
   const pageChange = ({ selected }) => {
@@ -107,7 +113,7 @@ const Blog = () => {
           <div className="mt-10 hidden md:grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-10 ">
             {displayArticles}{" "}
           </div>
-          {allBlog.length > articlePerPage ? (
+          {API_ENABLED && allBlog && allBlog.length > articlePerPage ? (
           <ReactPaginate
             breakLabel="..."
             nextLabel={<FaArrowAltCircleRight size={30}/>}
@@ -125,9 +131,12 @@ const Blog = () => {
           {/* Small Screens */}
           <div className="mt-10 md:hidden overflow-hidden lg:mx-28">
             <Slider {...settings}>
-              {allBlog.map((blog, i) => (
+            {API_ENABLED && allBlog ? (
+          allBlog.map((blog, i) => <BlogPostCard key={i} {...blog} />)
+              ) : null}
+              {/* {allBlog.map((blog, i) => (
                 <BlogPostCard key={i} {...blog} />
-              ))}
+              ))} */}
             </Slider>
           </div>
         </div>

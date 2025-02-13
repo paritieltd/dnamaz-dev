@@ -34,12 +34,13 @@ const  Hero = () => {
         <div className=" relative flex justify-between items-center lg:gap-4 lg:-mt-40 w-full z-0  ">
           <div className=" relative w-[35%]  lg:-ml-[4.5rem] max-sm:-ml-[1.5rem] max-md:-ml-[1.5rem] z-10">
             <Image
-              src="/images/walletCash.png"
+              src="/images/walletCashtinio.png"
               alt="cash"
               // layout="fill"
               width={700} 
               height={700}
               // bg-slate-500
+              loading="eager"
               className="object-contain "
             />
           </div>
@@ -72,6 +73,7 @@ const  Hero = () => {
            // layout="fill"
            width={700} 
            height={700}
+           loading="eager"
           //  bg-slate-600
            className="object-contain right-0 "
             />

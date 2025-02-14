@@ -18,6 +18,7 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Slider from "react-slick";
 import { ExclusiveVideo } from "./Cards/Cards";
+// import Image from "next/image";
 import { ArticleCard } from "./Cards/Cards";
 import Marquee from "react-fast-marquee";
 import { AreaFocusCard } from "./Cards/Cards";

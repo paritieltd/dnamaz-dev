@@ -41,6 +41,7 @@ const  Hero = () => {
               height={700}
               // bg-slate-500
               loading="eager"
+              priority
               className="object-contain "
             />
           </div>
@@ -74,6 +75,7 @@ const  Hero = () => {
            width={700} 
            height={700}
            loading="eager"
+           priority
           //  bg-slate-600
            className="object-contain right-0 "
             />

@@ -59,7 +59,7 @@ export const boardMembers = [
       in Tax advisory and compliance, Accounting as well as analysis and interpretation of financial statements.
       `,
       `Nasir Mahmud holds a Bachelor’s Degree in Accounting from Bayero University, Kano State. He is also a 
-      student member of Association of Chartered Certified Accountants (ACCA, UK) and Chartered Institute of Forensic and
+       member of Association of Chartered Certified Accountants (ACCA, UK) and Chartered Institute of Forensic and
        Investigative Professionals of Nigeria.`,
     ],
   },

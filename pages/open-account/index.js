@@ -67,7 +67,7 @@ const OpenAccount = () => {
               date of upload).
             </p>
           </div>
-          <h1 className="mt-20">Dnamaz Capital Halal Fixed funds [<a href="/forms/DHFIF APPLICATION FORM.pdf" download={'DHFIF APPLICATION FORM'} className="text-custom-primary">Apply Here</a>]</h1>
+          <h1 className="mt-20">Dnamaz Capital Halal Fixed funds <a href="/forms/DHFIF APPLICATION FORM.pdf" download={'DHFIF APPLICATION FORM'} className="hover:bg-custom-primary hover:text-white transition-all duration-500 text-custom-primary max-sm:text-center max-sm:block font-semibold border border-custom-primary py-4 h-16 w-full sm:w-[unset] sm:px-20 ">Apply Here</a></h1>
           <h5 className="font-semibold mt-20">
             Select interested account opening form to fill the online form
           </h5>

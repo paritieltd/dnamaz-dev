@@ -8,14 +8,16 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { FaChevronDown, FaTimes } from "react-icons/fa";
 import Dropdown from "../Dropdown/Dropdown";
-import { AboutMenuItems, FocusMenuItems } from "../Dropdown/DropdownItems";
+import { AboutMenuItems, FocusMenuItems,ProductMenuItems } from "../Dropdown/DropdownItems";
 
 const Navigation = () => {
   const [navbarOpen, setNavbarOpen] = useState(false);
   const [rotateCheveronAbout, setRotateCheveronAbout] = useState(false);
   const [rotateCheveronFocus, setRotateCheveronFocus] = useState(false);
+  const [rotateCheveronProduct, setRotateCheveronProduct] = useState(false);
   const [aboutDropdown, setAboutDropdown] = useState(false);
   const [focusDropdown, setFocusDropdown] = useState(false);
+  const [productDropdown, setProductDropdown] = useState(false);
   const [navBg, setNavBg] = useState(false);
   const router = useRouter();
 
@@ -34,6 +36,10 @@ const Navigation = () => {
     setFocusDropdown(true);
     setRotateCheveronFocus(true);
   };
+  const onMouseEnterProduct=()=>{
+    setProductDropdown(true);
+    setRotateCheveronProduct(true);
+  }
 
   const onMouseLeaveAbout = () => {
     setAboutDropdown(false);
@@ -44,7 +50,10 @@ const Navigation = () => {
     setFocusDropdown(false);
     setRotateCheveronFocus(false);
   };
-
+  const onMouseLeaveProduct=()=>{
+    setProductDropdown(false);
+    setRotateCheveronProduct(false);
+  }
   useEffect(() => {
     window.addEventListener("scroll", changeNavBg);
     return () => {
@@ -140,8 +149,8 @@ const Navigation = () => {
                   ? "text-[#1D5506] !font-extrabold"
                   : router.pathname === "/our-focus/research"
                   ? "text-[#1D5506] !font-extrabold"
-                  : router.pathname === "/our-focus/training"
-                  ? "text-[#1D5506] !font-extrabold"
+                  // : router.pathname === "/our-focus/training"
+                  // ? "text-[#1D5506] !font-extrabold"
                   : ""
               }`}
             >
@@ -160,8 +169,28 @@ const Navigation = () => {
             />
           )}
         </li>
-        <li className="font-extrabold hover:text-primary">
-          <Link href="/blog">Blog</Link>
+        {/* <li className="font-extrabold hover:text-primary"> */}
+        <li onMouseEnter={onMouseEnterProduct} onMouseLeave={onMouseLeaveProduct}>
+          <div className={`!flex lg:block justify-center`}>
+            <div
+            className={`flex items-center ${
+              router.pathname === "/Dnamaz-capital"
+              ? "text-[#1D5506] !font-extrabold"
+              : router.pathname === "/open-account"
+              ? "text-[#1D5506] !font-extrabold"
+              :""
+            }`}
+            >
+            <span className="font-extrabold hover:text-primary cursor-pointer">
+            Our Product
+              </span>
+              <span className={`${rotateCheveronProduct ? "-rotate-90" : ""}`}>
+                <RiArrowDropDownLine className="w-8 h-auto" />
+              </span>
+            </div>
+          </div>
+          {/* <Link href="/blog"></Link> */}
+          {productDropdown && <Dropdown menuItems={ProductMenuItems} />}
         </li>
         <li>
           <Link href="/contact">
@@ -257,7 +286,7 @@ const Navigation = () => {
               )}
             </li>
             <li className="hover:font-extrabold">
-              <Link href="/blog">Blog</Link>
+              <Link href="/blog">Our Product</Link>
             </li>
             <li className="flex w-full">
               <Link href="/contact">

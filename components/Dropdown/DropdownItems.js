@@ -24,7 +24,7 @@ export const AboutMenuItems = [
       path: '/about/funding-profiles',
     },
   ];
-  export const FocusMenuItems = [
+export const FocusMenuItems = [
     {
       title: 'Portfolio/Fund Management',
       path: '/our-focus/portfolio',
@@ -49,8 +49,20 @@ export const AboutMenuItems = [
       title: 'Wealth Management & Financial Planning',
       path: '/our-focus/wealth-management',
     },
-    {
-      title: 'Training and Conferences',
-      path: '/our-focus/training',
-    },
+    // {
+    //   title: 'Training and Conferences',
+    //   path: '/our-focus/training',
+    // },
   ];
+export const ProductMenuItems =[
+  {
+    title : "D'Namaz Capital Halal Fixed Income Fund",
+    path: "/Dnamaz-capital"
+  },
+  {
+    title: "Account opening",
+    path : "/open-account"
+  }
+]
+
+

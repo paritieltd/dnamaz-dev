@@ -36,7 +36,7 @@ const Contact = () => {
                     <PhoneIcon />
                   </div>
                   <span className="font-medium text-xl sm:text-2xl">
-                    +234 916 444 1444
+                    <a href="tel:+234 916 444 1444">+234 916 444 1444</a>
                   </span>
                 </div>
                 <div className="mt-6 flex  space-x-5 sm:space-x-10">
@@ -45,13 +45,13 @@ const Contact = () => {
                   </div>
                   <span className="font-medium text-lg sm:text-2xl">
                     <span className="block mb-1">
-                      enquires@dnamazcapital.com
+                      <a href="mailto:enquiries@dnamazcapital.com">enquiries@dnamazcapital.com</a>
                     </span>
-                    <span className="block">or dnamazcapital@gmail.com</span>
+                    {/* <span className="block">or dnamazcapital@gmail.com</span> */}
                   </span>
                 </div>
                 <div className="flex space-x-4">
-                  <div className="hover:bg-[#1D5506] h-[60px] w-[60px] rounded-full flex justify-center items-center">
+                  <div className="hover:bg-[#1D5506] hover:text-white h-[60px] w-[60px] rounded-full flex justify-center items-center">
                     <a
                       className="hover:text-white"
                       href="https://www.facebook.com/DnamazCapital"
@@ -61,9 +61,9 @@ const Contact = () => {
                       <FacebookIcon />
                     </a>
                   </div>
-                  <div className="hover:bg-[#1D5506] h-[60px] w-[60px] rounded-full flex justify-center items-center">
+                  <div className="hover:bg-[#1D5506] hover:text-white h-[60px] w-[60px] rounded-full flex justify-center items-center">
                     <a
-                      className="underline hover:text-white"
+                      className="underline "
                       href="https://www.instagram.com/dnamazcapital/"
                       target="_blank"
                       rel="noopener noreferrer"
@@ -74,16 +74,16 @@ const Contact = () => {
                   <div className="hover:bg-[#1D5506] hover:text-white h-[60px] w-[60px] rounded-full flex justify-center items-center">
                     <a
                       className="underline hover:text-white"
-                      href="https://twitter.com/d_namazcapital"
+                      href="https://twitter.com/dnamazcapital"
                       target="_blank"
                       rel="noopener noreferrer"
                     >
                       <TwitterIcon />
                     </a>
                   </div>
-                  <div className="hover:bg-[#1D5506] h-[60px] w-[60px] rounded-full flex justify-center items-center">
+                  <div className="hover:bg-[#1D5506] hover:text-white h-[60px] w-[60px] rounded-full flex justify-center items-center">
                     <a
-                      className="underline hover:text-white"
+                      className="underline "
                       href="https://www.linkedin.com/company/d-namaz-capital-limited/"
                       target="_blank"
                       rel="noopener noreferrer"

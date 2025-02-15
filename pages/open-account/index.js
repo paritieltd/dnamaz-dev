@@ -46,8 +46,31 @@ const OpenAccount = () => {
             <p>Back</p>
           </div>
         </div>
-        <section className="max-w-[1100px] mt-10 sm:mt-5 mx-auto px-5 sm:px-10 text-base md:text-xl pb-16">
-          <h4 className="text-[36px] text-center my-5 mb-10 font-bold text-custom-primary">
+        <input type="hidden" id="dnamazCapital"/>
+        <section id="dnamazCapital" className=" w-[70%] text-center mx-auto lg:py-[10rem] ">
+          <h4 className="lg:text-[36px] max-sm:text-[20px] text-center my-5 mb-10 font-bold text-custom-primary">D'Namaz Capital Halal Fixed Income Fund</h4>
+          <div className=" flex max-sm:flex-col max-sm:gap-4 lg:w-[90%] lg:mx-auto items-center justify-between">
+          <button
+          className="hover:bg-custom-primary hover:text-white transition-all duration-500 text-custom-primary font-semibold border border-custom-primary h-16 w-full sm:w-[unset] sm:px-20 "
+          onClick={() => {
+            router.push("open-account/halal-fixed")
+            // console.log("hey");
+          }}
+          >Apply Here Online</button> 
+          {/* <p>or</p> */}
+          <button 
+          className="hover:bg-custom-primary hover:text-white transition-all duration-500 text-custom-primary font-semibold border border-custom-primary h-16 w-full sm:w-[unset] sm:px-20 "
+          onClick={() => {
+            router.push("open-account/downloadreupload")
+            // console.log("hey");
+          }}
+          >Download and Re-upload Application Form</button>
+          </div>
+        </section>
+            {/* <input type="hidden" id="accountOpening"/> */}
+          {/* <h1 className="mt-20">Dnamaz Capital Halal Fixed funds <a href="/forms/DHFIF APPLICATION FORM.pdf" download={'DHFIF APPLICATION FORM'} className="hover:bg-custom-primary hover:text-white transition-all duration-500 text-custom-primary max-sm:text-center max-sm:block font-semibold border border-custom-primary py-4 h-16 w-full sm:w-[unset] sm:px-20 ">Apply Here</a></h1> */}
+        <section id="accountOpening" className="max-w-[1100px] mt-10 sm:mt-5 mx-auto px-5 sm:px-10 text-base md:text-xl pb-16">
+          <h4 className="lg:text-[36px] max-sm:text-[20px] text-center my-8 mb-10 font-bold text-custom-primary">
           Account Opening Form Guide
           </h4>
           <div>
@@ -67,7 +90,6 @@ const OpenAccount = () => {
               date of upload).
             </p>
           </div>
-          <h1 className="mt-20">Dnamaz Capital Halal Fixed funds <a href="/forms/DHFIF APPLICATION FORM.pdf" download={'DHFIF APPLICATION FORM'} className="hover:bg-custom-primary hover:text-white transition-all duration-500 text-custom-primary max-sm:text-center max-sm:block font-semibold border border-custom-primary py-4 h-16 w-full sm:w-[unset] sm:px-20 ">Apply Here</a></h1>
           <h5 className="font-semibold mt-20">
             Select interested account opening form to fill the online form
           </h5>

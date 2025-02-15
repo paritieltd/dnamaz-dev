@@ -46,7 +46,6 @@ const OpenAccount = () => {
             <p>Back</p>
           </div>
         </div>
-        <input type="hidden" id="dnamazCapital"/>
         <section id="dnamazCapital" className=" w-[70%] text-center mx-auto lg:py-[10rem] ">
           <h4 className="lg:text-[36px] max-sm:text-[20px] text-center my-5 mb-10 font-bold text-custom-primary">D'Namaz Capital Halal Fixed Income Fund</h4>
           <div className=" flex max-sm:flex-col max-sm:gap-4 lg:w-[90%] lg:mx-auto items-center justify-between">

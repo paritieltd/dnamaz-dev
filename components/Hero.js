@@ -3,6 +3,7 @@ import Button from "./Button";
 // import CashWallet from "../public/images/cash.png"
 // import HalalStamp from "../public/images/halal.png"
 import { FaFacebook, FaInstagramSquare, FaLinkedinIn, FaTwitter } from "react-icons/fa"
+import { FaXTwitter } from "react-icons/fa6";
 import { useRouter } from "next/router";
 import Image from "next/image";
 
@@ -57,7 +58,7 @@ const  Hero = () => {
                 <FaInstagramSquare className="text-sm lg:text-base xl:text-xl hover:text-primary" />
               </a>
               <a href="https://twitter.com/d_namazcapital">
-                <FaTwitter className="text-sm lg:text-base xl:text-xl hover:text-primary" />
+                <FaXTwitter className="text-sm lg:text-base xl:text-xl hover:text-primary" />
               </a>
               <a href="https://www.linkedin.com/company/d-namaz-capital-limited/">
                 <FaLinkedinIn className="text-sm lg:text-base xl:text-xl hover:text-primary" />

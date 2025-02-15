@@ -15,13 +15,14 @@ const  Hero = () => {
       <div id="home">
         <div className=" relative flex justify-center text-center z-10 h-full px-10 lg:px-0 pt-14">
           <div className=" relative z-10 ">
-            <p className="text-2xl md:text-7xl text-gray-800 font-lato font-bold leading-snug mt-44">
-              <span>
-                Earn More... <br />
+            <p className="text-2xl md:text-7xl  text-gray-800 font-lato font-bold leading-snug mt-44">
+              <span className="">
+              Be intentional.<br />
               </span>{" "}
-              <span>The </span>
-              <span className="text-primary">Ethical & Halal</span>{" "}
-              <span>More.</span>
+              <span className="text-primary">Halal investment</span>
+              <span> just for you</span>
+              {/* <span className="text-primary">Ethical & Halal</span>{" "}
+              <span>More.</span> */}
             </p>
             <p className="mt-4 md:mt-8 max-w-xl mx-auto text-lg md:text-2xl">
               Tailored to every investor's current and future wealth aspiration.
@@ -42,6 +43,7 @@ const  Hero = () => {
               height={700}
               // bg-slate-500
               loading="eager"
+              priority
               className="object-contain "
             />
           </div>
@@ -57,7 +59,7 @@ const  Hero = () => {
               <a href="https://www.instagram.com/dnamazcapital/">
                 <FaInstagramSquare className="text-sm lg:text-base xl:text-xl hover:text-primary" />
               </a>
-              <a href="https://twitter.com/d_namazcapital">
+              <a href="https://twitter.com/dnamazcapital">
                 <FaXTwitter className="text-sm lg:text-base xl:text-xl hover:text-primary" />
               </a>
               <a href="https://www.linkedin.com/company/d-namaz-capital-limited/">
@@ -75,6 +77,7 @@ const  Hero = () => {
            width={700} 
            height={700}
            loading="eager"
+           priority
           //  bg-slate-600
            className="object-contain right-0 "
             />

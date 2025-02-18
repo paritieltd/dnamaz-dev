@@ -57,11 +57,11 @@ export const FocusMenuItems = [
 export const ProductMenuItems =[
   {
     title : "D'Namaz Capital Halal Fixed Income Fund",
-    path: "/Dnamaz-capital"
+    path: "/open-account#dnamazCapital"
   },
   {
     title: "Account opening",
-    path : "/open-account"
+    path : "/open-account#accountOpening"
   }
 ]
 

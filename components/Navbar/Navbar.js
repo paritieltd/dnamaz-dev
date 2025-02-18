@@ -194,9 +194,9 @@ function Navbar() {
                 <div className={`!flex lg:block justify-center ${styles.nav_links}`}>
                   <div
             className={`flex items-center space-x-1 ${
-              router.pathname === "/Dnamaz-capital"
+              router.pathname === "/open-account#dnamazCapital"
               ? "text-[#1D5506] !font-extrabold"
-              : router.pathname === "/open-account"
+              : router.pathname === "/open-account#accountOpening"
               ? "text-[#1D5506] !font-extrabold"
               :""
             }`}
@@ -209,7 +209,6 @@ function Navbar() {
               </span>
             </div>
           </div>
-          {/* <Link href="/blog"></Link> */}
           {productDropdown && <Dropdown menuItems={ProductMenuItems} />}
         </li>
                 {/* Our Product */}

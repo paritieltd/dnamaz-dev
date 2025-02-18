@@ -7,6 +7,8 @@ import {
   FaLinkedinIn,
   FaTwitter,
 } from "react-icons/fa";
+import { FaXTwitter } from "react-icons/fa6";
+
 import Button from "./Button";
 
 
@@ -21,6 +23,7 @@ const Footer = () => {
             src="images/rukayya.png"
             alt="woman"
             className="relative hidden md:flex"
+            
           />
           <div className="relative bg-footer md:bg-transparent md:absolute md:inset-x-0 py-5 md:py-0 px-5 md:px-0 md:top-5 md:left-40 lg:left-52 max-w-full h-full md:max-w-2xl">
             <p className="text-4xl lg:text-5xl xl:text-6xl leading-tight font-bold font-lex md:mt-5 lg:mt-20">
@@ -51,8 +54,8 @@ const Footer = () => {
               Shodeinde Street, <br />
               Central Business District, Fct-Abuja.
             </p>
-            <span className="block my-2">enquires@dnamazcapital.com</span>
-            <span className="block mb-2">+234 916 444 1444</span>
+            <span className="block my-2"><a href="mailto:enquiries@dnamazcapital.com">enquiries@dnamazcapital.com</a></span>
+            <span className="block mb-2"><a href="tel:+234 916 444 1444">+234 916 444 1444</a></span>
           </div>
           <div className="">
             <h2 className="text-xl font-bold mb-6 font-lex">Other Links</h2>
@@ -88,7 +91,7 @@ const Footer = () => {
               </div>
               <div className="">
                 <a href="https://twitter.com/d_namazcapital">
-                  <FaTwitter className="text-sm lg:text-base xl:text-xl" />
+                  <FaXTwitter className="text-sm lg:text-base xl:text-xl" />
                 </a>
               </div>
               <div className="">

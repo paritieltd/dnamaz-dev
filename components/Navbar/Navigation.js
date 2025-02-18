@@ -174,9 +174,9 @@ const Navigation = () => {
           <div className={`!flex lg:block justify-center`}>
             <div
             className={`flex items-center ${
-              router.pathname === "/Dnamaz-capital"
+              router.pathname === "/open-account#dnamazCapital"
               ? "text-[#1D5506] !font-extrabold"
-              : router.pathname === "/open-account"
+              : router.pathname === "/open-account#accountOpening"
               ? "text-[#1D5506] !font-extrabold"
               :""
             }`}
@@ -285,9 +285,27 @@ const Navigation = () => {
                 />
               )}
             </li>
-            <li className="hover:font-extrabold">
-              <Link href="/blog">Our Product</Link>
-            </li>
+            <li onMouseEnter={onMouseEnterProduct} onMouseLeave={onMouseLeaveProduct}>
+          <div className={`!flex lg:block justify-center`}>
+            <div
+            className={`flex items-center ${
+              router.pathname === "/open-account#dnamazCapital"
+              ? "text-[#1D5506] !font-extrabold"
+              : router.pathname === "/open-account#accountOpening"
+              ? "text-[#1D5506] !font-extrabold"
+              :""
+            }`}
+            >
+            <span className="font-extrabold hover:text-primary cursor-pointer">
+            Our Product
+              </span>
+              <span className={`${rotateCheveronProduct ? "-rotate-90" : ""}`}>
+                <RiArrowDropDownLine className="w-8 h-auto" />
+              </span>
+            </div>
+          </div>
+          {productDropdown && <Dropdown menuItems={ProductMenuItems} />}
+        </li>
             <li className="flex w-full">
               <Link href="/contact">
                 <Button text="Talk to US" />

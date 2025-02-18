@@ -8,6 +8,8 @@ import {
   LinkedInIcon,
   TwitterIcon,
 } from "../SvgIcon/SvgIcon";
+import { FaXTwitter } from "react-icons/fa6";
+
 
 const Footer = () => {
   const router = useRouter();
@@ -26,8 +28,8 @@ const Footer = () => {
           6th Floor, Yobe Investment House, Plot 1332, Ralph Shodeinde Street, Central
             Business District, Fct-Abuja.
           </p>
-          <span className="block my-2">enquires@dnamazcapital.com</span>
-          <span className="block mb-2">+234 916 444 1444</span>
+          <span className="block my-2"><a href="mailto:enquiries@dnamazcapital.com">enquiries@dnamazcapital.com</a></span>
+          <span className="block mb-2"><a href="tel:+234 916 444 1444">+234 916 444 1444</a></span>
          
         </div>
         <div className="flex-1 min-w-[300px]">
@@ -74,7 +76,7 @@ const Footer = () => {
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                <TwitterIcon />
+                <FaXTwitter />
               </a>
             </div>
             <div className="hover:bg-[#1D5506] h-[60px] w-[60px] rounded-full flex justify-center items-center">

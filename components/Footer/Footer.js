@@ -72,7 +72,7 @@ const Footer = () => {
             <div className="hover:bg-[#1D5506] h-[60px] w-[60px] rounded-full flex justify-center items-center">
               <a
                 className="underline"
-                href="https://twitter.com/d_namazcapital"
+                href="https://twitter.com/dnamazcapital"
                 target="_blank"
                 rel="noopener noreferrer"
               >

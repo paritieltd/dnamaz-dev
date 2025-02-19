@@ -63,7 +63,7 @@ const OpenAccount = () => {
             router.push("open-account/downloadreupload")
             // console.log("hey");
           }}
-          >Download and Re-upload Application Form</button>
+          >Download and upload Application Form</button>
           </div>
         </section>
             {/* <input type="hidden" id="accountOpening"/> */}

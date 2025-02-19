@@ -15,7 +15,7 @@ const  Hero = () => {
       <div id="home">
         <div className=" relative flex justify-center text-center z-10 h-full px-10 lg:px-0 pt-14">
           <div className=" relative z-10 ">
-            <p className="text-2xl md:text-7xl  text-gray-800 font-lato font-bold leading-snug mt-44">
+            <p className="text-2xl text-left md:text-7xl  text-gray-800 font-lato font-bold leading-snug mt-44">
               <span className="">
               Be intentional.<br />
               </span>{" "}

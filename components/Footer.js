@@ -90,7 +90,7 @@ const Footer = () => {
                 </a>
               </div>
               <div className="">
-                <a href="https://twitter.com/d_namazcapital">
+                <a href="https://twitter.com/dnamazcapital">
                   <FaXTwitter className="text-sm lg:text-base xl:text-xl" />
                 </a>
               </div>

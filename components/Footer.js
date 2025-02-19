@@ -55,7 +55,7 @@ const Footer = () => {
               Central Business District, Fct-Abuja.
             </p>
             <span className="block my-2"><a href="mailto:enquiries@dnamazcapital.com">enquiries@dnamazcapital.com</a></span>
-            <span className="block mb-2"><a href="tel:+234 916 444 1444">+234 916 444 1444</a></span>
+            <span className="block mb-2"><a href="tel:+234 9164441444">+234 916 444 1444</a></span>
           </div>
           <div className="">
             <h2 className="text-xl font-bold mb-6 font-lex">Other Links</h2>

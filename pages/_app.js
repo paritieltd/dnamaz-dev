@@ -35,7 +35,7 @@ const MyApp = ({ Component, pageProps }) => {
       <Script id="whatsapp" type="text/javascript">
   {`
     (function() {
-      var whatsappLink = 'https://wa.me/2349164441441?text=Hello%2C%20I%20would%20like%20to%20ask%20some%20questions.';
+      var whatsappLink = 'https://wa.me/2349164441444?text=Hello%2C%20I%20would%20like%20to%20ask%20some%20questions.';
       var chatButton = document.createElement("a");
       chatButton.href = whatsappLink;
       chatButton.target = "_blank";

@@ -66,7 +66,7 @@ const OpenAccount = () => {
           }}
           >Download and Re-upload Application Form</button>
           <button
-          className="hover:bg-custom-primary hover:text-white transition-all duration-500 text-custom-primary font-semibold border border-custom-primary h-16 w-full sm:w-[unset] sm:px-20 "
+          className="hover:bg-custom-primary md:col-start-1 md:col-end-3 hover:text-white transition-all duration-500 text-custom-primary font-semibold border border-custom-primary h-16 w-full sm:w-[unset] sm:px-20 "
           onClick={() => {
             router.push("open-account/downloadprospect")
             // console.log("hey");

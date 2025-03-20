@@ -46,9 +46,10 @@ const OpenAccount = () => {
             <p>Back</p>
           </div>
         </div>
+        <input type="hidden" id="dnamazCapital"/>
         <section id="dnamazCapital" className=" w-[70%] text-center mx-auto lg:py-[10rem] ">
           <h4 className="lg:text-[36px] max-sm:text-[20px] text-center my-5 mb-10 font-bold text-custom-primary">D'Namaz Capital Halal Fixed Income Fund</h4>
-          <div className=" flex max-sm:flex-col max-sm:gap-4 lg:w-[90%] lg:mx-auto items-center justify-between">
+          <div className=" grid grid-cols-2 gap-4 max-sm:grid-cols-1 max-sm:gap-4 lg:w-[90%] lg:mx-auto items-center justify-between">
           <button
           className="hover:bg-custom-primary hover:text-white transition-all duration-500 text-custom-primary font-semibold border border-custom-primary h-16 w-full sm:w-[unset] sm:px-20 "
           onClick={() => {
@@ -64,6 +65,15 @@ const OpenAccount = () => {
             // console.log("hey");
           }}
           >Download and Re-upload Application Form</button>
+          <button
+          className="hover:bg-custom-primary md:col-start-1 md:col-end-3 hover:text-white transition-all duration-500 text-custom-primary font-semibold border border-custom-primary h-16 w-full sm:w-[unset] sm:px-20 "
+          onClick={() => {
+            router.push("open-account/downloadprospect")
+            // console.log("hey");
+          }}
+          >
+            Download Prospectus
+          </button>
           </div>
         </section>
             {/* <input type="hidden" id="accountOpening"/> */}

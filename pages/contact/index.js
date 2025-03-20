@@ -36,7 +36,7 @@ const Contact = () => {
                     <PhoneIcon />
                   </div>
                   <span className="font-medium text-xl sm:text-2xl">
-                    <a href="tel:+234 916 444 1444">+234 916 444 1444</a>
+                    <a href="tel:+2349164441444">0916 444 1444</a>
                   </span>
                 </div>
                 <div className="mt-6 flex  space-x-5 sm:space-x-10">

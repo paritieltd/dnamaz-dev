@@ -64,17 +64,20 @@ const OpenAccount = () => {
             router.push("open-account/downloadreupload")
             // console.log("hey");
           }}
-          >Download and Re-upload Application Form</button>
-          <button
-          className="hover:bg-custom-primary md:col-start-1 md:col-end-3 hover:text-white transition-all duration-500 text-custom-primary font-semibold border border-custom-primary h-16 w-full sm:w-[unset] sm:px-20 "
-          onClick={() => {
-            router.push("open-account/downloadprospect")
-            // console.log("hey");
-          }}
-          >
-            Download Prospectus
-          </button>
+          >Download and Upload Application Form</button>
           </div>
+          <div className="h-4"></div>
+          <a  href="/forms/DNAMAZ HALAL FUND PROSPECTUS.pdf"
+            className="flex items-center justify-center mx-auto font-semibold border hover:bg-custom-primary w-[60%] text-custom-primary  h-16  hover:text-white transition-all duration-500 border-custom-primary"
+          download="DNAMAZ HALAL FUND PROSPECTUS FORM">Download Prospectus Document</a>
+          {/* <button 
+          className="hover:bg-custom-primary   hover:text-white transition-all duration-500  w-[100%] h-16 text-custom-primary font-semibold border border-custom-primary  sm:w-[unset] sm:px-20 "
+          >
+            <a href="/forms/DNAMAZ HALAL FUND PROSPECTUS.pdf"
+          download="DNAMAZ HALAL FUND PROSPECTUS FORM">Download Prospectus document</a>
+            
+          </button> */}
+          
         </section>
             {/* <input type="hidden" id="accountOpening"/> */}
           {/* <h1 className="mt-20">Dnamaz Capital Halal Fixed funds <a href="/forms/DHFIF APPLICATION FORM.pdf" download={'DHFIF APPLICATION FORM'} className="hover:bg-custom-primary hover:text-white transition-all duration-500 text-custom-primary max-sm:text-center max-sm:block font-semibold border border-custom-primary py-4 h-16 w-full sm:w-[unset] sm:px-20 ">Apply Here</a></h1> */}

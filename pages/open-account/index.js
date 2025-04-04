@@ -68,7 +68,7 @@ const OpenAccount = () => {
           </div>
           <div className="h-4"></div>
           <a  href="/forms/DNAMAZ HALAL FUND PROSPECTUS.pdf"
-            className="flex items-center justify-center mx-auto font-semibold border hover:bg-custom-primary w-[60%] text-custom-primary  h-16  hover:text-white transition-all duration-500 border-custom-primary"
+            className="flex items-center justify-center mx-auto font-semibold border hover:bg-custom-primary max-sm:px-4 md:w-[60%] text-custom-primary  h-16  hover:text-white transition-all duration-500 border-custom-primary"
           download="DNAMAZ HALAL FUND PROSPECTUS FORM">Download Prospectus Document</a>
           {/* <button 
           className="hover:bg-custom-primary   hover:text-white transition-all duration-500  w-[100%] h-16 text-custom-primary font-semibold border border-custom-primary  sm:w-[unset] sm:px-20 "

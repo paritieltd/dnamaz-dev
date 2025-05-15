@@ -38,7 +38,7 @@ const BoardMemberPage = () => {
             title="Head, Corporate Services"
             description="Ifeoma heads the corporate services department at D'namaz Capital Limited. Her commitment and dedication in ensuring that all corporate affairs and operational activities are coordinated seamlessly while ensuring organizational strategic objectives are attained puts her in the position she occupies in D'namaz Capital Limited."
           /> */}
-          <BoardMember
+          {/* <BoardMember
             url="/about/team-member/4"
             imgUrl="/images/elon-buba.png"
             name="Elon Markus Buba "
@@ -51,7 +51,7 @@ const BoardMemberPage = () => {
             name="Abdullahi M. Ahmad" 
             title="Legal Officer/Company Secretary"
             description="Abdullahi is a Law graduate from Ahmadu Bello University (ABU) and a practitioner with satisfactory skills in legal and litigation drafting, alternative dispute resolution, interviewing and counselling..."
-          />
+          /> */}
         </div>
       </section>
       <section className="pt-28">

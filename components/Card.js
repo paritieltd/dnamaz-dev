@@ -204,7 +204,7 @@ const Card = () => {
       {/* bg-[linear-gradient(to_right,#DDFFF7,#FAFFF8,#FAFFF8,#FBFFFA,#DDEFFF)] */}
       {/* bg-[linear-gradient(to_bottom, rgba(255, 255, 255, 0.6), #fff)] */}
       {/* bg-gradient-to-b from-[rgba(255, 255, 255, 0.6)]  to-[#fff]*/}
-      <div className="relative w-[90%] px-1 bg-gradient-to-b from-[#ffffff99] backdrop-blur-3xl to-[#fff] shadow-lg rounded-xl mx-auto  lg:-mt-[20.5rem]   z-15 border-2 py-10">
+      <div className="relative w-[90%] px-1 bg-gradient-to-b from-[#ffffff99] backdrop-blur-3xl to-[#fff] shadow-lg lg:mb-[30rem] max-sm:mb-[7rem] rounded-xl mx-auto  lg:-mt-[20.5rem]   z-15 border-2 py-10">
         {/* <Marquee direction="right" delay="2" gradient="false" gradientWidth={0}> */}
           <div className="hidden md:block">
             <h2 className="text-center font-extrabold text-2xl md:text-5xl font-mont">
@@ -280,13 +280,13 @@ const Card = () => {
           </div>
         </div>
       </div>
-      <div className="">
+      {/* <div className="">
         <img
           src="images/rosary.png"
           alt="rosary"
           className="w-[1200px] mx-auto h-auto z-10 -mt-[300px] md:-mt-[650px]"
         />
-      </div>
+      </div> */}
       {/* focus */}
       <div id="focus" className="-mt-20 md:-mt-60 relative">
         <img

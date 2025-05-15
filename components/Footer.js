@@ -58,11 +58,10 @@ const Footer = () => {
               Central Business District, Fct-Abuja.
             </p>
             <span className="block my-2"><a href="mailto:enquiries@dnamazcapital.com">enquiries@dnamazcapital.com</a></span>
-<<<<<<< HEAD
+
             <span className="block mb-2"><a href="tel:+234 916 444 1444">+234 916 444 1444</a></span>
-=======
             <span className="block mb-2"><a href="tel:+234 9164441444">0916 444 1444</a></span>
->>>>>>> c0fbe8eea14f07774bc5ff222ae891aa47a9ad60
+
           </div>
           <div className="">
             <h2 className="text-xl font-bold mb-6 font-lex">Other Links</h2>
@@ -97,11 +96,9 @@ const Footer = () => {
                 </a>
               </div>
               <div className="">
-<<<<<<< HEAD
                 <a href="https://twitter.com/d_namazcapital">
-=======
+
                 <a href="https://twitter.com/dnamazcapital">
->>>>>>> c0fbe8eea14f07774bc5ff222ae891aa47a9ad60
                   <FaXTwitter className="text-sm lg:text-base xl:text-xl" />
                 </a>
               </div>

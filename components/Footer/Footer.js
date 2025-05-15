@@ -32,7 +32,11 @@ const Footer = () => {
             Business District, Fct-Abuja.
           </p>
           <span className="block my-2"><a href="mailto:enquiries@dnamazcapital.com">enquiries@dnamazcapital.com</a></span>
+<<<<<<< HEAD
           <span className="block mb-2"><a href="tel:+234 916 444 1444">+234 916 444 1444</a></span>
+=======
+          <span className="block mb-2"><a href="tel:+2349164441444">0916 444 1444</a></span>
+>>>>>>> c0fbe8eea14f07774bc5ff222ae891aa47a9ad60
          
         </div>
         {/* min-w-[300px] */}
@@ -76,11 +80,15 @@ const Footer = () => {
             <div className="hover:bg-[#1D5506] h-[60px] w-[60px] rounded-full flex justify-center items-center">
               <a
                 className="underline"
-                href="https://twitter.com/d_namazcapital"
+                href="https://twitter.com/dnamazcapital"
                 target="_blank"
                 rel="noopener noreferrer"
               >
+<<<<<<< HEAD
                 <FaXTwitter  className="text-sm lg:text-base xl:text-xl"/>
+=======
+                <FaXTwitter />
+>>>>>>> c0fbe8eea14f07774bc5ff222ae891aa47a9ad60
               </a>
             </div>
             <div className="hover:bg-[#1D5506] h-[60px] w-[60px] rounded-full flex justify-center items-center">

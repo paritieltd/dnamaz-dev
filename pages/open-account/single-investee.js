@@ -107,7 +107,7 @@ const SingleInvestee = () => {
       }
 
       if (isBvnValid() == false) {
-        setErrorMsg("Note: Bvn must be exactly 10 numbers");
+        setErrorMsg("Note: Bvn must be exactly 11 numbers");
         return;
       }
     } else if (currentStep === 2) {
@@ -173,7 +173,7 @@ const SingleInvestee = () => {
   } = formData;
 
   function isBvnValid() {
-    return bvn.length === 10 ? true : false;
+    return bvn.length === 11 ? true : false;
   }
 
   function validMail(mail) {
@@ -399,7 +399,7 @@ const SingleInvestee = () => {
                       {!isBvnValid() && (
                         <p className="text-xs sm:text-sm text-[coral]">
                           <span className="font-medium">Note:</span> BVN
-                          can&#39;t be less or more than 10 numbers
+                          can&#39;t be less or more than 11 numbers
                         </p>
                       )}
                     </div>

@@ -80,14 +80,11 @@ const halalFixed = () => {
     if (currentStep === 1) {
       const res = isAnyValueEmpty([
         title,
-<<<<<<< HEAD
-        surname,
-=======
+
         // titleJoint,
         surname,
         // surnameJoint,
->>>>>>> c0fbe8eea14f07774bc5ff222ae891aa47a9ad60
-        otherNames,
+    otherNames,
         amountPaid,
         date,
         postalAdress,

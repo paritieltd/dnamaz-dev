@@ -84,7 +84,9 @@ const halalFixed = () => {
         // titleJoint,
         surname,
         // surnameJoint,
+
     otherNames,
+
         amountPaid,
         date,
         postalAdress,

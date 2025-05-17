@@ -67,7 +67,7 @@ const OpenAccount = () => {
           >Download and Upload Application Form</button>
           </div>
           <div className="h-4"></div>
-          <a  href="/forms/DNAMAZ HALAL FUND PROSPECTUS.pdf"
+          <a  href="/forms/DNAMAZ HALAL FIXED INCOME FUND PROSPECTUS .pdf"
             className="flex items-center justify-center mx-auto font-semibold border hover:bg-custom-primary max-sm:px-4 md:w-[60%] text-custom-primary  h-16  hover:text-white transition-all duration-500 border-custom-primary"
           download="DNAMAZ HALAL FUND PROSPECTUS FORM">Download Prospectus Document</a>
           {/* <button 

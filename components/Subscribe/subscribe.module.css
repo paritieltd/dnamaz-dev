@@ -1,8 +1,8 @@
 .subscribesContainer {
     margin-top: 5px;
-    /* margin-bottom: 5rem; */
+    margin-bottom: 5rem; 
     margin-inline: auto;
-    background: url(../../public/images/rukayya.JPG);
+    /* background: url(../../public/images/rukayya.JPG); */
     background-size: cover;
 }
 .subscribe{

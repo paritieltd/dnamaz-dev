@@ -14,9 +14,9 @@ const Subscribe = () => {
     <div className="-mt-2" data-aos="fade-up" >
       <div className={styles.subscribesContainer}>
         <div
-          className={`${styles.subscribes}  relative lg:grid grid-cols-[1fr,.8fr] xl:grid-cols-2 w-full xl:w-[90%] mx-auto h-60 sm:h-[350px] md:h-[530px]`}
+          className={`${styles.subscribes}  relative lg:grid grid-cols-[1fr,.8fr] xl:grid-cols-2 w-full mt-9 xl:w-[90%] bg-primary mx-auto h-60 sm:h-[350px] md:h-[530px]`}
         >
-          <div className="h-full flex flex-col justify-center items-center lg:items-end text-white ">
+          <div className="h-full flex flex-col justify-center bg-primary items-center lg:items-end text-white ">
             <div className="text-center lg:text-start font-Lex">
               <h2 className="uppercase text-base sm:text-2xl font-bold mb-2 sm:mb-0">
                 <span className="text-xl sm:text-3xl">S</span>ubscribe to <br className="hidden lg:block" />{" "}
@@ -34,7 +34,7 @@ const Subscribe = () => {
                 />
                 <div className="flex">
                 <button
-                  className="hover:bg-green-900 sm:w-[unset] transition-all duration-500 bg-custom-primary text-white items-start md:auto py-3 px-10 mt-4 rounded-lg"
+                  className="hover:bg-custom-primary hover:text-white sm:w-[unset] transition-all duration-500 bg-white text-custom-primary border-2 items-start md:auto py-3 px-10 mt-4 rounded-lg"
                   type="button"
                 >
                   Subscribe

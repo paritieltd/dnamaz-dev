@@ -26,7 +26,7 @@ const BoardMemberPage = () => {
           />
           <BoardMember
             url="/about/board-member/2"
-            imgUrl="/images/m-m-gabi.png"
+            imgUrl="/images/GabiPic.jpeg"
             name="Muhammad M. Gabi"
             title="Managing Director/CEO"
             description="Gabi is a seasoned and well-grounded professional with over a decade

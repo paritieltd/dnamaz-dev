@@ -18,13 +18,17 @@ const Footer = () => {
       <div id="contact">
         <div className="relative text-gray-200">
           <div className="h-10 bg-primary" />
-          <img
+          {/* <img
             src="images/rukayya.png"
             alt="woman"
             className="relative hidden md:flex"
-          />
-          <div className="relative bg-footer md:bg-transparent md:absolute md:inset-x-0 py-5 md:py-0 px-5 md:px-0 md:top-5 md:left-40 lg:left-52 max-w-full h-full md:max-w-2xl">
-            <p className="text-4xl lg:text-5xl xl:text-6xl leading-tight font-bold font-lex md:mt-5 lg:mt-20">
+          /> */}
+          <div 
+          className="text-primary w-[90%] mx-auto"
+          // className="bg-primary"
+          // className="relative bg-footer md:bg-transparent md:absolute md:inset-x-0 py-5 md:py-0 px-5 md:px-0 md:top-5 md:left-40 lg:left-52 max-w-full h-full md:max-w-2xl"
+          >
+            <p className="text-4xl lg:text-5xl xl:text-6xl leading-tight  font-bold font-lex md:mt-5 lg:mt-20">
               Subscribe to Our <br />
               Newsletter
             </p>
@@ -38,6 +42,8 @@ const Footer = () => {
                 className="border-b-2 pb-5 bg-transparent w-5/6 mb-2 md:mb-5 lg:mb-10 focus:outline-none"
               />
               <Button text="Subscribe" />
+
+              <div className="h-10"></div>
             </div>
           </div>
         </div>

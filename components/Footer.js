@@ -12,7 +12,7 @@ import Button from "./Button";
 
 const Footer = () => {
   const router = useRouter();
-
+  const currentYear = new Date().getFullYear();
   return (
     <footer className="">
       <div id="contact">
@@ -113,7 +113,7 @@ const Footer = () => {
         </div>
         <hr />
         <div className="pt-7 text-white">
-          <span>All rights Reserved. © 2022 Dnamaz Capital Limited.</span>
+          <span>All rights Reserved. © {currentYear} Dnamaz Capital Limited.</span>
         </div>
       </div>
     </footer>

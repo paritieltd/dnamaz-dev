@@ -189,7 +189,7 @@ export const shariaAdvisers = [
   {
     id: "2",
     url: `/about/sharia-advisers/2`,
-    imgUrl: "/images/placeholder.png",
+    imgUrl: "/images/ProfDogarawa.jpeg",
     name: "Prof. Ahmad Bello Dogarawa",
     title: "Member, Shari’ah advisory Council",
     shortDescription: `Ahmad Bello Dogarawa is a Professor with the Department of Accounting, Ahmadu Bello University (ABU) Zaria, Nigeria and a Certified Management Trainer. He is an alumnus of Al-Azhar University, Cairo from where he obtained Certificate in Islamic Religious Sciences, Da’awah (Islamic propagation) and Islamic Economics...`,

@@ -53,7 +53,7 @@ const Footer = () => {
 
       <div className="pt-20 pb-10 px-5 md:px-20 bg-footer">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 text-white pb-12">
-          <img src="/images/NDPR.png" alt="NDPR" />
+          <img src="/images/NDPRImage.jpeg" alt="NDPR" />
 
           <div>
             <h2 className="text-xl font-bold mb-6 font-lex">Head Office</h2>

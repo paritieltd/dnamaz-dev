@@ -17,7 +17,7 @@ const BoardMemberPage = () => {
         <div className="mt-20">
         <BoardMember
             url="/about/team-member/3"
-            imgUrl="/images/m-m-gabi.png"
+            imgUrl="/images/GabiPic.jpeg"
             name="Muhammad M. Gabi"
             title="Managing Director/CEO"
             description="Gabi is a seasoned and well-grounded professional with over a decade

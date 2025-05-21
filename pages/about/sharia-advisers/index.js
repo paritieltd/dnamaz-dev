@@ -24,7 +24,7 @@ const BoardMemberPage = () => {
           />
           <BoardMember
             url={`/about/sharia-advisers/2`}
-            imgUrl="/images/dogarawa2.jpg"
+            imgUrl="/images/ProfDogarawa.jpeg"
             name="Prof. Ahmad Bello Dogarawa"
             title="Member, Shari’ah advisory Council"
             description="Ahmad Bello Dogarawa is a Professor at the Department of Accounting, Ahmadu Bello University (ABU) Zaria, Nigeria. In addition to the academic degrees he obtained, he holds a Certificate in Islamic Religious Sciences, Da’awah (Islamic propagation) and Islamic Economics from the prestigious Al-Azhar University, Cairo. He was former Head of Department and Deputy Dean of ABU Business School. He is a member of Jaiz Bank’s Advisory Committee of Experts...."

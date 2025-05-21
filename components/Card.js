@@ -90,12 +90,12 @@ const Card = () => {
       text: "Mutual Funds",
       url: "/our-focus/mutual-fund",
     },
-    {
-      id: 3,
-      image: "./images/training.jpg",
-      text: "Training and Conferences",
-      url: "/our-focus/training",
-    },
+    // {
+    //   id: 3,
+    //   image: "./images/training.jpg",
+    //   text: "Training and Conferences",
+    //   url: "/our-focus/training",
+    // },
     {
       id: 4,
       image: "./images/wealth-management.jpg",
@@ -372,14 +372,14 @@ const Card = () => {
                     Mutual Funds
                   </Link>
                 </li>
-                <li>
+                {/* <li>
                   <Link
                     className="flex items-center pl-8 py-3 my-6 space-x-3 "
                     href="/our-focus/training"
                   >
                     Training and Conferences
                   </Link>
-                </li>
+                </li> */}
                 <li className="text-white md:text-black">
                   <Link className="" href="/our-focus/wealth-management">
                     Wealth Management & Financial Planning

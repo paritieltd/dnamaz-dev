@@ -25,7 +25,7 @@ const Footer = () => {
       <div className="grid md:grid-cols-3 max-sm:grid-cols-1 gap-6  w-[90%]  mx-auto text-white">
       
 
-        <img src="/images/NDPR.png" alt="" className="md:w-[100%] object-cover max-sm:w-[50%]"/>
+        <img src="/images/NDPRImage.jpeg" alt="" className="md:w-[100%] object-cover max-sm:w-[50%]"/>
         <div className=" w-[100%]">
           <h2 className="text-2xl font-extrabold font-lex mb-6">Head Office</h2>
           <p className="sm:w-4/5">

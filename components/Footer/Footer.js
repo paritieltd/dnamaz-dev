@@ -13,6 +13,7 @@ import { FaXTwitter } from "react-icons/fa6";
 
 const Footer = () => {
   const router = useRouter();
+  const currentYear = new Date().getFullYear();
   return (
     <footer
       className="text-white -mt-12 py-40 bg-gradient-to-br from-[#2E9F00] to-[#F7BD01]"
@@ -85,7 +86,7 @@ const Footer = () => {
               >
                 <FaXTwitter  className="text-sm lg:text-base xl:text-xl"/>
 
-                <FaXTwitter />
+                {/* <FaXTwitter /> */}
               </a>
             </div>
             <div className="hover:bg-[#1D5506] h-[60px] w-[60px] rounded-full flex justify-center items-center">
@@ -104,7 +105,7 @@ const Footer = () => {
       <div className="w-[90%] mx-auto">
         <hr className="my-8" />
         <span className="block ">
-          All rights Reserved. © 2022 Dnamaz Capital Limited.
+          All rights Reserved. © {currentYear} Dnamaz Capital Limited.
         </span>
       </div>
     </footer>

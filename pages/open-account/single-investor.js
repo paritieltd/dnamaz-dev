@@ -229,7 +229,24 @@ const SingleInvestor = () => {
 
     const formDataToSubmit = new FormData();
     Object.keys(formData).forEach((key) => {
-      formDataToSubmit.append(key, formData[key]);
+      // formDataToSubmit.append(key, formData[key]);
+      if (
+        (key === "email" || key === "kin_email" || key === "email_address") &&
+        typeof formData[key] === "string"
+      ) {
+        formDataToSubmit.append(key, formData[key].toLowerCase());
+      } else if (
+        (key === "phone" ||
+          key === "kin_phone" ||
+          key === "mobile_phone_number" ||
+          key === "land_phone_number") &&
+        typeof formData[key] === "string"
+      ) {
+        const cleaned = formData[key].replace(/[\s\-\+]/g, "").trim();
+        formDataToSubmit.append(key, cleaned);
+      } else {
+        formDataToSubmit.append(key, formData[key]);
+      }
     });
     if (selectedSignature) {
       formDataToSubmit.append("signature", selectedSignature);
@@ -240,11 +257,9 @@ const SingleInvestor = () => {
     if (selectedProof) {
       formDataToSubmit.append("proof_of_address_image", selectedProof);
     }
-    formDataToSubmit.append("created", new Date().toISOString());
+    formDataToSubmit.append("created", new Date().toLocaleDateString("en-GB"));
     formDataToSubmit.append("form_category", "Single Investor");
 
-    // const sheetMonkeyUrl =
-    //   "https://api.sheetmonkey.io/form/3hiHfcG3qBz46eMoku8Qxk";
     const sheetMonkeyUrl =
       process.env.NEXT_PUBLIC_SHEET_MONKEY_SINGLE_INVESTOR_URL;
 
@@ -470,6 +485,7 @@ const SingleInvestor = () => {
                         name="bvn"
                         type="text"
                         placeholder="Bank Verification Number"
+                        maxLength={11}
                         value={formData.bvn}
                         onChange={(e) => handleNumberInputChange(e, "bvn")}
                       />
@@ -487,6 +503,7 @@ const SingleInvestor = () => {
                       type="tel"
                       placeholder="Phone Number"
                       value={formData.phone}
+                      maxLength={14}
                       onChange={(e) => handleNumberInputChange(e, "phone")}
                     />
                     <CustomTextInput
@@ -945,6 +962,7 @@ const CustomTextInput = ({
   required,
   value,
   onChange,
+  maxLength,
 }) => {
   return (
     <div className="w-full">
@@ -958,6 +976,7 @@ const CustomTextInput = ({
         autoComplete="new-password"
         value={value}
         onChange={onChange}
+        maxLength={maxLength}
       />
     </div>
   );

@@ -156,14 +156,31 @@ const HalalFixed = () => {
 
     const formDataToSubmit = new FormData();
     Object.keys(formData).forEach((key) => {
-      formDataToSubmit.append(key, formData[key]);
+      // formDataToSubmit.append(key, formData[key]);
+      if (
+        (key === "email" || key === "kin_email" || key === "email_address") &&
+        typeof formData[key] === "string"
+      ) {
+        formDataToSubmit.append(key, formData[key].toLowerCase());
+      } else if (
+        (key === "phone" ||
+          key === "kin_phone" ||
+          key === "mobile_phone_number" ||
+          key === "land_phone_number") &&
+        typeof formData[key] === "string"
+      ) {
+        const cleaned = formData[key].replace(/[\s\-\+]/g, "").trim();
+        formDataToSubmit.append(key, cleaned);
+      } else {
+        formDataToSubmit.append(key, formData[key]);
+      }
     });
     if (selectedSignature) {
       formDataToSubmit.append("signature", selectedSignature);
     }
+    formDataToSubmit.append("created", new Date().toLocaleDateString("en-GB"));
+    formDataToSubmit.append("form_category", "Halal Fixed Income");
 
-    // const sheetMonkeyUrl =
-    //   "https://api.sheetmonkey.io/form/tcvs9FpvViNXFx5BkcEqSJ";
     const sheetMonkeyUrl =
       process.env.NEXT_PUBLIC_SHEET_MONKEY_HALAL_FIXED_INCOME_FUND_URL;
 
@@ -383,6 +400,7 @@ const HalalFixed = () => {
                     type="tel"
                     placeholder="Mobile Phone Number:"
                     value={formData.mobile_phone_number}
+                    maxLength={14}
                     onChange={(e) => {
                       setErrorMsg("");
                       setFormData((prev) => ({
@@ -409,7 +427,7 @@ const HalalFixed = () => {
                   <CustomTextInput
                     id="clearing_house_number"
                     name="clearing_house_number"
-                    type="text"
+                    type="number"
                     placeholder="Clearing House Number (CHN):"
                     value={formData.clearing_house_number}
                     onChange={(e) => {
@@ -423,6 +441,7 @@ const HalalFixed = () => {
                   <CustomTextInput
                     id="name_of_stockbroker"
                     name="name_of_stockbroker"
+                    type="text"
                     placeholder="Name of Your Stockbroker:"
                     value={formData.name_of_stockbroker}
                     onChange={(e) => {
@@ -772,6 +791,7 @@ const CustomTextInput = ({
   required,
   value,
   onChange,
+  maxLength,
 }) => (
   <div className="w-full">
     <input
@@ -784,6 +804,7 @@ const CustomTextInput = ({
       autoComplete="off"
       value={value}
       onChange={onChange}
+      maxLength={maxLength}
     />
   </div>
 );

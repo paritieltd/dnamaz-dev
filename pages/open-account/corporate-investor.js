@@ -161,7 +161,27 @@ const CorporateInvestor = () => {
 
     const formDataToSubmit = new FormData();
     Object.keys(formData).forEach((key) => {
-      formDataToSubmit.append(key, formData[key]);
+      // formDataToSubmit.append(key, formData[key]);
+      if (
+        (key === "email" ||
+          key === "kin_email" ||
+          key === "email_address" ||
+          key === "company_email") &&
+        typeof formData[key] === "string"
+      ) {
+        formDataToSubmit.append(key, formData[key].toLowerCase());
+      } else if (
+        (key === "phone" ||
+          key === "kin_phone" ||
+          key === "mobile_phone_number" ||
+          key === "land_phone_number") &&
+        typeof formData[key] === "string"
+      ) {
+        const cleaned = formData[key].replace(/[\s\-\+]/g, "").trim();
+        formDataToSubmit.append(key, cleaned);
+      } else {
+        formDataToSubmit.append(key, formData[key]);
+      }
     });
 
     // Only append files if they exist
@@ -183,15 +203,13 @@ const CorporateInvestor = () => {
       formDataToSubmit.append("proof_of_address_image", "");
     }
 
-    formDataToSubmit.append("created", "x-sheetmonkey-current-date-time");
+    formDataToSubmit.append("created", new Date().toLocaleDateString("en-GB"));
     formDataToSubmit.append("form_category", "Corporate Investor");
 
     for (let [key, value] of formDataToSubmit.entries()) {
       console.log(`${key}:`, value);
     }
 
-    // const sheetMonkeyUrl =
-    //   "https://api.sheetmonkey.io/form/tAedX1V9vmis67G3LLctmS";
     const sheetMonkeyUrl =
       process.env.NEXT_PUBLIC_SHEET_MONKEY_CORPORATE_INVESTOR_URL;
 
@@ -402,6 +420,7 @@ const CorporateInvestor = () => {
                       placeholder="Company Phone Number"
                       type="text"
                       value={formData.company_phone}
+                      maxLength={14}
                       onChange={(e) =>
                         handleNumberInputChange(e, "company_phone")
                       }
@@ -770,6 +789,7 @@ const CustomTextInput = ({
   required,
   value,
   onChange,
+  maxLength,
 }) => {
   return (
     <div className="w-full">
@@ -783,6 +803,7 @@ const CustomTextInput = ({
         autoComplete="new-password"
         value={value}
         onChange={onChange}
+        maxLength={maxLength}
       />
     </div>
   );

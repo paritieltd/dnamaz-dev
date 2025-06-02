@@ -186,7 +186,27 @@ const CorporateInvestee = () => {
 
     const formDataToSubmit = new FormData();
     Object.keys(formData).forEach((key) => {
-      formDataToSubmit.append(key, formData[key]);
+      // formDataToSubmit.append(key, formData[key]);
+      if (
+        (key === "email" ||
+          key === "kin_email" ||
+          key === "email_address" ||
+          key === "company_email") &&
+        typeof formData[key] === "string"
+      ) {
+        formDataToSubmit.append(key, formData[key].toLowerCase());
+      } else if (
+        (key === "phone" ||
+          key === "kin_phone" ||
+          key === "mobile_phone_number" ||
+          key === "land_phone_number") &&
+        typeof formData[key] === "string"
+      ) {
+        const cleaned = formData[key].replace(/[\s\-\+]/g, "").trim();
+        formDataToSubmit.append(key, cleaned);
+      } else {
+        formDataToSubmit.append(key, formData[key]);
+      }
     });
     if (selectedSignature) {
       formDataToSubmit.append("signature", selectedSignature);
@@ -197,15 +217,13 @@ const CorporateInvestee = () => {
     if (selectedProof) {
       formDataToSubmit.append("proof_of_address_image", selectedProof);
     }
-    formDataToSubmit.append("created", "x-sheetmonkey-current-date-time");
+    formDataToSubmit.append("created", new Date().toLocaleDateString("en-GB"));
     formDataToSubmit.append("form_category", "Corporate Investee");
 
     for (let [key, value] of formDataToSubmit.entries()) {
       console.log(`${key}:`, value);
     }
 
-    // const sheetMonkeyUrl =
-    //   "https://api.sheetmonkey.io/form/qspUH96vSmFLgwQHVzh3RF";
     const sheetMonkeyUrl =
       process.env.NEXT_PUBLIC_SHEET_MONKEY_CORPORATE_INVESTEE_URL;
 
@@ -228,7 +246,6 @@ const CorporateInvestee = () => {
 
       if (response.ok) {
         setSubmissionStatus("success");
-        console.log("Submission successful, redirecting...");
         window.location.href = "https://dnamaz-update.vercel.app/success";
       } else {
         const errorText = await response.text();
@@ -476,6 +493,7 @@ const CorporateInvestee = () => {
                       placeholder="Company Phone Number"
                       type="text"
                       value={formData.company_phone}
+                      maxLength={14}
                       onChange={(e) =>
                         handleNumberInputChange(e, "company_phone")
                       }
@@ -515,6 +533,7 @@ const CorporateInvestee = () => {
                         name="bvn"
                         type="text"
                         placeholder="Bank Verification Number"
+                        maxLength={11}
                         value={formData.bvn}
                         onChange={(e) => handleNumberInputChange(e, "bvn")}
                       />
@@ -863,6 +882,7 @@ const CustomTextInput = ({
   required,
   value,
   onChange,
+  maxLength,
 }) => {
   return (
     <div className="w-full">
@@ -876,6 +896,7 @@ const CustomTextInput = ({
         autoComplete="new-password"
         value={value}
         onChange={onChange}
+        maxLength={maxLength}
       />
     </div>
   );

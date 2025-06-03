@@ -3,6 +3,10 @@ import { MdKeyboardBackspace } from "react-icons/md";
 import Footer from "../../components/Footer/Footer";
 import Navbar from "../../components/Navbar/Navbar";
 import { useRouter } from "next/router";
+import {
+  NIGERIAN_STATES,
+  NigerianStatesSelect,
+} from "../../components/NigerianState";
 
 const SingleInvestee = () => {
   const [uploadSignature, setUploadSignature] = useState(false);
@@ -78,28 +82,36 @@ const SingleInvestee = () => {
   }
 
   function isBvnValid() {
-    const bvnLength = formData.bvn.length;
-    return bvnLength === 11;
+    return /^\d{11}$/.test(formData.bvn);
   }
 
   function isPhoneValid(phone) {
-    const numericPhone = phone.replace(/\D/g, "");
-    return numericPhone.length >= 10;
+    return /^\d{11}$/.test(phone.replace(/[\s\-\+]/g, ""));
   }
 
-  function isDigitsOnly(value) {
-    return /^\d*$/.test(value);
+  function isValidDate(dateString) {
+    if (!dateString) return false;
+    const date = new Date(dateString);
+    return !isNaN(date.getTime()) && date <= new Date();
   }
 
-  function handleNumberInputChange(e, field) {
-    const value = e.target.value;
-    if (isDigitsOnly(value)) {
-      setFormData((prev) => ({
-        ...prev,
-        [field]: value,
-      }));
-      setErrorMsg("");
-    }
+  function handleNumberInputChange(e, field, maxLength) {
+    const value = e.target.value.replace(/\D/g, ""); 
+    if (maxLength && value.length > maxLength) return;
+    setFormData((prev) => ({
+      ...prev,
+      [field]: value,
+    }));
+    setErrorMsg("");
+  }
+
+  function handleTextInputChange(e, field) {
+    const value = e.target.value.replace(/[^a-zA-Z\s]/g, ""); 
+    setFormData((prev) => ({
+      ...prev,
+      [field]: value,
+    }));
+    setErrorMsg("");
   }
 
   function validateForm(sidebar = false) {
@@ -134,15 +146,11 @@ const SingleInvestee = () => {
         return false;
       }
       if (!isPhoneValid(formData.phone)) {
-        setErrorMsg("Note: Phone number must be at least 10 digits");
+        setErrorMsg("Note: Phone number must be exactly 11 digits");
         return false;
       }
-      if (!isDigitsOnly(formData.bvn)) {
-        setErrorMsg("Note: BVN must contain only digits");
-        return false;
-      }
-      if (!isDigitsOnly(formData.phone)) {
-        setErrorMsg("Note: Phone number must contain only digits");
+      if (!isValidDate(formData.dob)) {
+        setErrorMsg("Note: Please enter a valid date of birth");
         return false;
       }
       if (
@@ -174,13 +182,7 @@ const SingleInvestee = () => {
         return false;
       }
       if (!isPhoneValid(formData.kin_phone)) {
-        setErrorMsg(
-          "Note: Next of Kin phone number must be at least 10 digits"
-        );
-        return false;
-      }
-      if (!isDigitsOnly(formData.kin_phone)) {
-        setErrorMsg("Note: Next of Kin phone number must contain only digits");
+        setErrorMsg("Note: Next of Kin phone number must be exactly 11 digits");
         return false;
       }
     } else if (currentStep === 3) {
@@ -196,16 +198,29 @@ const SingleInvestee = () => {
         return false;
       }
     } else if (currentStep === 4) {
+      const maxFileSize = 2 * 1024 * 1024; 
       if (!selectedId) {
         setErrorMsg("Please upload a Means of Identification");
+        return false;
+      }
+      if (selectedId && selectedId.size > maxFileSize) {
+        setErrorMsg("Means of Identification file size must not exceed 2MB");
         return false;
       }
       if (!selectedProof) {
         setErrorMsg("Please upload a Proof of Address");
         return false;
       }
+      if (selectedProof && selectedProof.size > maxFileSize) {
+        setErrorMsg("Proof of Address file size must not exceed 2MB");
+        return false;
+      }
       if (!selectedSignature) {
         setErrorMsg("Please upload a Signature");
+        return false;
+      }
+      if (selectedSignature && selectedSignature.size > maxFileSize) {
+        setErrorMsg("Signature file size must not exceed 2MB");
         return false;
       }
     } else if (currentStep === 5) {
@@ -218,7 +233,7 @@ const SingleInvestee = () => {
         setErrorMsg("Note: All fields are compulsory. Fill to continue!");
         return false;
       }
-      if (!isDigitsOnly(formData.amount)) {
+      if (!/^\d*$/.test(formData.amount)) {
         setErrorMsg("Note: Amount must contain only digits");
         return false;
       }
@@ -241,7 +256,6 @@ const SingleInvestee = () => {
 
     const formDataToSubmit = new FormData();
     Object.keys(formData).forEach((key) => {
-      // formDataToSubmit.append(key, formData[key]);
       if (
         (key === "email" || key === "kin_email" || key === "email_address") &&
         typeof formData[key] === "string"
@@ -298,75 +312,6 @@ const SingleInvestee = () => {
     }
   };
 
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
-  //   console.log("Form submitted, preventing default behavior");
-
-  //   for (let step = 1; step <= 5; step++) {
-  //     setActiveStep(step);
-  //     if (!validateForm(true)) {
-  //       return;
-  //     }
-  //   }
-
-  //   const formDataToSubmit = new FormData();
-  //   Object.keys(formData).forEach((key) => {
-  //     formDataToSubmit.append(key, formData[key]);
-  //   });
-  //   if (selectedSignature) {
-  //     formDataToSubmit.append("signature", selectedSignature);
-  //   }
-  //   if (selectedId) {
-  //     formDataToSubmit.append("means_of_identification_image", selectedId);
-  //   }
-  //   if (selectedProof) {
-  //     formDataToSubmit.append("proof_of_address_image", selectedProof);
-  //   }
-  //   formDataToSubmit.append("created", "x-sheetmonkey-current-date-time");
-  //   formDataToSubmit.append("form_category", "Single Investee");
-
-  //   // Log FormData contents
-  //   for (let [key, value] of formDataToSubmit.entries()) {
-  //     console.log(`${key}:`, value);
-  //   }
-
-  //   const sheetMonkeyUrl =
-  //     process.env.NEXT_PUBLIC_SHEET_MONKEY_SINGLE_INVESTEE_URL;
-
-  //   if (!sheetMonkeyUrl) {
-  //     setSubmissionStatus("error");
-  //     setErrorMsg(
-  //       "Sheet Monkey URL is not configured. Please contact support."
-  //     );
-  //     console.error("Error: Sheet Monkey URL is undefined");
-  //     return;
-  //   }
-
-  //   try {
-  //     setSubmissionStatus("submitting");
-  //     console.log("Sending request to Sheet Monkey");
-  //     const response = await fetch(sheetMonkeyUrl, {
-  //       method: "POST",
-  //       body: formDataToSubmit,
-  //     });
-
-  //     if (response.ok) {
-  //       setSubmissionStatus("success");
-  //       console.log("Submission successful, redirecting...");
-  //       window.location.href = "https://dnamaz-update.vercel.app/success";
-  //     } else {
-  //       const errorText = await response.text();
-  //       throw new Error(
-  //         `Submission failed with status: ${response.status}, Details: ${errorText}`
-  //       );
-  //     }
-  //   } catch (error) {
-  //     setSubmissionStatus("error");
-  //     setErrorMsg(`Failed to submit the form: ${error.message}`);
-  //     console.error("Submission error:", error.message);
-  //   }
-  // };
-
   return (
     <div className="" ref={topDiv}>
       <Navbar />
@@ -389,7 +334,7 @@ const SingleInvestee = () => {
           <p>Back</p>
         </div>
 
-        <section className="mt-14 flex gap-10">
+        <section className="mt-6 flex gap-10">
           <div className="w-96 hidden sm:block">
             <ul className="flex flex-col px-10 bg-[#eaeaea]">
               {formSteps.map((step, idx) => (
@@ -429,6 +374,13 @@ const SingleInvestee = () => {
               encType="multipart/form-data"
               className="flex flex-col flex-1 max-w-[800px] justify-center mx-auto"
             >
+              {/* Descriptive Header */}
+              <div className="text-center mb-8">
+                <h1 className="text-3xl font-bold text-custom-primary mb-4">
+                  Single Investee Application Form
+                </h1>
+              </div>
+
               {errorMsg && (
                 <p className="text-[coral] font-medium text-sm text-center mb-4">
                   {errorMsg}
@@ -448,7 +400,7 @@ const SingleInvestee = () => {
               {/* Step 1 */}
               {true && (
                 <div className={`${activeStep === 1 && "!block"} hidden`}>
-                  <h3 className="text-3xl text-center font-bold text-custom-primary">
+                  <h3 className="text-xl text-center font-bold text-custom-primary">
                     Personal Information
                   </h3>
                   <div className="grid md:grid-cols-2 gap-8 mt-10">
@@ -470,13 +422,7 @@ const SingleInvestee = () => {
                       name="first_name"
                       placeholder="First Name"
                       value={formData.first_name}
-                      onChange={(e) => {
-                        setErrorMsg("");
-                        setFormData((prev) => ({
-                          ...prev,
-                          first_name: e.target.value,
-                        }));
-                      }}
+                      onChange={(e) => handleTextInputChange(e, "first_name")}
                     />
                     <CustomTextInput
                       required
@@ -484,13 +430,7 @@ const SingleInvestee = () => {
                       name="last_name"
                       placeholder="Last Name"
                       value={formData.last_name}
-                      onChange={(e) => {
-                        setErrorMsg("");
-                        setFormData((prev) => ({
-                          ...prev,
-                          last_name: e.target.value,
-                        }));
-                      }}
+                      onChange={(e) => handleTextInputChange(e, "last_name")}
                     />
                     <CustomTextInput
                       required
@@ -498,35 +438,43 @@ const SingleInvestee = () => {
                       name="other_name"
                       placeholder="Other Name"
                       value={formData.other_name}
-                      onChange={(e) => {
-                        setErrorMsg("");
-                        setFormData((prev) => ({
-                          ...prev,
-                          other_name: e.target.value,
-                        }));
-                      }}
+                      onChange={(e) => handleTextInputChange(e, "other_name")}
                     />
-                    <input
-                      required
-                      type="text"
-                      onFocus={(e) => {
-                        e.target.type = "date";
-                      }}
-                      onBlur={(e) => {
-                        e.target.type = "text";
-                      }}
-                      name="dob"
-                      placeholder="Date of Birth"
-                      className="px-3 outline-none border border-custom-primary bg-[#fff] h-[50px]"
-                      value={formData.dob}
-                      onChange={(e) => {
-                        setErrorMsg("");
-                        setFormData((prev) => ({
-                          ...prev,
-                          dob: e.target.value,
-                        }));
-                      }}
-                    />
+                    <div>
+                      <input
+                        required
+                        type="text"
+                        onFocus={(e) => {
+                          e.target.type = "date";
+                        }}
+                        onBlur={(e) => {
+                          e.target.type = "text";
+                          if (!isValidDate(e.target.value)) {
+                            setErrorMsg(
+                              "Note: Please enter a valid date of birth"
+                            );
+                          }
+                        }}
+                        name="dob"
+                        placeholder="Date of Birth"
+                        className="px-3 outline-none border h-[50px] w-full border-custom-primary bg-[#fff]"
+                        value={formData.dob}
+                        onChange={(e) => {
+                          setErrorMsg("");
+                          setFormData((prev) => ({
+                            ...prev,
+                            dob: e.target.value,
+                          }));
+                        }}
+                        max={new Date().toISOString().split("T")[0]}
+                      />
+                      {!isValidDate(formData.dob) && formData.dob && (
+                        <p className="text-xs sm:text-sm text-[coral]">
+                          <span className="font-medium">Note:</span> Please
+                          enter a valid date of birth
+                        </p>
+                      )}
+                    </div>
                     <CustomTextInput
                       required
                       type="email"
@@ -569,7 +517,7 @@ const SingleInvestee = () => {
                         placeholder="Bank Verification Number"
                         maxLength={11}
                         value={formData.bvn}
-                        onChange={(e) => handleNumberInputChange(e, "bvn")}
+                        onChange={(e) => handleNumberInputChange(e, "bvn", 11)}
                       />
                       {!isBvnValid() && formData.bvn && (
                         <p className="text-xs sm:text-sm text-[coral]">
@@ -578,29 +526,35 @@ const SingleInvestee = () => {
                         </p>
                       )}
                     </div>
-                    <CustomTextInput
-                      required
-                      id="phone"
-                      name="phone"
-                      type="text"
-                      placeholder="Phone Number"
-                      value={formData.phone}
-                      maxLength={14}
-                      onChange={(e) => handleNumberInputChange(e, "phone")}
-                    />
+                    <div>
+                      <CustomTextInput
+                        required
+                        id="phone"
+                        name="phone"
+                        type="tel"
+                        placeholder="Phone Number"
+                        value={formData.phone}
+                        maxLength={11}
+                        onChange={(e) =>
+                          handleNumberInputChange(e, "phone", 11)
+                        }
+                      />
+                      {!isPhoneValid(formData.phone) && formData.phone && (
+                        <p className="text-xs sm:text-sm text-[coral]">
+                          <span className="font-medium">Note:</span> Phone
+                          number must be exactly 11 digits
+                        </p>
+                      )}
+                    </div>
                     <CustomTextInput
                       required
                       id="mothers_maiden_name"
                       name="mothers_maiden_name"
                       placeholder="Mother's Maiden Name"
                       value={formData.mothers_maiden_name}
-                      onChange={(e) => {
-                        setErrorMsg("");
-                        setFormData((prev) => ({
-                          ...prev,
-                          mothers_maiden_name: e.target.value,
-                        }));
-                      }}
+                      onChange={(e) =>
+                        handleTextInputChange(e, "mothers_maiden_name")
+                      }
                     />
                     <CustomTextInput
                       required
@@ -608,13 +562,7 @@ const SingleInvestee = () => {
                       name="occupation"
                       placeholder="Occupation"
                       value={formData.occupation}
-                      onChange={(e) => {
-                        setErrorMsg("");
-                        setFormData((prev) => ({
-                          ...prev,
-                          occupation: e.target.value,
-                        }));
-                      }}
+                      onChange={(e) => handleTextInputChange(e, "occupation")}
                     />
                     <CustomSelectInput
                       name="employment_status"
@@ -643,13 +591,9 @@ const SingleInvestee = () => {
                         name="name_of_employer"
                         placeholder="Name of Employer"
                         value={formData.name_of_employer}
-                        onChange={(e) => {
-                          setErrorMsg("");
-                          setFormData((prev) => ({
-                            ...prev,
-                            name_of_employer: e.target.value,
-                          }));
-                        }}
+                        onChange={(e) =>
+                          handleTextInputChange(e, "name_of_employer")
+                        }
                       />
                     )}
                     {formData.employment_status === "Employed" && <div></div>}
@@ -670,7 +614,7 @@ const SingleInvestee = () => {
               {/* Step 2 */}
               {true && (
                 <div className={`${activeStep === 2 && "!block"} hidden`}>
-                  <h3 className="text-3xl text-center font-bold text-custom-primary">
+                  <h3 className="text-xl text-center font-bold text-custom-primary">
                     Next of Kin Info
                   </h3>
                   <div className="grid md:grid-cols-2 gap-8 mt-10">
@@ -680,13 +624,9 @@ const SingleInvestee = () => {
                       name="kin_first_name"
                       placeholder="First Name"
                       value={formData.kin_first_name}
-                      onChange={(e) => {
-                        setErrorMsg("");
-                        setFormData((prev) => ({
-                          ...prev,
-                          kin_first_name: e.target.value,
-                        }));
-                      }}
+                      onChange={(e) =>
+                        handleTextInputChange(e, "kin_first_name")
+                      }
                     />
                     <CustomTextInput
                       required
@@ -694,13 +634,9 @@ const SingleInvestee = () => {
                       name="kin_other_name"
                       placeholder="Other Name"
                       value={formData.kin_other_name}
-                      onChange={(e) => {
-                        setErrorMsg("");
-                        setFormData((prev) => ({
-                          ...prev,
-                          kin_other_name: e.target.value,
-                        }));
-                      }}
+                      onChange={(e) =>
+                        handleTextInputChange(e, "kin_other_name")
+                      }
                     />
                     <CustomTextInput
                       required
@@ -708,13 +644,9 @@ const SingleInvestee = () => {
                       name="kin_last_name"
                       placeholder="Last Name"
                       value={formData.kin_last_name}
-                      onChange={(e) => {
-                        setErrorMsg("");
-                        setFormData((prev) => ({
-                          ...prev,
-                          kin_last_name: e.target.value,
-                        }));
-                      }}
+                      onChange={(e) =>
+                        handleTextInputChange(e, "kin_last_name")
+                      }
                     />
                     <CustomTextInput
                       required
@@ -736,13 +668,9 @@ const SingleInvestee = () => {
                       name="kin_relationship"
                       placeholder="Relationship"
                       value={formData.kin_relationship}
-                      onChange={(e) => {
-                        setErrorMsg("");
-                        setFormData((prev) => ({
-                          ...prev,
-                          kin_relationship: e.target.value,
-                        }));
-                      }}
+                      onChange={(e) =>
+                        handleTextInputChange(e, "kin_relationship")
+                      }
                     />
                     <CustomTextInput
                       required
@@ -750,13 +678,7 @@ const SingleInvestee = () => {
                       name="kin_address"
                       placeholder="Home Address"
                       value={formData.kin_address}
-                      onChange={(e) => {
-                        setErrorMsg("");
-                        setFormData((prev) => ({
-                          ...prev,
-                          kin_address: e.target.value,
-                        }));
-                      }}
+                      onChange={(e) => handleTextInputChange(e, "kin_address")}
                     />
                     <CustomTextInput
                       required
@@ -764,24 +686,31 @@ const SingleInvestee = () => {
                       name="kin_occupation"
                       placeholder="Occupation"
                       value={formData.kin_occupation}
-                      onChange={(e) => {
-                        setErrorMsg("");
-                        setFormData((prev) => ({
-                          ...prev,
-                          kin_occupation: e.target.value,
-                        }));
-                      }}
+                      onChange={(e) =>
+                        handleTextInputChange(e, "kin_occupation")
+                      }
                     />
-                    <CustomTextInput
-                      required
-                      id="kin_phone"
-                      name="kin_phone"
-                      placeholder="Mobile Number"
-                      type="text"
-                      maxLength={14}
-                      value={formData.kin_phone}
-                      onChange={(e) => handleNumberInputChange(e, "kin_phone")}
-                    />
+                    <div>
+                      <CustomTextInput
+                        required
+                        id="kin_phone"
+                        name="kin_phone"
+                        placeholder="Mobile Number"
+                        type="text"
+                        value={formData.kin_phone}
+                        maxLength={11}
+                        onChange={(e) =>
+                          handleNumberInputChange(e, "kin_phone", 11)
+                        }
+                      />
+                      {!isPhoneValid(formData.kin_phone) &&
+                        formData.kin_phone && (
+                          <p className="text-xs sm:text-sm text-[coral]">
+                            <span className="font-medium">Note:</span> Phone
+                            number must be exactly 11 digits
+                          </p>
+                        )}
+                    </div>
                     <button
                       onClick={() => {
                         if (validateForm()) {
@@ -799,7 +728,7 @@ const SingleInvestee = () => {
               {/* Step 3 */}
               {true && (
                 <div className={`${activeStep === 3 && "!block"} hidden`}>
-                  <h3 className="text-3xl text-center font-bold text-custom-primary">
+                  <h3 className="text-xl text-center font-bold text-custom-primary">
                     Address Information
                   </h3>
                   <div className="grid md:grid-cols-2 gap-8 mt-10">
@@ -809,13 +738,7 @@ const SingleInvestee = () => {
                       name="address"
                       placeholder="Address"
                       value={formData.address}
-                      onChange={(e) => {
-                        setErrorMsg("");
-                        setFormData((prev) => ({
-                          ...prev,
-                          address: e.target.value,
-                        }));
-                      }}
+                      onChange={(e) => handleTextInputChange(e, "address")}
                     />
                     <CustomTextInput
                       required
@@ -823,13 +746,7 @@ const SingleInvestee = () => {
                       name="street"
                       placeholder="Street"
                       value={formData.street}
-                      onChange={(e) => {
-                        setErrorMsg("");
-                        setFormData((prev) => ({
-                          ...prev,
-                          street: e.target.value,
-                        }));
-                      }}
+                      onChange={(e) => handleTextInputChange(e, "street")}
                     />
                     <CustomTextInput
                       required
@@ -837,25 +754,16 @@ const SingleInvestee = () => {
                       name="city"
                       placeholder="City"
                       value={formData.city}
-                      onChange={(e) => {
-                        setErrorMsg("");
-                        setFormData((prev) => ({
-                          ...prev,
-                          city: e.target.value,
-                        }));
-                      }}
+                      onChange={(e) => handleTextInputChange(e, "city")}
                     />
-                    <CustomTextInput
+                    <NigerianStatesSelect
                       required
-                      id="state"
-                      name="state"
-                      placeholder="State"
                       value={formData.state}
-                      onChange={(e) => {
+                      onChange={(value) => {
                         setErrorMsg("");
                         setFormData((prev) => ({
                           ...prev,
-                          state: e.target.value,
+                          state: value,
                         }));
                       }}
                     />
@@ -865,13 +773,7 @@ const SingleInvestee = () => {
                       name="country"
                       placeholder="Country"
                       value={formData.country}
-                      onChange={(e) => {
-                        setErrorMsg("");
-                        setFormData((prev) => ({
-                          ...prev,
-                          country: e.target.value,
-                        }));
-                      }}
+                      onChange={(e) => handleTextInputChange(e, "country")}
                     />
                     <div></div>
                     <button
@@ -891,10 +793,9 @@ const SingleInvestee = () => {
               {/* Step 4 */}
               {true && (
                 <div className={`${activeStep === 4 && "!block"} hidden`}>
-                  <h3 className="text-3xl text-center font-bold text-custom-primary">
+                  <h3 className="text-xl text-center font-bold text-custom-primary">
                     Document Upload
                   </h3>
-                  
                   <div className="grid md:grid-cols-2 gap-8 mt-10">
                     <div>
                       <CustomSelectInput
@@ -918,7 +819,18 @@ const SingleInvestee = () => {
                           hidden
                           id="means_of_id"
                           name="means_of_identification_image"
-                          onChange={(e) => setSelectedId(e.target.files[0])}
+                          onChange={(e) => {
+                            const file = e.target.files[0];
+                            if (file && file.size > 2 * 1024 * 1024) {
+                              setErrorMsg(
+                                "Means of Identification file size must not exceed 2MB"
+                              );
+                              setSelectedId(null);
+                            } else {
+                              setSelectedId(file);
+                              setErrorMsg("");
+                            }
+                          }}
                         />
                         <label
                           ref={idRef}
@@ -928,6 +840,9 @@ const SingleInvestee = () => {
                           Means of Identification Image
                         </label>
                       </div>
+                      <p className="text-xs text-gray-500 mt-1">
+                        Accepted formats: JPG, PNG (Max 2MB)
+                      </p>
                     </div>
                     <div>
                       <CustomSelectInput
@@ -951,7 +866,18 @@ const SingleInvestee = () => {
                           hidden
                           id="proof_of_address"
                           name="proof_of_address_image"
-                          onChange={(e) => setSelectedProof(e.target.files[0])}
+                          onChange={(e) => {
+                            const file = e.target.files[0];
+                            if (file && file.size > 2 * 1024 * 1024) {
+                              setErrorMsg(
+                                "Proof of Address file size must not exceed 2MB"
+                              );
+                              setSelectedProof(null);
+                            } else {
+                              setSelectedProof(file);
+                              setErrorMsg("");
+                            }
+                          }}
                         />
                         <label
                           ref={proofRef}
@@ -961,6 +887,9 @@ const SingleInvestee = () => {
                           Proof of Address
                         </label>
                       </div>
+                      <p className="text-xs text-gray-500 mt-1">
+                        Accepted formats: JPG, PNG (Max 2MB)
+                      </p>
                     </div>
                     <div>
                       <input
@@ -969,9 +898,18 @@ const SingleInvestee = () => {
                         name="signature"
                         accept="image/png, image/jpg, image/jpeg"
                         id="signature"
-                        onChange={(e) =>
-                          setSelectedSignature(e.target.files[0])
-                        }
+                        onChange={(e) => {
+                          const file = e.target.files[0];
+                          if (file && file.size > 2 * 1024 * 1024) {
+                            setErrorMsg(
+                              "Signature file size must not exceed 2MB"
+                            );
+                            setSelectedSignature(null);
+                          } else {
+                            setSelectedSignature(file);
+                            setErrorMsg("");
+                          }
+                        }}
                       />
                       <label htmlFor="signature">
                         <div
@@ -987,6 +925,9 @@ const SingleInvestee = () => {
                           )}
                         </div>
                       </label>
+                      <p className="text-xs text-gray-500 mt-1">
+                        Accepted formats: JPG, PNG (Max 2MB)
+                      </p>
                     </div>
                     <div></div>
                     <button
@@ -1006,7 +947,7 @@ const SingleInvestee = () => {
               {/* Step 5 */}
               {true && (
                 <div className={`${activeStep === 5 && "!block"} hidden`}>
-                  <h3 className="text-3xl text-center font-bold text-custom-primary">
+                  <h3 className="text-xl text-center font-bold text-custom-primary">
                     Investment Info
                   </h3>
                   <div className="grid md:grid-cols-2 gap-8 mt-10">
@@ -1034,13 +975,7 @@ const SingleInvestee = () => {
                       name="specify"
                       placeholder="Specify"
                       value={formData.specify}
-                      onChange={(e) => {
-                        setErrorMsg("");
-                        setFormData((prev) => ({
-                          ...prev,
-                          specify: e.target.value,
-                        }));
-                      }}
+                      onChange={(e) => handleTextInputChange(e, "specify")}
                     />
                     <CustomTextInput
                       required
@@ -1152,11 +1087,12 @@ const CustomSelectInput = ({
 
 export default SingleInvestee;
 
-// import React, { useRef, useState } from "react";
+// import React, { useRef, useState, useEffect } from "react";
 // import { MdKeyboardBackspace } from "react-icons/md";
 // import Footer from "../../components/Footer/Footer";
 // import Navbar from "../../components/Navbar/Navbar";
 // import { useRouter } from "next/router";
+
 // const SingleInvestee = () => {
 //   const [uploadSignature, setUploadSignature] = useState(false);
 //   const [uploadPassport, setUploadPassport] = useState(false);
@@ -1165,169 +1101,63 @@ export default SingleInvestee;
 //   const [selectedId, setSelectedId] = useState();
 //   const [selectedProof, setSelectedProof] = useState();
 //   const [activeStep, setActiveStep] = useState(1);
-//   const [completedStep, setCompletedStep] = useState(0);
 //   const [formSteps, setFormSteps] = useState([
-//     {
-//       name: "Personal Information",
-//       active: true,
-//     },
-//     {
-//       name: "Next of Kin",
-//       active: false,
-//     },
-//     {
-//       name: "Address Information",
-//       active: false,
-//     },
-//     {
-//       name: "Upload Document",
-//       active: false,
-//     },
-//     {
-//       name: "Investment Information",
-//       active: false,
-//     },
+//     { name: "Personal Information", active: true },
+//     { name: "Next of Kin", active: false },
+//     { name: "Address Information", active: false },
+//     { name: "Upload Document", active: false },
+//     { name: "Investment Information", active: false },
 //   ]);
 //   const [formData, setFormData] = useState({
 //     title: "",
-//     firstName: "",
-//     lastName: "",
-//     otherName: "",
+//     first_name: "",
+//     last_name: "",
+//     other_name: "",
 //     dob: "",
 //     email: "",
 //     gender: "",
 //     bvn: "",
 //     phone: "",
-//     mother: "",
-//     occupataion: "",
-//     kinFirstName: "",
-//     KinOtherName: "",
-//     KinLastName: "",
-//     kinEmail: "",
-//     kinRel: "",
-//     kinAddress: "",
-//     kinOccupation: "",
-//     kinPhone: "",
+//     mothers_maiden_name: "",
+//     occupation: "",
+//     kin_first_name: "",
+//     kin_other_name: "",
+//     kin_last_name: "",
+//     kin_email: "",
+//     kin_relationship: "",
+//     kin_address: "",
+//     kin_occupation: "",
+//     kin_phone: "",
 //     address: "",
 //     street: "",
 //     city: "",
 //     state: "",
 //     country: "",
-//     timeFrame: "",
+//     time_frame: "",
 //     specify: "",
 //     amount: "",
-//     employmentStatus: "",
-//     nameOfEmployer: ""
+//     employment_status: "",
+//     name_of_employer: "",
 //   });
 //   const [errorMsg, setErrorMsg] = useState("");
+//   const [submissionStatus, setSubmissionStatus] = useState(null);
 //   const router = useRouter();
 
-//   // console.log("employment status ==>", formData.employmentStatus);
-
-//    const idRef = useRef(null);
+//   const idRef = useRef(null);
 //   const proofRef = useRef(null);
 //   const topDiv = useRef();
 
+//   useEffect(() => {
+//     setFormSteps((prev) =>
+//       prev.map((step, idx) => ({
+//         ...step,
+//         active: idx + 1 === activeStep,
+//       }))
+//     );
+//   }, [activeStep]);
+
 //   function isAnyValueEmpty(array) {
-//     const result = [];
-//     array.map((arr) => {
-//       result.push(arr.trim() === "");
-//     });
-//     return result.indexOf(true) < 0 ? false : true;
-//   }
-
-//   function validateForm(sidebar) {
-//     let currentStep = activeStep;
-//     if (currentStep === 1) {
-//       const res = isAnyValueEmpty([
-//         firstName,
-//         lastName,
-//         dob,
-//         email,
-//         gender,
-//         bvn,
-//         phone,
-//         mother,
-//         occupataion,
-//       ]);
-//       if (res) {
-//         setErrorMsg("Note: All fields except 'Title, Employement status' are compulsory");
-//         return;
-//       }
-
-//       if (validMail(email) == false) {
-//         setErrorMsg("Please enter a valid email address");
-//         return;
-//       }
-
-//       if (isBvnValid() == false) {
-//         setErrorMsg("Note: Bvn must be exactly 11 numbers");
-//         return;
-//       }
-//     } else if (currentStep === 2) {
-//       const res = isAnyValueEmpty([
-//         kinFirstName,
-//         KinOtherName,
-//         KinLastName,
-//         kinEmail,
-//         kinRel,
-//         kinAddress,
-//         kinOccupation,
-//         kinPhone,
-//       ]);
-//       if (res) {
-//         setErrorMsg("Note: All fields are compulsory. Fill to continue !!!");
-//         return;
-//       }
-//       if (validMail(kinEmail) === false) {
-//         setErrorMsg("Please enter a valid email address");
-//         return;
-//       }
-//     } else if (currentStep === 3) {
-//       const res = isAnyValueEmpty([address, street, city, state, country]);
-//       if (res) {
-//         setErrorMsg("Note: All fields are compulsory. Fill to continue !!!");
-//         return;
-//       }
-//     }
-
-//     !sidebar && setActiveStep((prev) => prev + 1);
-//   }
-
-//   const {
-//     title,
-//     firstName,
-//     lastName,
-//     otherName,
-//     dob,
-//     email,
-//     gender,
-//     bvn,
-//     phone,
-//     mother,
-//     occupataion,
-//     kinFirstName,
-//     KinOtherName,
-//     KinLastName,
-//     kinEmail,
-//     kinRel,
-//     kinAddress,
-//     kinOccupation,
-//     kinPhone,
-//     address,
-//     street,
-//     city,
-//     state,
-//     country,
-//     timeFrame,
-//     specify,
-//     amount,
-//     employmentStatus,
-//     nameOfEmployer,
-//   } = formData;
-
-//   function isBvnValid() {
-//     return bvn.length === 11 ? true : false;
+//     return array.some((value) => value.trim() === "");
 //   }
 
 //   function validMail(mail) {
@@ -1335,6 +1165,296 @@ export default SingleInvestee;
 //       mail
 //     );
 //   }
+
+//   function isBvnValid() {
+//     const bvnLength = formData.bvn.length;
+//     return bvnLength === 11;
+//   }
+
+//   function isPhoneValid(phone) {
+//     const numericPhone = phone.replace(/\D/g, "");
+//     return numericPhone.length >= 10;
+//   }
+
+//   function isDigitsOnly(value) {
+//     return /^\d*$/.test(value);
+//   }
+
+//   function handleNumberInputChange(e, field) {
+//     const value = e.target.value;
+//     if (isDigitsOnly(value)) {
+//       setFormData((prev) => ({
+//         ...prev,
+//         [field]: value,
+//       }));
+//       setErrorMsg("");
+//     }
+//   }
+
+//   function validateForm(sidebar = false) {
+//     let currentStep = activeStep;
+//     setErrorMsg("");
+
+//     if (currentStep === 1) {
+//       const requiredFields = [
+//         formData.first_name,
+//         formData.last_name,
+//         formData.other_name,
+//         formData.dob,
+//         formData.email,
+//         formData.gender,
+//         formData.bvn,
+//         formData.phone,
+//         formData.mothers_maiden_name,
+//         formData.occupation,
+//       ];
+//       if (isAnyValueEmpty(requiredFields)) {
+//         setErrorMsg(
+//           "Note: All fields except 'title, employment_status' are compulsory"
+//         );
+//         return false;
+//       }
+//       if (!validMail(formData.email)) {
+//         setErrorMsg("Please enter a valid email address");
+//         return false;
+//       }
+//       if (!isBvnValid()) {
+//         setErrorMsg("Note: BVN must be exactly 11 digits");
+//         return false;
+//       }
+//       if (!isPhoneValid(formData.phone)) {
+//         setErrorMsg("Note: Phone number must be at least 10 digits");
+//         return false;
+//       }
+//       if (!isDigitsOnly(formData.bvn)) {
+//         setErrorMsg("Note: BVN must contain only digits");
+//         return false;
+//       }
+//       if (!isDigitsOnly(formData.phone)) {
+//         setErrorMsg("Note: Phone number must contain only digits");
+//         return false;
+//       }
+//       if (
+//         formData.employment_status === "Employed" &&
+//         !formData.name_of_employer.trim()
+//       ) {
+//         setErrorMsg(
+//           "Note: Name of Employer is required if Employment Status is 'Employed'"
+//         );
+//         return false;
+//       }
+//     } else if (currentStep === 2) {
+//       const requiredFields = [
+//         formData.kin_first_name,
+//         formData.kin_other_name,
+//         formData.kin_last_name,
+//         formData.kin_email,
+//         formData.kin_relationship,
+//         formData.kin_address,
+//         formData.kin_occupation,
+//         formData.kin_phone,
+//       ];
+//       if (isAnyValueEmpty(requiredFields)) {
+//         setErrorMsg("Note: All fields are compulsory. Fill to continue!");
+//         return false;
+//       }
+//       if (!validMail(formData.kin_email)) {
+//         setErrorMsg("Please enter a valid email address for Next of Kin");
+//         return false;
+//       }
+//       if (!isPhoneValid(formData.kin_phone)) {
+//         setErrorMsg(
+//           "Note: Next of Kin phone number must be at least 10 digits"
+//         );
+//         return false;
+//       }
+//       if (!isDigitsOnly(formData.kin_phone)) {
+//         setErrorMsg("Note: Next of Kin phone number must contain only digits");
+//         return false;
+//       }
+//     } else if (currentStep === 3) {
+//       const requiredFields = [
+//         formData.address,
+//         formData.street,
+//         formData.city,
+//         formData.state,
+//         formData.country,
+//       ];
+//       if (isAnyValueEmpty(requiredFields)) {
+//         setErrorMsg("Note: All fields are compulsory. Fill to continue!");
+//         return false;
+//       }
+//     } else if (currentStep === 4) {
+//       if (!selectedId) {
+//         setErrorMsg("Please upload a Means of Identification");
+//         return false;
+//       }
+//       if (!selectedProof) {
+//         setErrorMsg("Please upload a Proof of Address");
+//         return false;
+//       }
+//       if (!selectedSignature) {
+//         setErrorMsg("Please upload a Signature");
+//         return false;
+//       }
+//     } else if (currentStep === 5) {
+//       const requiredFields = [
+//         formData.time_frame,
+//         formData.specify,
+//         formData.amount,
+//       ];
+//       if (isAnyValueEmpty(requiredFields)) {
+//         setErrorMsg("Note: All fields are compulsory. Fill to continue!");
+//         return false;
+//       }
+//       if (!isDigitsOnly(formData.amount)) {
+//         setErrorMsg("Note: Amount must contain only digits");
+//         return false;
+//       }
+//     }
+
+//     if (!sidebar) setActiveStep((prev) => prev + 1);
+//     return true;
+//   }
+
+//   const handleSubmit = async (e) => {
+//     e.preventDefault();
+
+//     // Validate all steps before submission
+//     for (let step = 1; step <= 5; step++) {
+//       setActiveStep(step);
+//       if (!validateForm(true)) {
+//         return;
+//       }
+//     }
+
+//     const formDataToSubmit = new FormData();
+//     Object.keys(formData).forEach((key) => {
+//       // formDataToSubmit.append(key, formData[key]);
+//       if (
+//         (key === "email" || key === "kin_email" || key === "email_address") &&
+//         typeof formData[key] === "string"
+//       ) {
+//         formDataToSubmit.append(key, formData[key].toLowerCase());
+//       } else if (
+//         (key === "phone" ||
+//           key === "kin_phone" ||
+//           key === "mobile_phone_number" ||
+//           key === "land_phone_number") &&
+//         typeof formData[key] === "string"
+//       ) {
+//         const cleaned = formData[key].replace(/[\s\-\+]/g, "").trim();
+//         formDataToSubmit.append(key, cleaned);
+//       } else {
+//         formDataToSubmit.append(key, formData[key]);
+//       }
+//     });
+//     if (selectedSignature) {
+//       formDataToSubmit.append("signature", selectedSignature);
+//     }
+//     if (selectedId) {
+//       formDataToSubmit.append("means_of_identification_image", selectedId);
+//     }
+//     if (selectedProof) {
+//       formDataToSubmit.append("proof_of_address_image", selectedProof);
+//     }
+//     formDataToSubmit.append("created", new Date().toLocaleDateString("en-GB"));
+//     formDataToSubmit.append("form_category", "Single Investee");
+
+//     const sheetMonkeyUrl =
+//       process.env.NEXT_PUBLIC_SHEET_MONKEY_SINGLE_INVESTEE_URL;
+
+//     try {
+//       setSubmissionStatus("submitting");
+//       console.log("Sending request to Sheet Monkey");
+//       const response = await fetch(sheetMonkeyUrl, {
+//         method: "POST",
+//         body: formDataToSubmit,
+//       });
+
+//       if (response.ok) {
+//         setSubmissionStatus("success");
+//         window.location.href = "https://dnamaz-update.vercel.app/success";
+//       } else {
+//         const errorText = await response.text();
+//         throw new Error(
+//           `Submission failed with status: ${response.status}, Details: ${errorText}`
+//         );
+//       }
+//     } catch (error) {
+//       setSubmissionStatus("error");
+//       setErrorMsg(`Failed to submit the form: ${error.message}`);
+//     }
+//   };
+
+//   // const handleSubmit = async (e) => {
+//   //   e.preventDefault();
+//   //   console.log("Form submitted, preventing default behavior");
+
+//   //   for (let step = 1; step <= 5; step++) {
+//   //     setActiveStep(step);
+//   //     if (!validateForm(true)) {
+//   //       return;
+//   //     }
+//   //   }
+
+//   //   const formDataToSubmit = new FormData();
+//   //   Object.keys(formData).forEach((key) => {
+//   //     formDataToSubmit.append(key, formData[key]);
+//   //   });
+//   //   if (selectedSignature) {
+//   //     formDataToSubmit.append("signature", selectedSignature);
+//   //   }
+//   //   if (selectedId) {
+//   //     formDataToSubmit.append("means_of_identification_image", selectedId);
+//   //   }
+//   //   if (selectedProof) {
+//   //     formDataToSubmit.append("proof_of_address_image", selectedProof);
+//   //   }
+//   //   formDataToSubmit.append("created", "x-sheetmonkey-current-date-time");
+//   //   formDataToSubmit.append("form_category", "Single Investee");
+
+//   //   // Log FormData contents
+//   //   for (let [key, value] of formDataToSubmit.entries()) {
+//   //     console.log(`${key}:`, value);
+//   //   }
+
+//   //   const sheetMonkeyUrl =
+//   //     process.env.NEXT_PUBLIC_SHEET_MONKEY_SINGLE_INVESTEE_URL;
+
+//   //   if (!sheetMonkeyUrl) {
+//   //     setSubmissionStatus("error");
+//   //     setErrorMsg(
+//   //       "Sheet Monkey URL is not configured. Please contact support."
+//   //     );
+//   //     console.error("Error: Sheet Monkey URL is undefined");
+//   //     return;
+//   //   }
+
+//   //   try {
+//   //     setSubmissionStatus("submitting");
+//   //     console.log("Sending request to Sheet Monkey");
+//   //     const response = await fetch(sheetMonkeyUrl, {
+//   //       method: "POST",
+//   //       body: formDataToSubmit,
+//   //     });
+
+//   //     if (response.ok) {
+//   //       setSubmissionStatus("success");
+//   //       console.log("Submission successful, redirecting...");
+//   //       window.location.href = "https://dnamaz-update.vercel.app/success";
+//   //     } else {
+//   //       const errorText = await response.text();
+//   //       throw new Error(
+//   //         `Submission failed with status: ${response.status}, Details: ${errorText}`
+//   //       );
+//   //     }
+//   //   } catch (error) {
+//   //     setSubmissionStatus("error");
+//   //     setErrorMsg(`Failed to submit the form: ${error.message}`);
+//   //     console.error("Submission error:", error.message);
+//   //   }
+//   // };
 
 //   return (
 //     <div className="" ref={topDiv}>
@@ -1359,15 +1479,15 @@ export default SingleInvestee;
 //         </div>
 
 //         <section className="mt-14 flex gap-10">
-//           <div className="w-96 hidden sm:block ">
+//           <div className="w-96 hidden sm:block">
 //             <ul className="flex flex-col px-10 bg-[#eaeaea]">
 //               {formSteps.map((step, idx) => (
 //                 <li
 //                   onClick={() => {
 //                     if (idx < activeStep) {
 //                       setActiveStep(idx + 1);
+//                       setErrorMsg("");
 //                     }
-//                     setErrorMsg("");
 //                   }}
 //                   key={idx}
 //                   className="cursor-pointer py-6 text-lg leading-snug flex items-center gap-3 border-b border-[gainsboro]"
@@ -1383,7 +1503,7 @@ export default SingleInvestee;
 //                   <p
 //                     className={`${
 //                       activeStep >= idx + 1 && "text-custom-primary"
-//                     } font-semibold `}
+//                     } font-semibold`}
 //                   >
 //                     {step.name}
 //                   </p>
@@ -1394,40 +1514,37 @@ export default SingleInvestee;
 
 //           <div className="mr-5 ml-5 sm:ml-[unset] sm:mr-10 w-full">
 //             <form
-//               autoComplete="new-password"
-//               action="https://api.sheetmonkey.io/form/d9L7BaXFZnm7Hiu25HhnmG"
-//               method="POST"
+//               onSubmit={handleSubmit}
 //               encType="multipart/form-data"
 //               className="flex flex-col flex-1 max-w-[800px] justify-center mx-auto"
 //             >
-//               <input
-//                 name="Account Type"
-//                 value="Single Investor"
-//                 id="accountType"
-//                 hidden
-//               />
-//               <input
-//                 type="hidden"
-//                 name="x-sheetmonkey-redirect"
-//                 value="https://dnamaz-update.vercel.app/success"
-//               />
+//               {errorMsg && (
+//                 <p className="text-[coral] font-medium text-sm text-center mb-4">
+//                   {errorMsg}
+//                 </p>
+//               )}
+//               {submissionStatus === "submitting" && (
+//                 <p className="text-center text-sm font-medium mb-4">
+//                   Submitting your form, please wait...
+//                 </p>
+//               )}
+//               {submissionStatus === "success" && (
+//                 <p className="text-green-600 font-medium text-sm text-center mb-4">
+//                   Form submitted successfully! Redirecting...
+//                 </p>
+//               )}
+
 //               {/* Step 1 */}
 //               {true && (
 //                 <div className={`${activeStep === 1 && "!block"} hidden`}>
 //                   <h3 className="text-3xl text-center font-bold text-custom-primary">
 //                     Personal Information
 //                   </h3>
-//                   {activeStep === 1 && errorMsg && (
-//                     <p className="text-[coral] font-medium text-sm text-center">
-//                       {errorMsg}
-//                     </p>
-//                   )}
 //                   <div className="grid md:grid-cols-2 gap-8 mt-10">
 //                     <CustomSelectInput
-//                       required
-//                       name="Title"
+//                       name="title"
 //                       options={["Title", "Mr", "Mrs", "Master", "Miss"]}
-//                       value={title}
+//                       value={formData.title}
 //                       onChange={(e) => {
 //                         setErrorMsg("");
 //                         setFormData((prev) => ({
@@ -1438,43 +1555,43 @@ export default SingleInvestee;
 //                     />
 //                     <CustomTextInput
 //                       required
-//                       id="firstname"
-//                       name="Firstname"
+//                       id="first_name"
+//                       name="first_name"
 //                       placeholder="First Name"
-//                       value={firstName}
+//                       value={formData.first_name}
 //                       onChange={(e) => {
 //                         setErrorMsg("");
 //                         setFormData((prev) => ({
 //                           ...prev,
-//                           firstName: e.target.value,
+//                           first_name: e.target.value,
 //                         }));
 //                       }}
 //                     />
 //                     <CustomTextInput
 //                       required
-//                       id="lastname"
-//                       name="Lastname"
+//                       id="last_name"
+//                       name="last_name"
 //                       placeholder="Last Name"
-//                       value={lastName}
+//                       value={formData.last_name}
 //                       onChange={(e) => {
 //                         setErrorMsg("");
 //                         setFormData((prev) => ({
 //                           ...prev,
-//                           lastName: e.target.value,
+//                           last_name: e.target.value,
 //                         }));
 //                       }}
 //                     />
 //                     <CustomTextInput
 //                       required
-//                       id="othername"
-//                       name="Other names"
+//                       id="other_name"
+//                       name="other_name"
 //                       placeholder="Other Name"
-//                       value={otherName}
+//                       value={formData.other_name}
 //                       onChange={(e) => {
 //                         setErrorMsg("");
 //                         setFormData((prev) => ({
 //                           ...prev,
-//                           otherName: e.target.value,
+//                           other_name: e.target.value,
 //                         }));
 //                       }}
 //                     />
@@ -1487,11 +1604,10 @@ export default SingleInvestee;
 //                       onBlur={(e) => {
 //                         e.target.type = "text";
 //                       }}
-//                       // type="date"
-//                       name="Date of Birth"
+//                       name="dob"
 //                       placeholder="Date of Birth"
-//                       className="px-3 outline-none border h-[50px] border-custom-primary bg-[#fff]"
-//                       value={dob}
+//                       className="px-3 outline-none border border-custom-primary bg-[#fff] h-[50px]"
+//                       value={formData.dob}
 //                       onChange={(e) => {
 //                         setErrorMsg("");
 //                         setFormData((prev) => ({
@@ -1504,9 +1620,9 @@ export default SingleInvestee;
 //                       required
 //                       type="email"
 //                       id="email"
-//                       name="Email"
+//                       name="email"
 //                       placeholder="Email Address"
-//                       value={email}
+//                       value={formData.email}
 //                       onChange={(e) => {
 //                         setErrorMsg("");
 //                         setFormData((prev) => ({
@@ -1517,14 +1633,14 @@ export default SingleInvestee;
 //                     />
 //                     <CustomSelectInput
 //                       required
-//                       name="Gender"
+//                       name="gender"
 //                       options={[
 //                         "select gender",
 //                         "male",
 //                         "female",
 //                         "prefer not to say",
 //                       ]}
-//                       value={gender}
+//                       value={formData.gender}
 //                       onChange={(e) => {
 //                         setErrorMsg("");
 //                         setFormData((prev) => ({
@@ -1537,107 +1653,100 @@ export default SingleInvestee;
 //                       <CustomTextInput
 //                         required
 //                         id="bvn"
-//                         name="BVN"
-//                         type="number"
-//                         placeholder="Bank Verfication Number"
-//                         value={bvn}
-//                         onChange={(e) => {
-//                           // console.log(e);
-//                           setErrorMsg("");
-//                           setFormData((prev) => ({
-//                             ...prev,
-//                             bvn: e.target.value,
-//                           }));
-//                         }}
+//                         name="bvn"
+//                         type="text"
+//                         placeholder="Bank Verification Number"
+//                         maxLength={11}
+//                         value={formData.bvn}
+//                         onChange={(e) => handleNumberInputChange(e, "bvn")}
 //                       />
-//                       {!isBvnValid() && (
+//                       {!isBvnValid() && formData.bvn && (
 //                         <p className="text-xs sm:text-sm text-[coral]">
-//                           <span className="font-medium">Note:</span> BVN
-//                           can&#39;t be less or more than 11 numbers
+//                           <span className="font-medium">Note:</span> BVN must be
+//                           exactly 11 digits
 //                         </p>
 //                       )}
 //                     </div>
 //                     <CustomTextInput
 //                       required
 //                       id="phone"
-//                       name="Phone"
-//                       type="number"
+//                       name="phone"
+//                       type="text"
 //                       placeholder="Phone Number"
-//                       value={phone}
-//                       onChange={(e) => {
-//                         setErrorMsg("");
-//                         setFormData((prev) => ({
-//                           ...prev,
-//                           phone: e.target.value,
-//                         }));
-//                       }}
+//                       value={formData.phone}
+//                       maxLength={14}
+//                       onChange={(e) => handleNumberInputChange(e, "phone")}
 //                     />
 //                     <CustomTextInput
 //                       required
-//                       id="mothername"
-//                       name="Mother's Name"
-//                       placeholder="Mother Maiden Name"
-//                       value={mother}
+//                       id="mothers_maiden_name"
+//                       name="mothers_maiden_name"
+//                       placeholder="Mother's Maiden Name"
+//                       value={formData.mothers_maiden_name}
 //                       onChange={(e) => {
 //                         setErrorMsg("");
 //                         setFormData((prev) => ({
 //                           ...prev,
-//                           mother: e.target.value,
+//                           mothers_maiden_name: e.target.value,
 //                         }));
 //                       }}
 //                     />
 //                     <CustomTextInput
 //                       required
 //                       id="occupation"
-//                       name="Occupation"
+//                       name="occupation"
 //                       placeholder="Occupation"
-//                       value={occupataion}
+//                       value={formData.occupation}
 //                       onChange={(e) => {
 //                         setErrorMsg("");
 //                         setFormData((prev) => ({
 //                           ...prev,
-//                           occupataion: e.target.value,
+//                           occupation: e.target.value,
 //                         }));
 //                       }}
 //                     />
 //                     <CustomSelectInput
+//                       name="employment_status"
+//                       options={[
+//                         "Select Employment Status",
+//                         "Employed",
+//                         "Unemployed",
+//                       ]}
+//                       value={formData.employment_status}
+//                       onChange={(e) => {
+//                         setErrorMsg("");
+//                         setFormData((prev) => ({
+//                           ...prev,
+//                           employment_status: e.target.value,
+//                           name_of_employer:
+//                             e.target.value === "Employed"
+//                               ? prev.name_of_employer
+//                               : "",
+//                         }));
+//                       }}
+//                     />
+//                     {formData.employment_status === "Employed" && (
+//                       <CustomTextInput
 //                         required
-//                         idRef={idRef}
-//                         selectedId={selectedId}
-//                         setSelectedId={setSelectedId}
-//                         name="Employment Status"
-//                         options={[
-//                           "Select Employment Status",
-//                           "Employed",
-//                           "Unemployed",
-//                         ]}
-//                         value={employmentStatus}
+//                         id="name_of_employer"
+//                         name="name_of_employer"
+//                         placeholder="Name of Employer"
+//                         value={formData.name_of_employer}
 //                         onChange={(e) => {
 //                           setErrorMsg("");
 //                           setFormData((prev) => ({
 //                             ...prev,
-//                             employmentStatus: e.target.value,
+//                             name_of_employer: e.target.value,
 //                           }));
 //                         }}
 //                       />
-//                     {formData.employmentStatus === "Employed" && <CustomTextInput
-//                       required
-//                       id="name-of-employer"
-//                       name="name-of-employer"
-//                       placeholder="Name of employer"
-//                       value={nameOfEmployer}
-//                       onChange={(e) => {
-//                         setFormData((prev) => ({
-//                           ...prev,
-//                           nameOfEmployer: e.target.value,
-//                         }));
-//                       }}
-//                     />}
-//                     {formData.employmentStatus === "Employed" && <div></div>}
+//                     )}
+//                     {formData.employment_status === "Employed" && <div></div>}
 //                     <button
 //                       onClick={() => {
-//                         validateForm();
-//                         topDiv.current.scrollIntoView();
+//                         if (validateForm()) {
+//                           topDiv.current.scrollIntoView();
+//                         }
 //                       }}
 //                       type="button"
 //                       className="text-white px-20 h-[50px] bg-custom-primary w-fit font-medium"
@@ -1647,136 +1756,126 @@ export default SingleInvestee;
 //                   </div>
 //                 </div>
 //               )}
-//               {/* step 2 */}
+//               {/* Step 2 */}
 //               {true && (
 //                 <div className={`${activeStep === 2 && "!block"} hidden`}>
 //                   <h3 className="text-3xl text-center font-bold text-custom-primary">
 //                     Next of Kin Info
 //                   </h3>
-//                   {activeStep === 2 && errorMsg && (
-//                     <p className="text-[coral] font-medium text-sm text-center">
-//                       {errorMsg}
-//                     </p>
-//                   )}
 //                   <div className="grid md:grid-cols-2 gap-8 mt-10">
 //                     <CustomTextInput
 //                       required
-//                       id="firstname"
-//                       name="Firstname (Next of Kin)"
+//                       id="kin_first_name"
+//                       name="kin_first_name"
 //                       placeholder="First Name"
-//                       value={kinFirstName}
+//                       value={formData.kin_first_name}
 //                       onChange={(e) => {
 //                         setErrorMsg("");
 //                         setFormData((prev) => ({
 //                           ...prev,
-//                           kinFirstName: e.target.value,
+//                           kin_first_name: e.target.value,
 //                         }));
 //                       }}
 //                     />
 //                     <CustomTextInput
 //                       required
-//                       id="othername"
-//                       name="Other Name"
+//                       id="kin_other_name"
+//                       name="kin_other_name"
 //                       placeholder="Other Name"
-//                       value={KinOtherName}
+//                       value={formData.kin_other_name}
 //                       onChange={(e) => {
 //                         setErrorMsg("");
 //                         setFormData((prev) => ({
 //                           ...prev,
-//                           KinOtherName: e.target.value,
+//                           kin_other_name: e.target.value,
 //                         }));
 //                       }}
 //                     />
 //                     <CustomTextInput
 //                       required
-//                       id="lastname"
-//                       name="Last Name (Next of Kin)"
+//                       id="kin_last_name"
+//                       name="kin_last_name"
 //                       placeholder="Last Name"
-//                       value={KinLastName}
+//                       value={formData.kin_last_name}
 //                       onChange={(e) => {
 //                         setErrorMsg("");
 //                         setFormData((prev) => ({
 //                           ...prev,
-//                           KinLastName: e.target.value,
+//                           kin_last_name: e.target.value,
 //                         }));
 //                       }}
 //                     />
 //                     <CustomTextInput
 //                       required
-//                       id="email"
-//                       name="Email (Next of Kin)"
+//                       id="kin_email"
+//                       name="kin_email"
 //                       placeholder="Email"
-//                       value={kinEmail}
+//                       value={formData.kin_email}
 //                       onChange={(e) => {
 //                         setErrorMsg("");
 //                         setFormData((prev) => ({
 //                           ...prev,
-//                           kinEmail: e.target.value,
+//                           kin_email: e.target.value,
 //                         }));
 //                       }}
 //                     />
 //                     <CustomTextInput
 //                       required
-//                       id="relationship"
-//                       name="Relationship"
+//                       id="kin_relationship"
+//                       name="kin_relationship"
 //                       placeholder="Relationship"
-//                       value={kinRel}
+//                       value={formData.kin_relationship}
 //                       onChange={(e) => {
 //                         setErrorMsg("");
 //                         setFormData((prev) => ({
 //                           ...prev,
-//                           kinRel: e.target.value,
+//                           kin_relationship: e.target.value,
 //                         }));
 //                       }}
 //                     />
 //                     <CustomTextInput
 //                       required
-//                       id="homeAddress"
-//                       name="Home Address"
+//                       id="kin_address"
+//                       name="kin_address"
 //                       placeholder="Home Address"
-//                       value={kinAddress}
+//                       value={formData.kin_address}
 //                       onChange={(e) => {
 //                         setErrorMsg("");
 //                         setFormData((prev) => ({
 //                           ...prev,
-//                           kinAddress: e.target.value,
+//                           kin_address: e.target.value,
 //                         }));
 //                       }}
 //                     />
 //                     <CustomTextInput
 //                       required
-//                       id="occupation"
-//                       name="Occupation (Next of Kin)"
+//                       id="kin_occupation"
+//                       name="kin_occupation"
 //                       placeholder="Occupation"
-//                       value={kinOccupation}
+//                       value={formData.kin_occupation}
 //                       onChange={(e) => {
 //                         setErrorMsg("");
 //                         setFormData((prev) => ({
 //                           ...prev,
-//                           kinOccupation: e.target.value,
+//                           kin_occupation: e.target.value,
 //                         }));
 //                       }}
 //                     />
 //                     <CustomTextInput
 //                       required
-//                       id="phone"
-//                       name="Mobile Number"
+//                       id="kin_phone"
+//                       name="kin_phone"
 //                       placeholder="Mobile Number"
-//                       type="number"
-//                       value={kinPhone}
-//                       onChange={(e) => {
-//                         setErrorMsg("");
-//                         setFormData((prev) => ({
-//                           ...prev,
-//                           kinPhone: e.target.value,
-//                         }));
-//                       }}
+//                       type="text"
+//                       maxLength={14}
+//                       value={formData.kin_phone}
+//                       onChange={(e) => handleNumberInputChange(e, "kin_phone")}
 //                     />
 //                     <button
 //                       onClick={() => {
-//                         validateForm();
-//                         topDiv.current.scrollIntoView();
-//                         // setActiveStep(3);
+//                         if (validateForm()) {
+//                           topDiv.current.scrollIntoView();
+//                         }
 //                       }}
 //                       type="button"
 //                       className="text-white px-20 h-[50px] bg-custom-primary w-fit font-medium"
@@ -1786,24 +1885,19 @@ export default SingleInvestee;
 //                   </div>
 //                 </div>
 //               )}
-//               {/* step 3 */}
+//               {/* Step 3 */}
 //               {true && (
 //                 <div className={`${activeStep === 3 && "!block"} hidden`}>
 //                   <h3 className="text-3xl text-center font-bold text-custom-primary">
 //                     Address Information
 //                   </h3>
-//                   {activeStep === 3 && errorMsg && (
-//                     <p className="text-[coral] font-medium text-sm text-center">
-//                       {errorMsg}
-//                     </p>
-//                   )}
 //                   <div className="grid md:grid-cols-2 gap-8 mt-10">
 //                     <CustomTextInput
 //                       required
 //                       id="address"
-//                       name="Address"
+//                       name="address"
 //                       placeholder="Address"
-//                       value={address}
+//                       value={formData.address}
 //                       onChange={(e) => {
 //                         setErrorMsg("");
 //                         setFormData((prev) => ({
@@ -1815,9 +1909,9 @@ export default SingleInvestee;
 //                     <CustomTextInput
 //                       required
 //                       id="street"
-//                       name="Street"
+//                       name="street"
 //                       placeholder="Street"
-//                       value={street}
+//                       value={formData.street}
 //                       onChange={(e) => {
 //                         setErrorMsg("");
 //                         setFormData((prev) => ({
@@ -1831,7 +1925,7 @@ export default SingleInvestee;
 //                       id="city"
 //                       name="city"
 //                       placeholder="City"
-//                       value={city}
+//                       value={formData.city}
 //                       onChange={(e) => {
 //                         setErrorMsg("");
 //                         setFormData((prev) => ({
@@ -1843,9 +1937,9 @@ export default SingleInvestee;
 //                     <CustomTextInput
 //                       required
 //                       id="state"
-//                       name="State"
+//                       name="state"
 //                       placeholder="State"
-//                       value={state}
+//                       value={formData.state}
 //                       onChange={(e) => {
 //                         setErrorMsg("");
 //                         setFormData((prev) => ({
@@ -1857,9 +1951,9 @@ export default SingleInvestee;
 //                     <CustomTextInput
 //                       required
 //                       id="country"
-//                       name="Country"
+//                       name="country"
 //                       placeholder="Country"
-//                       value={country}
+//                       value={formData.country}
 //                       onChange={(e) => {
 //                         setErrorMsg("");
 //                         setFormData((prev) => ({
@@ -1871,9 +1965,9 @@ export default SingleInvestee;
 //                     <div></div>
 //                     <button
 //                       onClick={() => {
-//                         validateForm();
-//                         topDiv.current.scrollIntoView();
-//                         // setActiveStep(4);
+//                         if (validateForm()) {
+//                           topDiv.current.scrollIntoView();
+//                         }
 //                       }}
 //                       type="button"
 //                       className="text-white px-20 h-[50px] bg-custom-primary w-fit font-medium"
@@ -1883,12 +1977,13 @@ export default SingleInvestee;
 //                   </div>
 //                 </div>
 //               )}
-//               {/* step 4 */}
+//               {/* Step 4 */}
 //               {true && (
 //                 <div className={`${activeStep === 4 && "!block"} hidden`}>
 //                   <h3 className="text-3xl text-center font-bold text-custom-primary">
 //                     Document Upload
 //                   </h3>
+
 //                   <div className="grid md:grid-cols-2 gap-8 mt-10">
 //                     <div>
 //                       <CustomSelectInput
@@ -1896,7 +1991,7 @@ export default SingleInvestee;
 //                         idRef={idRef}
 //                         selectedId={selectedId}
 //                         setSelectedId={setSelectedId}
-//                         name="Means of Identification"
+//                         name="means_of_identification"
 //                         options={[
 //                           "Means of Identification",
 //                           "International Passport",
@@ -1911,7 +2006,7 @@ export default SingleInvestee;
 //                           accept="image/png, image/jpg, image/jpeg"
 //                           hidden
 //                           id="means_of_id"
-//                           name="Means of Identification (Image)"
+//                           name="means_of_identification_image"
 //                           onChange={(e) => setSelectedId(e.target.files[0])}
 //                         />
 //                         <label
@@ -1929,7 +2024,7 @@ export default SingleInvestee;
 //                         proofRef={proofRef}
 //                         selectedProof={selectedProof}
 //                         setSelectedProof={setSelectedProof}
-//                         name="Proof of Address"
+//                         name="proof_of_address"
 //                         options={[
 //                           "Proof of Address",
 //                           "Utility Bill",
@@ -1944,7 +2039,7 @@ export default SingleInvestee;
 //                           accept="image/png, image/jpg, image/jpeg"
 //                           hidden
 //                           id="proof_of_address"
-//                           name="Proof of Address (Image)"
+//                           name="proof_of_address_image"
 //                           onChange={(e) => setSelectedProof(e.target.files[0])}
 //                         />
 //                         <label
@@ -1960,7 +2055,7 @@ export default SingleInvestee;
 //                       <input
 //                         hidden
 //                         type="file"
-//                         name="Signature"
+//                         name="signature"
 //                         accept="image/png, image/jpg, image/jpeg"
 //                         id="signature"
 //                         onChange={(e) =>
@@ -1970,8 +2065,7 @@ export default SingleInvestee;
 //                       <label htmlFor="signature">
 //                         <div
 //                           role="button"
-//                           // onClick={() => setUploadSignature(true)}
-//                           className="bg-[#fff] flex justify-between  items-center border border-custom-primary text-left w-full p-3"
+//                           className="bg-[#fff] flex justify-between items-center border border-custom-primary text-left w-full p-3"
 //                         >
 //                           Signature Upload
 //                           {selectedSignature && (
@@ -1983,42 +2077,12 @@ export default SingleInvestee;
 //                         </div>
 //                       </label>
 //                     </div>
-//                     {/* password no more needed */}
-//                     {/* <div>
-//                       <input
-//                         hidden
-//                         type="file"
-//                         name="Passport"
-//                         accept="image/png, image/jpg, image/jpeg"
-//                         id="passport"
-//                         onChange={(e) => setSelectedPassport(e.target.files[0])}
-//                       />
-//                       <label htmlFor="passport">
-//                         <div
-//                           role="button"
-//                           // onClick={() => setUploadPassport(true)}
-//                           className="bg-[#fff] text text-base justify-between  flex items-center border border-[#dddddd] text-left w-full p-3"
-//                         >
-//                           <p>
-//                             Passport Photograph
-//                             <span className="ml-1 hidden sm:inline">
-//                               Upload
-//                             </span>
-//                           </p>
-//                           {selectedPassport && (
-//                             <span className="ml-2 italic text-xs sm:text-sm">{`(${selectedPassport.name.slice(
-//                               0,
-//                               15
-//                             )})`}</span>
-//                           )}
-//                         </div>
-//                       </label>
-//                     </div> */}
 //                     <div></div>
 //                     <button
 //                       onClick={() => {
-//                         topDiv.current.scrollIntoView();
-//                         setActiveStep(5);
+//                         if (validateForm()) {
+//                           topDiv.current.scrollIntoView();
+//                         }
 //                       }}
 //                       type="button"
 //                       className="text-white px-20 h-[50px] bg-custom-primary w-fit font-medium"
@@ -2028,42 +2092,37 @@ export default SingleInvestee;
 //                   </div>
 //                 </div>
 //               )}
-//               {/* step 5 */}
+//               {/* Step 5 */}
 //               {true && (
 //                 <div className={`${activeStep === 5 && "!block"} hidden`}>
 //                   <h3 className="text-3xl text-center font-bold text-custom-primary">
 //                     Investment Info
 //                   </h3>
-//                   {activeStep === 5 && errorMsg && (
-//                     <p className="text-[coral] font-medium text-sm text-center">
-//                       {errorMsg}
-//                     </p>
-//                   )}
 //                   <div className="grid md:grid-cols-2 gap-8 mt-10">
 //                     <CustomSelectInput
 //                       required
-//                       name="Time Frame"
+//                       name="time_frame"
 //                       options={[
 //                         "Time Frame",
 //                         "Short Term (Less than or equal to 1 year)",
 //                         "Mid-Term (More than 1 year - less than 5yrs)",
 //                         "Long Term (More than 5 less - than 10yrs)",
 //                       ]}
-//                       value={timeFrame}
+//                       value={formData.time_frame}
 //                       onChange={(e) => {
 //                         setErrorMsg("");
 //                         setFormData((prev) => ({
 //                           ...prev,
-//                           timeFrame: e.target.value,
+//                           time_frame: e.target.value,
 //                         }));
 //                       }}
 //                     />
 //                     <CustomTextInput
 //                       required
 //                       id="specify"
-//                       name="Specify"
+//                       name="specify"
 //                       placeholder="Specify"
-//                       value={specify}
+//                       value={formData.specify}
 //                       onChange={(e) => {
 //                         setErrorMsg("");
 //                         setFormData((prev) => ({
@@ -2075,22 +2134,17 @@ export default SingleInvestee;
 //                     <CustomTextInput
 //                       required
 //                       id="amount"
-//                       name="Amount (₦) "
-//                       placeholder="Amount (₦) "
-//                       value={amount}
-//                       onChange={(e) => {
-//                         setErrorMsg("");
-//                         setFormData((prev) => ({
-//                           ...prev,
-//                           amount: e.target.value,
-//                         }));
-//                       }}
+//                       name="amount"
+//                       placeholder="Amount (₦)"
+//                       type="text"
+//                       value={formData.amount}
+//                       onChange={(e) => handleNumberInputChange(e, "amount")}
 //                     />
 //                     <div></div>
 //                     <button
-//                       onClick={() => validateForm(true)}
 //                       type="submit"
-//                       className="text-white px-20 h-[50px] bg-custom-primary w-fit font-medium"
+//                       disabled={submissionStatus === "submitting"}
+//                       className="text-white px-20 h-[50px] bg-custom-primary w-fit font-medium disabled:opacity-50"
 //                     >
 //                       Submit
 //                     </button>
@@ -2116,19 +2170,21 @@ export default SingleInvestee;
 //   required,
 //   value,
 //   onChange,
+//   maxLength,
 // }) => {
 //   return (
 //     <div className="w-full">
 //       <input
-//         required={required ? true : false}
+//         required={required}
 //         className="outline-none bg-white placeholder:font-medium border border-custom-primary p-3 w-full"
 //         name={name}
 //         id={id}
 //         placeholder={placeholder}
-//         type={type}
+//         type={type || "text"}
 //         autoComplete="new-password"
 //         value={value}
 //         onChange={onChange}
+//         maxLength={maxLength}
 //       />
 //     </div>
 //   );
@@ -2150,35 +2206,33 @@ export default SingleInvestee;
 //   return (
 //     <div className="relative">
 //       <select
-//         required={required ? true : false}
+//         required={required}
 //         name={name}
 //         value={value}
 //         onChange={(e) => {
-//           if (name == "Proof of Address") {
+//           if (name === "proof_of_address") {
 //             setSelectedProof(e.target.value);
 //             proofRef.current.click();
-//           } else if (name == "Means of Identification") {
+//           } else if (name === "means_of_identification") {
 //             setSelectedId(e.target.value);
 //             idRef.current.click();
 //           } else {
 //             onChange(e);
 //           }
 //         }}
-//         defaultValue="some random test value"
 //         className="outline-none border h-[50px] border-custom-primary placeholder:font-semibold bg-[#fff] p-3 w-full capitalize"
 //       >
 //         {options.map((item, idx) => (
 //           <option key={idx} value={item} className="capitalize">
-//             {" "}
-//             {item}{" "}
+//             {item}
 //           </option>
 //         ))}
 //       </select>
 //       <p className="italic text-xs sm:text-sm absolute top-1/2 -translate-y-1/2 right-5 sm:right-10">
-//         {name == "Proof of Address" && selectedProof != undefined
-//           ? `${selectedProof?.name?.slice(0, 15)}`
-//           : name == "Means of Identification" && selectedId != undefined
-//           ? `${selectedId?.name?.slice(0, 15)}`
+//         {name === "proof_of_address" && selectedProof?.name
+//           ? `${selectedProof.name.slice(0, 15)}`
+//           : name === "means_of_identification" && selectedId?.name
+//           ? `${selectedId.name.slice(0, 15)}`
 //           : null}
 //       </p>
 //     </div>

@@ -98,6 +98,35 @@ const CorporateInvestee = () => {
     setErrorMsg("");
   }
 
+  function handleAmountInputChange(e) {
+    let value = e.target.value.replace(/[^\d]/g, "");
+    if (!value) {
+      setFormData((prev) => ({ ...prev, amount: "" }));
+      return;
+    }
+    value = value.replace(/^0+/, "") || "0";
+    const withCommas = value.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    setFormData((prev) => ({
+      ...prev,
+      amount: `₦${withCommas}`,
+    }));
+    setErrorMsg("");
+  }
+
+  function handleAmountBlur(e) {
+    let value = e.target.value.replace(/[^\d]/g, "");
+    if (!value) {
+      setFormData((prev) => ({ ...prev, amount: "" }));
+      return;
+    }
+    value = value.replace(/^0+/, "") || "0";
+    const withCommas = value.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    setFormData((prev) => ({
+      ...prev,
+      amount: `₦${withCommas}.00`,
+    }));
+  }
+
   function validateForm(sidebar = false) {
     let currentStep = activeStep;
     setErrorMsg("");
@@ -191,8 +220,10 @@ const CorporateInvestee = () => {
         setErrorMsg("Note: All fields are compulsory. Fill to continue!");
         return false;
       }
-      if (!/^\d*$/.test(formData.amount)) {
-        setErrorMsg("Note: Amount must contain only digits");
+      if (!/^₦[\d,]+(\.\d{2})?$/.test(formData.amount)) {
+        setErrorMsg(
+          "Note: Amount must be a valid naira amount, e.g. ₦1,234.00"
+        );
         return false;
       }
     }
@@ -885,7 +916,9 @@ const CorporateInvestee = () => {
                       placeholder="Amount (₦)"
                       type="text"
                       value={formData.amount}
-                      onChange={(e) => handleNumberInputChange(e, "amount")}
+                      // onChange={(e) => handleNumberInputChange(e, "amount")}
+                      onChange={handleAmountInputChange}
+                      onBlur={handleAmountBlur}
                     />
                     <div></div>
                     <button

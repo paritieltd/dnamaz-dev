@@ -96,7 +96,7 @@ const SingleInvestee = () => {
   }
 
   function handleNumberInputChange(e, field, maxLength) {
-    const value = e.target.value.replace(/\D/g, ""); 
+    const value = e.target.value.replace(/\D/g, "");
     if (maxLength && value.length > maxLength) return;
     setFormData((prev) => ({
       ...prev,
@@ -106,12 +106,41 @@ const SingleInvestee = () => {
   }
 
   function handleTextInputChange(e, field) {
-    const value = e.target.value.replace(/[^a-zA-Z\s]/g, ""); 
+    const value = e.target.value.replace(/[^a-zA-Z\s]/g, "");
     setFormData((prev) => ({
       ...prev,
       [field]: value,
     }));
     setErrorMsg("");
+  }
+
+  function handleAmountInputChange(e) {
+    let value = e.target.value.replace(/[^\d]/g, "");
+    if (!value) {
+      setFormData((prev) => ({ ...prev, amount: "" }));
+      return;
+    }
+    value = value.replace(/^0+/, "") || "0";
+    const withCommas = value.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    setFormData((prev) => ({
+      ...prev,
+      amount: `₦${withCommas}`,
+    }));
+    setErrorMsg("");
+  }
+
+  function handleAmountBlur(e) {
+    let value = e.target.value.replace(/[^\d]/g, "");
+    if (!value) {
+      setFormData((prev) => ({ ...prev, amount: "" }));
+      return;
+    }
+    value = value.replace(/^0+/, "") || "0";
+    const withCommas = value.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    setFormData((prev) => ({
+      ...prev,
+      amount: `₦${withCommas}.00`,
+    }));
   }
 
   function validateForm(sidebar = false) {
@@ -198,7 +227,7 @@ const SingleInvestee = () => {
         return false;
       }
     } else if (currentStep === 4) {
-      const maxFileSize = 2 * 1024 * 1024; 
+      const maxFileSize = 2 * 1024 * 1024;
       if (!selectedId) {
         setErrorMsg("Please upload a Means of Identification");
         return false;
@@ -233,8 +262,10 @@ const SingleInvestee = () => {
         setErrorMsg("Note: All fields are compulsory. Fill to continue!");
         return false;
       }
-      if (!/^\d*$/.test(formData.amount)) {
-        setErrorMsg("Note: Amount must contain only digits");
+      if (!/^₦[\d,]+(\.\d{2})?$/.test(formData.amount)) {
+        setErrorMsg(
+          "Note: Amount must be a valid naira amount, e.g. ₦1,234.00"
+        );
         return false;
       }
     }
@@ -984,7 +1015,9 @@ const SingleInvestee = () => {
                       placeholder="Amount (₦)"
                       type="text"
                       value={formData.amount}
-                      onChange={(e) => handleNumberInputChange(e, "amount")}
+                      onChange={handleAmountInputChange}
+                      onBlur={handleAmountBlur}
+                      // onChange={(e) => handleNumberInputChange(e, "amount")}
                     />
                     <div></div>
                     <button

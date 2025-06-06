@@ -141,6 +141,15 @@ const SingleInvestor = () => {
     }));
   }
 
+  function handleFreeTextInputChange(e, field) {
+  const value = e.target.value;
+  setFormData((prev) => ({
+    ...prev,
+    [field]: value,
+  }));
+  setErrorMsg("");
+}
+
   function validateForm(sidebar = false) {
     let currentStep = activeStep;
     setErrorMsg("");
@@ -958,7 +967,8 @@ const SingleInvestor = () => {
                       name="specify"
                       placeholder="Specify"
                       value={formData.specify}
-                      onChange={(e) => handleTextInputChange(e, "specify")}
+                      // onChange={(e) => handleTextInputChange(e, "specify")}
+                      onChange={(e) => handleFreeTextInputChange(e, "specify")}
                     />
                     <CustomTextInput
                       required

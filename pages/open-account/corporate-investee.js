@@ -306,7 +306,7 @@ const CorporateInvestee = () => {
 
     try {
       setSubmissionStatus("submitting");
-      console.log("Sending request to Sheet Monkey");
+      // console.log("Sending request to Sheet Monkey");
       const response = await fetch(sheetMonkeyUrl, {
         method: "POST",
         body: formDataToSubmit,
@@ -314,7 +314,8 @@ const CorporateInvestee = () => {
 
       if (response.ok) {
         setSubmissionStatus("success");
-        window.location.href = "https://dnamaz-update.vercel.app/success";
+        // window.location.href = "https://dnamaz-update.vercel.app/success";
+        router.replace("/success");
       } else {
         const errorText = await response.text();
         throw new Error(

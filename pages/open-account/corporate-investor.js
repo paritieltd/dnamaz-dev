@@ -310,8 +310,9 @@ const CorporateInvestor = () => {
 
       if (response.ok) {
         setSubmissionStatus("success");
-        console.log("Submission successful, redirecting...");
-        window.location.href = "https://dnamaz-update.vercel.app/success";
+        router.replace("/success");
+        // console.log("Submission successful, redirecting...");
+        // window.location.href = "https://dnamaz-update.vercel.app/success";
       } else {
         const errorText = await response.text();
         throw new Error(

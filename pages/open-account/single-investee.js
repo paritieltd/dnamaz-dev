@@ -326,12 +326,25 @@ const SingleInvestee = () => {
     formDataToSubmit.append("created", new Date().toLocaleDateString("en-GB"));
     formDataToSubmit.append("form_category", "Single Investee");
 
+    for (let [key, value] of formDataToSubmit.entries()) {
+      console.log(`${key}:`, value);
+    }
+
     const sheetMonkeyUrl =
       process.env.NEXT_PUBLIC_SHEET_MONKEY_SINGLE_INVESTEE_URL;
+    
+    if (!sheetMonkeyUrl) {
+      setSubmissionStatus("error");
+      setErrorMsg(
+        "Sheet Monkey URL is not configured. Please contact support."
+      );
+      console.error("Error: Sheet Monkey URL is undefined");
+      return;
+    }
 
     try {
       setSubmissionStatus("submitting");
-      console.log("Sending request to Sheet Monkey");
+      // console.log("Sending request to Sheet Monkey");
       const response = await fetch(sheetMonkeyUrl, {
         method: "POST",
         body: formDataToSubmit,
@@ -339,7 +352,8 @@ const SingleInvestee = () => {
 
       if (response.ok) {
         setSubmissionStatus("success");
-        window.location.href = "https://dnamaz-update.vercel.app/success";
+        // window.location.href = "https://dnamaz-update.vercel.app/success";
+        router.replace("/success");
       } else {
         const errorText = await response.text();
         throw new Error(
@@ -349,6 +363,7 @@ const SingleInvestee = () => {
     } catch (error) {
       setSubmissionStatus("error");
       setErrorMsg(`Failed to submit the form: ${error.message}`);
+      console.error("Submission error:", error.message);
     }
   };
 
@@ -718,7 +733,14 @@ const SingleInvestee = () => {
                       name="kin_address"
                       placeholder="Home Address"
                       value={formData.kin_address}
-                      onChange={(e) => handleTextInputChange(e, "kin_address")}
+                      // onChange={(e) => handleTextInputChange(e, "kin_address")}
+                      onChange={(e) => {
+                        setErrorMsg("");
+                        setFormData((prev) => ({
+                          ...prev,
+                          kin_address: e.target.value,
+                        }));
+                      }}
                     />
                     <CustomTextInput
                       required
@@ -778,7 +800,14 @@ const SingleInvestee = () => {
                       name="address"
                       placeholder="Address"
                       value={formData.address}
-                      onChange={(e) => handleTextInputChange(e, "address")}
+                      // onChange={(e) => handleTextInputChange(e, "address")}
+                      onChange={(e) => {
+                        setErrorMsg("");
+                        setFormData((prev) => ({
+                          ...prev,
+                          address: e.target.value,
+                        }));
+                      }}
                     />
                     <CustomTextInput
                       required

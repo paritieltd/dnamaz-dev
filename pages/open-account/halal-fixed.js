@@ -242,7 +242,8 @@ const HalalFixed = () => {
 
       if (response.ok) {
         setSubmissionStatus("success");
-        window.location.href = "https://dnamaz-update.vercel.app/success";
+        router.replace("/success");
+        // window.location.href = "https://dnamaz-update.vercel.app/success";
       } else {
         throw new Error("Submission failed with status: " + response.status);
       }

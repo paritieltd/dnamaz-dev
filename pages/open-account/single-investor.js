@@ -7,6 +7,8 @@ import {
   NIGERIAN_STATES,
   NigerianStatesSelect,
 } from "../../components/NigerianState";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 const SingleInvestor = () => {
   const [uploadSignature, setUploadSignature] = useState(false);
@@ -28,7 +30,8 @@ const SingleInvestor = () => {
     first_name: "",
     last_name: "",
     other_name: "",
-    date_of_birth: "",
+    // date_of_birth: "",
+    date_of_birth: null,
     email: "",
     gender: "",
     bvn: "",
@@ -60,6 +63,12 @@ const SingleInvestor = () => {
   const proofRef = useRef(null);
   const topDiv = useRef();
 
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   useEffect(() => {
     setFormSteps((prev) =>
       prev.map((step, idx) => ({
@@ -69,8 +78,17 @@ const SingleInvestor = () => {
     );
   }, [activeStep]);
 
+  // function isAnyValueEmpty(array) {
+  //   return array.some((value) => value.trim() === "");
+  // }
+
   function isAnyValueEmpty(array) {
-    return array.some((value) => value.trim() === "");
+    return array.some((value) => {
+      if (typeof value === "string") {
+        return value.trim() === "";
+      }
+      return value === null || value === undefined;
+    });
   }
 
   function validMail(mail) {
@@ -87,14 +105,19 @@ const SingleInvestor = () => {
     return /^\d{11}$/.test(phone.replace(/[\s\-\+]/g, ""));
   }
 
-  function isValidDate(dateString) {
-    if (!dateString) return false;
-    const date = new Date(dateString);
-    return !isNaN(date.getTime()) && date <= new Date();
+  // function isValidDate(dateString) {
+  //   if (!dateString) return false;
+  //   const date = new Date(dateString);
+  //   return !isNaN(date.getTime()) && date <= new Date();
+  // }
+
+  function isValidDate(date) {
+    if (!date) return false;
+    return date instanceof Date && !isNaN(date.getTime()) && date <= new Date();
   }
 
   function handleNumberInputChange(e, field, maxLength) {
-    const value = e.target.value.replace(/\D/g, ""); 
+    const value = e.target.value.replace(/\D/g, "");
     if (maxLength && value.length > maxLength) return;
     setFormData((prev) => ({
       ...prev,
@@ -104,7 +127,7 @@ const SingleInvestor = () => {
   }
 
   function handleTextInputChange(e, field) {
-    const value = e.target.value.replace(/[^a-zA-Z\s]/g, ""); 
+    const value = e.target.value.replace(/[^a-zA-Z\s]/g, "");
     setFormData((prev) => ({
       ...prev,
       [field]: value,
@@ -112,8 +135,8 @@ const SingleInvestor = () => {
     setErrorMsg("");
   }
 
-   function handleAmountInputChange(e) {
-    let value = e.target.value.replace(/[^\d]/g, ""); 
+  function handleAmountInputChange(e) {
+    let value = e.target.value.replace(/[^\d]/g, "");
     if (!value) {
       setFormData((prev) => ({ ...prev, amount: "" }));
       return;
@@ -142,13 +165,13 @@ const SingleInvestor = () => {
   }
 
   function handleFreeTextInputChange(e, field) {
-  const value = e.target.value;
-  setFormData((prev) => ({
-    ...prev,
-    [field]: value,
-  }));
-  setErrorMsg("");
-}
+    const value = e.target.value;
+    setFormData((prev) => ({
+      ...prev,
+      [field]: value,
+    }));
+    setErrorMsg("");
+  }
 
   function validateForm(sidebar = false) {
     let currentStep = activeStep;
@@ -223,7 +246,7 @@ const SingleInvestor = () => {
         return false;
       }
     } else if (currentStep === 4) {
-      const maxFileSize = 2 * 1024 * 1024; 
+      const maxFileSize = 2 * 1024 * 1024;
       if (!selectedId) {
         setErrorMsg("Please upload a Means of Identification");
         return false;
@@ -468,7 +491,7 @@ const SingleInvestor = () => {
                       onChange={(e) => handleTextInputChange(e, "other_name")}
                     />
                     <div>
-                      <input
+                      {/* <input
                         required
                         type="text"
                         onFocus={(e) => {
@@ -495,6 +518,33 @@ const SingleInvestor = () => {
                         }}
                         max={new Date().toISOString().split("T")[0]}
                       />
+                      {!isValidDate(formData.date_of_birth) &&
+                        formData.date_of_birth && (
+                          <p className="text-xs sm:text-sm text-[coral]">
+                            <span className="font-medium">Note:</span> Please
+                            enter a valid date of birth
+                          </p>
+                        )} */}
+                      {mounted && (
+                        <DatePicker
+                          selected={formData.date_of_birth}
+                          onChange={(date) => {
+                            setErrorMsg("");
+                            setFormData((prev) => ({
+                              ...prev,
+                              date_of_birth: date,
+                            }));
+                          }}
+                          dateFormat="yyyy-MM-dd"
+                          maxDate={new Date()}
+                          showYearDropdown
+                          scrollableYearDropdown
+                          yearDropdownItemNumber={100}
+                          placeholderText="Date Of Birth"
+                          className="px-3 outline-none border h-[50px] w-full border-custom-primary bg-[#fff]"
+                          required
+                        />
+                      )}
                       {!isValidDate(formData.date_of_birth) &&
                         formData.date_of_birth && (
                           <p className="text-xs sm:text-sm text-[coral]">
@@ -672,7 +722,7 @@ const SingleInvestor = () => {
                       name="kin_address"
                       placeholder="Home Address"
                       value={formData.kin_address}
-                      onChange={(e) => handleTextInputChange(e, "kin_address")}
+                      onChange={(e) => handleFreeTextInputChange(e, "kin_address")}
                     />
                     <CustomTextInput
                       required
@@ -732,7 +782,7 @@ const SingleInvestor = () => {
                       name="address"
                       placeholder="Address"
                       value={formData.address}
-                      onChange={(e) => handleTextInputChange(e, "address")}
+                      onChange={(e) => handleFreeTextInputChange(e, "address")}
                     />
                     <CustomTextInput
                       required
@@ -1082,9 +1132,6 @@ const CustomSelectInput = ({
 };
 
 export default SingleInvestor;
-
-
-
 
 // import React, { useRef, useState, useEffect } from "react";
 // import { MdKeyboardBackspace } from "react-icons/md";

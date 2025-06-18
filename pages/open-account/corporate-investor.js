@@ -3,6 +3,8 @@ import { MdKeyboardBackspace } from "react-icons/md";
 import Footer from "../../components/Footer/Footer";
 import Navbar from "../../components/Navbar/Navbar";
 import { useRouter } from "next/router";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 const CorporateInvestor = () => {
   const [selectedSignature, setSelectedSignature] = useState();
@@ -17,7 +19,7 @@ const CorporateInvestor = () => {
   ]);
   const [formData, setFormData] = useState({
     company_name: "",
-    date_of_incorporation: "",
+    date_of_incorporation: null,
     biz_nature: "",
     company_email: "",
     rc: "",
@@ -28,8 +30,8 @@ const CorporateInvestor = () => {
     designation: "",
     valid_id: "",
     id_no: "",
-    issue_date: "",
-    expiry_date: "",
+    issue_date: null,
+    expiry_date: null,
     time_frame: "",
     specify: "",
     amount: "",
@@ -42,6 +44,12 @@ const CorporateInvestor = () => {
   const proofRef = useRef(null);
   const topDiv = useRef();
 
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   useEffect(() => {
     setFormSteps((prev) =>
       prev.map((step, idx) => ({
@@ -51,8 +59,16 @@ const CorporateInvestor = () => {
     );
   }, [activeStep]);
 
+  // function isAnyValueEmpty(array) {
+  //   return array.some((value) => value.trim() === "");
+  // }
   function isAnyValueEmpty(array) {
-    return array.some((value) => value.trim() === "");
+    return array.some((value) => {
+      if (typeof value === "string") {
+        return value.trim() === "";
+      }
+      return value === null || value === undefined;
+    });
   }
 
   function validMail(mail) {
@@ -65,19 +81,26 @@ const CorporateInvestor = () => {
     return /^\d{11}$/.test(phone.replace(/[\s\-\+]/g, ""));
   }
 
-  function isValidDate(dateString, isExpiry = false) {
-    if (!dateString) return false;
-    const date = new Date(dateString);
+  // function isValidDate(dateString, isExpiry = false) {
+  //   if (!dateString) return false;
+  //   const date = new Date(dateString);
+  //   if (isExpiry) {
+  //    return !isNaN(date.getTime());
+  //   }
+  //   return !isNaN(date.getTime()) && date <= new Date();
+  // }
+
+  function isValidDate(date, isExpiry = false) {
+    if (!date) return false;
+    if (!(date instanceof Date)) return false;
     if (isExpiry) {
-      // For expiry date, allow future dates
       return !isNaN(date.getTime());
     }
-    // For other dates (e.g., incorporation, issue), prevent future dates
     return !isNaN(date.getTime()) && date <= new Date();
   }
 
   function handleNumberInputChange(e, field, maxLength) {
-    const value = e.target.value.replace(/\D/g, ""); // Remove non-digits
+    const value = e.target.value.replace(/\D/g, "");
     if (maxLength && value.length > maxLength) return;
     setFormData((prev) => ({
       ...prev,
@@ -283,9 +306,25 @@ const CorporateInvestor = () => {
 
     formDataToSubmit.append("created", new Date().toLocaleDateString("en-GB"));
     formDataToSubmit.append("form_category", "Corporate Investor");
+    formDataToSubmit.append(
+      "date_of_incorporation",
+      formData.date_of_incorporation
+        ? formData.date_of_incorporation.toISOString().split("T")[0]
+        : ""
+    );
+    formDataToSubmit.append(
+      "issue_date",
+      formData.issue_date ? formData.issue_date.toISOString().split("T")[0] : ""
+    );
+    formDataToSubmit.append(
+      "expiry_date",
+      formData.expiry_date
+        ? formData.expiry_date.toISOString().split("T")[0]
+        : ""
+    );
 
     for (let [key, value] of formDataToSubmit.entries()) {
-      console.log(`${key}:`, value);
+      // console.log(`${key}:`, value);
     }
 
     const sheetMonkeyUrl =
@@ -296,7 +335,7 @@ const CorporateInvestor = () => {
       setErrorMsg(
         "Sheet Monkey URL is not configured. Please contact support."
       );
-      console.error("Error: Sheet Monkey URL is undefined");
+      // console.error("Error: Sheet Monkey URL is undefined");
       return;
     }
 
@@ -322,7 +361,7 @@ const CorporateInvestor = () => {
     } catch (error) {
       setSubmissionStatus("error");
       setErrorMsg("Failed to submit the form. Please try again later.");
-      console.error("Submission error:", error.message);
+      // console.error("Submission error:", error.message);
     }
   };
 
@@ -429,7 +468,7 @@ const CorporateInvestor = () => {
                       onChange={(e) => handleTextInputChange(e, "company_name")}
                     />
                     <div>
-                      <input
+                      {/* <input
                         required
                         type="text"
                         onFocus={(e) => {
@@ -456,7 +495,26 @@ const CorporateInvestor = () => {
                           }));
                         }}
                         max={new Date().toISOString().split("T")[0]}
-                      />
+                      /> */}
+                      {mounted && (
+                        <DatePicker
+                          selected={formData.date_of_incorporation}
+                          onChange={(date) => {
+                            setErrorMsg("");
+                            setFormData((prev) => ({
+                              ...prev,
+                              date_of_incorporation: date,
+                            }));
+                          }}
+                          dateFormat="yyyy-MM-dd"
+                          maxDate={new Date()}
+                          showYearDropdown
+                          scrollableYearDropdown
+                          placeholderText="Date of Incorporation"
+                          className="px-3 outline-none border h-[50px] border-custom-primary bg-[#fff] w-full"
+                          required
+                        />
+                      )}
                       {!isValidDate(formData.date_of_incorporation) &&
                         formData.date_of_incorporation && (
                           <p className="text-xs sm:text-sm text-[coral]">
@@ -619,7 +677,7 @@ const CorporateInvestor = () => {
                       }}
                     />
                     <div>
-                      <input
+                      {/* <input
                         required
                         type="text"
                         onFocus={(e) => {
@@ -646,7 +704,26 @@ const CorporateInvestor = () => {
                           }));
                         }}
                         max={new Date().toISOString().split("T")[0]}
-                      />
+                      /> */}
+                      {mounted && (
+                        <DatePicker
+                          selected={formData.issue_date}
+                          onChange={(date) => {
+                            setErrorMsg("");
+                            setFormData((prev) => ({
+                              ...prev,
+                              issue_date: date,
+                            }));
+                          }}
+                          dateFormat="yyyy-MM-dd"
+                          maxDate={new Date()}
+                          showYearDropdown
+                          scrollableYearDropdown
+                          placeholderText="Issue Date"
+                          className="px-3 outline-none border h-[50px] border-custom-primary bg-[#fff] w-full"
+                          required
+                        />
+                      )}
                       {!isValidDate(formData.issue_date) &&
                         formData.issue_date && (
                           <p className="text-xs sm:text-sm text-[coral]">
@@ -656,7 +733,7 @@ const CorporateInvestor = () => {
                         )}
                     </div>
                     <div>
-                      <input
+                      {/* <input
                         required
                         type="text"
                         onFocus={(e) => {
@@ -682,7 +759,25 @@ const CorporateInvestor = () => {
                             expiry_date: e.target.value,
                           }));
                         }}
-                      />
+                      /> */}
+                      {mounted && (
+                        <DatePicker
+                          selected={formData.expiry_date}
+                          onChange={(date) => {
+                            setErrorMsg("");
+                            setFormData((prev) => ({
+                              ...prev,
+                              expiry_date: date,
+                            }));
+                          }}
+                          dateFormat="yyyy-MM-dd"
+                          showYearDropdown
+                          scrollableYearDropdown
+                          placeholderText="Expiry Date"
+                          className="px-3 outline-none border h-[50px] border-custom-primary bg-[#fff] w-full"
+                          required
+                        />
+                      )}
                       {!isValidDate(formData.expiry_date, true) &&
                         formData.expiry_date && (
                           <p className="text-xs sm:text-sm text-[coral]">

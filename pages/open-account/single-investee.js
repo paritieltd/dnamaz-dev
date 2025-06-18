@@ -7,6 +7,8 @@ import {
   NIGERIAN_STATES,
   NigerianStatesSelect,
 } from "../../components/NigerianState";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 const SingleInvestee = () => {
   const [uploadSignature, setUploadSignature] = useState(false);
@@ -28,7 +30,8 @@ const SingleInvestee = () => {
     first_name: "",
     last_name: "",
     other_name: "",
-    dob: "",
+    // dob: "",
+    dob: null,
     email: "",
     gender: "",
     bvn: "",
@@ -62,6 +65,12 @@ const SingleInvestee = () => {
   const proofRef = useRef(null);
   const topDiv = useRef();
 
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   useEffect(() => {
     setFormSteps((prev) =>
       prev.map((step, idx) => ({
@@ -71,8 +80,17 @@ const SingleInvestee = () => {
     );
   }, [activeStep]);
 
+  // function isAnyValueEmpty(array) {
+  //   return array.some((value) => value.trim() === "");
+  // }
+
   function isAnyValueEmpty(array) {
-    return array.some((value) => value.trim() === "");
+    return array.some((value) => {
+      if (typeof value === "string") {
+        return value.trim() === "";
+      }
+      return value === null || value === undefined;
+    });
   }
 
   function validMail(mail) {
@@ -89,10 +107,15 @@ const SingleInvestee = () => {
     return /^\d{11}$/.test(phone.replace(/[\s\-\+]/g, ""));
   }
 
-  function isValidDate(dateString) {
-    if (!dateString) return false;
-    const date = new Date(dateString);
-    return !isNaN(date.getTime()) && date <= new Date();
+  // function isValidDate(dateString) {
+  //   if (!dateString) return false;
+  //   const date = new Date(dateString);
+  //   return !isNaN(date.getTime()) && date <= new Date();
+  // }
+
+  function isValidDate(date) {
+    if (!date) return false;
+    return date instanceof Date && !isNaN(date.getTime()) && date <= new Date();
   }
 
   function handleNumberInputChange(e, field, maxLength) {
@@ -332,7 +355,7 @@ const SingleInvestee = () => {
 
     const sheetMonkeyUrl =
       process.env.NEXT_PUBLIC_SHEET_MONKEY_SINGLE_INVESTEE_URL;
-    
+
     if (!sheetMonkeyUrl) {
       setSubmissionStatus("error");
       setErrorMsg(
@@ -495,7 +518,7 @@ const SingleInvestee = () => {
                       value={formData.other_name}
                       onChange={(e) => handleTextInputChange(e, "other_name")}
                     />
-                    <div>
+                    {/* <div>
                       <input
                         required
                         type="text"
@@ -529,7 +552,34 @@ const SingleInvestee = () => {
                           enter a valid date of birth
                         </p>
                       )}
-                    </div>
+                    </div> */}
+
+                    {mounted && (
+                      <DatePicker
+                        selected={formData.dob}
+                        onChange={(date) => {
+                          setErrorMsg("");
+                          setFormData((prev) => ({
+                            ...prev,
+                            dob: date,
+                          }));
+                        }}
+                        dateFormat="yyyy-MM-dd"
+                        maxDate={new Date()}
+                        showYearDropdown
+                        scrollableYearDropdown
+                        yearDropdownItemNumber={100}
+                        placeholderText="Date of Birth"
+                        className="px-3 outline-none border h-[50px] w-full border-custom-primary bg-[#fff]"
+                        required
+                      />
+                    )}
+                    {!isValidDate(formData.dob) && formData.dob && (
+                      <p className="text-xs sm:text-sm text-[coral]">
+                        <span className="font-medium">Note:</span> Please enter
+                        a valid date of birth
+                      </p>
+                    )}
                     <CustomTextInput
                       required
                       type="email"

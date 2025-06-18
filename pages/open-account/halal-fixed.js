@@ -7,6 +7,8 @@ import {
   NIGERIAN_STATES,
   NigerianStatesSelect,
 } from "../../components/NigerianState";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 const HalalFixed = () => {
   const [uploadSignature, setUploadSignature] = useState(false);
@@ -29,7 +31,7 @@ const HalalFixed = () => {
     amount_paid: "",
     number_of_units: "",
     payment_method: "",
-    date_of_registration: "",
+    date_of_registration: null,
     postal_address: "",
     city: "",
     state: "",
@@ -48,6 +50,12 @@ const HalalFixed = () => {
   const [submissionStatus, setSubmissionStatus] = useState(null);
   const router = useRouter();
   const topDiv = useRef();
+
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     setFormSteps((prev) =>
@@ -70,14 +78,53 @@ const HalalFixed = () => {
   const isPhoneValid = (phone) =>
     /^\d{11}$/.test(phone.replace(/[\s\-\+]/g, ""));
 
-  const isAnyValueEmpty = (values) =>
-    values.some((value) => value.trim() === "");
+  // const isAnyValueEmpty = (values) =>
+  //   values.some((value) => value.trim() === "");
+
+  const isAnyValueEmpty = (array) => {
+    return array.some((value) => {
+      if (typeof value === "string") {
+        return value.trim() === "";
+      }
+      return value === null || value === undefined;
+    });
+  };
+
+  function handleAmountInputChange(e) {
+    let value = e.target.value.replace(/[^\d]/g, "");
+    if (!value) {
+      setFormData((prev) => ({ ...prev, amount_paid: "" }));
+      return;
+    }
+    value = value.replace(/^0+/, "") || "0";
+    const withCommas = value.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    setFormData((prev) => ({
+      ...prev,
+      amount_paid: `₦${withCommas}`,
+    }));
+    setErrorMsg("");
+  }
+
+  function handleAmountBlur(e) {
+    let value = e.target.value.replace(/[^\d]/g, "");
+    if (!value) {
+      setFormData((prev) => ({ ...prev, amount_paid: "" }));
+      return;
+    }
+    value = value.replace(/^0+/, "") || "0";
+    const withCommas = value.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    setFormData((prev) => ({
+      ...prev,
+      amount_paid: `₦${withCommas}.00`,
+    }));
+  }
 
   // Improved date validation
   const isValidDate = (dateString) => {
     if (!dateString) return false;
-    const date = new Date(dateString);
-    return !isNaN(date.getTime()) && date <= new Date();
+    // const date = new Date(dateString);
+    if (!(dateString instanceof Date)) return false;
+    return !isNaN(dateString.getTime()) && dateString <= new Date();
   };
 
   // Format date to DD/MM/YYYY
@@ -514,7 +561,7 @@ const HalalFixed = () => {
                     onChange={(e) => handleNumberInput(e, "number_of_units")}
                   />
                   <div>
-                    <input
+                    {/* <input
                       required
                       type="text"
                       onFocus={(e) => (e.target.type = "date")}
@@ -538,7 +585,26 @@ const HalalFixed = () => {
                         }));
                       }}
                       max={new Date().toISOString().split("T")[0]}
-                    />
+                    /> */}
+                    {mounted && (
+                      <DatePicker
+                        selected={formData.date_of_registration}
+                        onChange={(date) => {
+                          setErrorMsg("");
+                          setFormData((prev) => ({
+                            ...prev,
+                            date_of_registration: date,
+                          }));
+                        }}
+                        dateFormat="yyyy-MM-dd"
+                        maxDate={new Date()}
+                        showYearDropdown
+                        scrollableYearDropdown
+                        placeholderText="Date of Registration"
+                        className="px-3 outline-none border h-[50px] w-full border-custom-primary bg-[#fff]"
+                        required
+                      />
+                    )}
                     {!isValidDate(formData.date_of_registration) &&
                       formData.date_of_registration && (
                         <p className="text-xs sm:text-sm text-[coral]">
@@ -554,7 +620,9 @@ const HalalFixed = () => {
                     type="text"
                     placeholder="Value of Units Applied for/Amount Paid:"
                     value={formData.amount_paid}
-                    onChange={(e) => handleNumberInput(e, "amount_paid")}
+                    // onChange={(e) => handleNumberInput(e, "amount_paid")}
+                    onChange={handleAmountInputChange}
+                    onBlur={handleAmountBlur}
                   />
                   <button
                     onClick={() => {

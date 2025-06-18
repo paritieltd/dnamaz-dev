@@ -3,6 +3,8 @@ import { MdKeyboardBackspace } from "react-icons/md";
 import Footer from "../../components/Footer/Footer";
 import Navbar from "../../components/Navbar/Navbar";
 import { useRouter } from "next/router";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 const CorporateInvestee = () => {
   const [selectedSignature, setSelectedSignature] = useState();
@@ -17,7 +19,7 @@ const CorporateInvestee = () => {
   ]);
   const [formData, setFormData] = useState({
     company_name: "",
-    date_of_incorporation: "",
+    date_of_incorporation: null,
     biz_nature: "",
     company_email: "",
     rc: "",
@@ -28,8 +30,8 @@ const CorporateInvestee = () => {
     designation: "",
     valid_id: "",
     id_no: "",
-    issue_date: "",
-    expiry_date: "",
+    issue_date: null,
+    expiry_date: null,
     time_frame: "",
     specify: "",
     amount: "",
@@ -43,6 +45,12 @@ const CorporateInvestee = () => {
   const proofRef = useRef(null);
   const topDiv = useRef();
 
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   useEffect(() => {
     setFormSteps((prev) =>
       prev.map((step, idx) => ({
@@ -52,8 +60,17 @@ const CorporateInvestee = () => {
     );
   }, [activeStep]);
 
+  // function isAnyValueEmpty(array) {
+  //   return array.some((value) => value.trim() === "");
+  // }
+
   function isAnyValueEmpty(array) {
-    return array.some((value) => value.trim() === "");
+    return array.some((value) => {
+      if (typeof value === "string") {
+        return value.trim() === "";
+      }
+      return value === null || value === undefined;
+    });
   }
 
   function validMail(mail) {
@@ -70,9 +87,18 @@ const CorporateInvestee = () => {
     return /^\d{11}$/.test(formData.bvn);
   }
 
-  function isValidDate(dateString, isExpiry = false) {
-    if (!dateString) return false;
-    const date = new Date(dateString);
+  // function isValidDate(dateString, isExpiry = false) {
+  //   if (!dateString) return false;
+  //   const date = new Date(dateString);
+  //   if (isExpiry) {
+  //     return !isNaN(date.getTime());
+  //   }
+  //   return !isNaN(date.getTime()) && date <= new Date();
+  // }
+
+  function isValidDate(date, isExpiry = false) {
+    if (!date) return false;
+    if (!(date instanceof Date)) return false;
     if (isExpiry) {
       return !isNaN(date.getTime());
     }
@@ -287,6 +313,22 @@ const CorporateInvestee = () => {
     }
     formDataToSubmit.append("created", new Date().toLocaleDateString("en-GB"));
     formDataToSubmit.append("form_category", "Corporate Investee");
+    formDataToSubmit.append(
+      "date_of_incorporation",
+      formData.date_of_incorporation
+        ? formData.date_of_incorporation.toISOString().split("T")[0]
+        : ""
+    );
+    formDataToSubmit.append(
+      "issue_date",
+      formData.issue_date ? formData.issue_date.toISOString().split("T")[0] : ""
+    );
+    formDataToSubmit.append(
+      "expiry_date",
+      formData.expiry_date
+        ? formData.expiry_date.toISOString().split("T")[0]
+        : ""
+    );
 
     for (let [key, value] of formDataToSubmit.entries()) {
       console.log(`${key}:`, value);
@@ -432,7 +474,7 @@ const CorporateInvestee = () => {
                       onChange={(e) => handleTextInputChange(e, "company_name")}
                     />
                     <div>
-                      <input
+                      {/* <input
                         required
                         type="text"
                         onFocus={(e) => {
@@ -458,7 +500,26 @@ const CorporateInvestee = () => {
                           }));
                         }}
                         max={new Date().toISOString().split("T")[0]}
-                      />
+                      /> */}
+                      {mounted && (
+                        <DatePicker
+                          selected={formData.date_of_incorporation}
+                          onChange={(date) => {
+                            setErrorMsg("");
+                            setFormData((prev) => ({
+                              ...prev,
+                              date_of_incorporation: date,
+                            }));
+                          }}
+                          dateFormat="yyyy-MM-dd"
+                          maxDate={new Date()}
+                          showYearDropdown
+                          scrollableYearDropdown
+                          placeholderText="Date of Incorporation"
+                          className="px-3 outline-none border h-[50px] w-full border-custom-primary bg-[#fff]"
+                          required
+                        />
+                      )}
                       {!isValidDate(formData.date_of_incorporation) &&
                         formData.date_of_incorporation && (
                           <p className="text-xs sm:text-sm text-[coral]">
@@ -640,7 +701,7 @@ const CorporateInvestee = () => {
                       }}
                     />
                     <div>
-                      <input
+                      {/* <input
                         required
                         type="text"
                         onFocus={(e) => {
@@ -666,7 +727,26 @@ const CorporateInvestee = () => {
                           }));
                         }}
                         max={new Date().toISOString().split("T")[0]}
-                      />
+                      /> */}
+                      {mounted && (
+                        <DatePicker
+                          selected={formData.issue_date}
+                          onChange={(date) => {
+                            setErrorMsg("");
+                            setFormData((prev) => ({
+                              ...prev,
+                              issue_date: date,
+                            }));
+                          }}
+                          dateFormat="yyyy-MM-dd"
+                          maxDate={new Date()}
+                          showYearDropdown
+                          scrollableYearDropdown
+                          placeholderText="Issue Date"
+                          className="px-3 outline-none border h-[50px] w-full border-custom-primary bg-[#fff]"
+                          required
+                        />
+                      )}
                       {!isValidDate(formData.issue_date) &&
                         formData.issue_date && (
                           <p className="text-xs sm:text-sm text-[coral]">
@@ -676,7 +756,7 @@ const CorporateInvestee = () => {
                         )}
                     </div>
                     <div>
-                      <input
+                      {/* <input
                         required
                         type="text"
                         onFocus={(e) => {
@@ -701,7 +781,25 @@ const CorporateInvestee = () => {
                             expiry_date: e.target.value,
                           }));
                         }}
-                      />
+                      /> */}
+                      {mounted && (
+                        <DatePicker
+                          selected={formData.expiry_date}
+                          onChange={(date) => {
+                            setErrorMsg("");
+                            setFormData((prev) => ({
+                              ...prev,
+                              expiry_date: date,
+                            }));
+                          }}
+                          dateFormat="yyyy-MM-dd"
+                          showYearDropdown
+                          scrollableYearDropdown
+                          placeholderText="Expiry Date"
+                          className="px-3 outline-none border h-[50px] w-full border-custom-primary bg-[#fff]"
+                          required
+                        />
+                      )}
                       {!isValidDate(formData.expiry_date, true) &&
                         formData.expiry_date && (
                           <p className="text-xs sm:text-sm text-[coral]">

@@ -7,6 +7,7 @@ import {
   shariaAdvisers,
   teamMembers,
 } from "../datas/MembersData";
+import { FaWhatsapp } from "react-icons/fa";
 
 export const MembersContext = createContext();
 
@@ -18,27 +19,28 @@ const MyApp = ({ Component, pageProps }) => {
       <Component {...pageProps} />
 
       {/* WhatsApp Chat Button Script */}
-      <Script id="whatsapp" type="text/javascript">
-        {`
-          (function() {
-            var whatsappLink = 'https://wa.me/2349164441444?text=Hello%2C%20I%20would%20like%20to%20ask%20some%20questions.';
-            var chatButton = document.createElement("a");
-            chatButton.href = whatsappLink;
-            chatButton.target = "_blank";
-            chatButton.style.position = "fixed";
-            chatButton.style.bottom = "20px";
-            chatButton.style.right = "20px";
-            chatButton.style.background = "#25D366";
-            chatButton.style.color = "#fff";
-            chatButton.style.padding = "10px 20px";
-            chatButton.style.borderRadius = "50px";
-            chatButton.style.fontSize = "16px";
-            chatButton.style.textDecoration = "none";
-            chatButton.innerText = "Chat on WhatsApp";
-            document.body.appendChild(chatButton);
-          })();
-        `}
-      </Script>
+      <a
+        href="https://wa.me/2349164441444?text=Hello%2C%20I%20would%20like%20to%20ask%20some%20questions."
+        target="_blank"
+        rel="noopener noreferrer"
+        style={{
+          position: "fixed",
+          bottom: "20px",
+          right: "20px",
+          background: "#25D366",
+          color: "#fff",
+          padding: "12px",
+          borderRadius: "50%",
+          fontSize: "28px",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          boxShadow: "0 2px 8px rgba(0,0,0,0.15)",
+          zIndex: 9999,
+        }}
+      >
+        <FaWhatsapp size={20} />
+      </a>
     </MembersContext.Provider>
   );
 };

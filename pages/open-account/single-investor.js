@@ -722,7 +722,9 @@ const SingleInvestor = () => {
                       name="kin_address"
                       placeholder="Home Address"
                       value={formData.kin_address}
-                      onChange={(e) => handleFreeTextInputChange(e, "kin_address")}
+                      onChange={(e) =>
+                        handleFreeTextInputChange(e, "kin_address")
+                      }
                     />
                     <CustomTextInput
                       required
@@ -841,7 +843,8 @@ const SingleInvestor = () => {
                     Document Upload
                   </h3>
                   <div className="grid md:grid-cols-2 gap-8 mt-10">
-                    <div>
+                  {/* Means of Identification */}
+                    {/* <div>
                       <CustomSelectInput
                         required
                         idRef={idRef}
@@ -886,8 +889,72 @@ const SingleInvestor = () => {
                       <p className="text-xs text-gray-500 mt-1">
                         Accepted formats: JPG, PNG (Max 2MB)
                       </p>
+                    </div> */}
+                    <div className="flex gap-4 items-center">
+                      <div className="flex-1">
+                        <CustomSelectInput
+                          required
+                          name="means_of_identification"
+                          options={[
+                            "Means of Identification",
+                            "International Passport",
+                            "NIN",
+                          ]}
+                          value={formData.means_of_identification}
+                          onChange={(e) => {
+                            setErrorMsg("");
+                            setFormData((prev) => ({
+                              ...prev,
+                              means_of_identification: e.target.value,
+                            }));
+                            setSelectedId(null);
+                          }}
+                        />
+                        {formData.means_of_identification &&
+                          formData.means_of_identification !==
+                            "Means of Identification" && (
+                            <div className="mt-3">
+                              <label
+                                htmlFor="means_of_id"
+                                className="block cursor-pointer"
+                              >
+                                <div className="bg-[#fff] flex justify-between items-center border border-custom-primary text-left w-full p-3">
+                                  Upload {formData.means_of_identification}
+                                  {selectedId && (
+                                    <span className="ml-2 italic text-xs sm:text-sm">
+                                      ({selectedId.name.slice(0, 15)})
+                                    </span>
+                                  )}
+                                </div>
+                              </label>
+                              <input
+                                required
+                                className="hidden"
+                                type="file"
+                                accept="image/png, image/jpg, image/jpeg"
+                                id="means_of_id"
+                                name="means_of_identification_image"
+                                onChange={(e) => {
+                                  const file = e.target.files[0];
+                                  if (file && file.size > 2 * 1024 * 1024) {
+                                    setErrorMsg(
+                                      "Means of Identification file size must not exceed 2MB"
+                                    );
+                                    setSelectedId(null);
+                                  } else {
+                                    setSelectedId(file);
+                                    setErrorMsg("");
+                                  }
+                                }}
+                              />
+                              <p className="text-xs text-gray-500 mt-1">
+                                Accepted formats: JPG, PNG (Max 2MB)
+                              </p>
+                            </div>
+                          )}
+                      </div>
                     </div>
-                    <div>
+                    {/* <div>
                       <CustomSelectInput
                         required
                         proofRef={proofRef}
@@ -933,6 +1000,70 @@ const SingleInvestor = () => {
                       <p className="text-xs text-gray-500 mt-1">
                         Accepted formats: JPG, PNG (Max 2MB)
                       </p>
+                    </div> */}
+                    <div className="flex gap-4 items-center">
+                      <div className="flex-1">
+                        <CustomSelectInput
+                          required
+                          name="proof_of_address"
+                          options={[
+                            "Proof of Address",
+                            "Utility Bill",
+                            "Tenancy Agreement",
+                          ]}
+                          value={formData.proof_of_address}
+                          onChange={(e) => {
+                            setErrorMsg("");
+                            setFormData((prev) => ({
+                              ...prev,
+                              proof_of_address: e.target.value,
+                            }));
+                            setSelectedProof(null);
+                          }}
+                        />
+
+                        {formData.proof_of_address &&
+                          formData.proof_of_address !== "Proof of Address" && (
+                            <div className="mt-8">
+                              <label
+                                htmlFor="proof_of_address_file"
+                                className="block cursor-pointer"
+                              >
+                                <div className="bg-[#fff] flex items-center border border-custom-primary text-left px-4 py-2 rounded hover:bg-gray-50 transition">
+                                  Upload {formData.proof_of_address}
+                                  {selectedProof && (
+                                    <span className="ml-2 italic text-xs sm:text-sm">
+                                      ({selectedProof.name.slice(0, 15)})
+                                    </span>
+                                  )}
+                                </div>
+                              </label>
+                              <input
+                                required
+                                className="hidden"
+                                type="file"
+                                accept="image/png, image/jpg, image/jpeg"
+                                id="proof_of_address_file"
+                                name="proof_of_address_image"
+                                onChange={(e) => {
+                                  const file = e.target.files[0];
+                                  if (file && file.size > 2 * 1024 * 1024) {
+                                    setErrorMsg(
+                                      "Proof of Address file size must not exceed 2MB"
+                                    );
+                                    setSelectedProof(null);
+                                  } else {
+                                    setSelectedProof(file);
+                                    setErrorMsg("");
+                                  }
+                                }}
+                              />
+                              <p className="text-xs text-gray-500 mt-1">
+                                Accepted formats: JPG, PNG (Max 2MB)
+                              </p>
+                            </div>
+                          )}
+                      </div>
                     </div>
                     <div>
                       <input
@@ -1085,12 +1216,12 @@ const CustomTextInput = ({
 const CustomSelectInput = ({
   options,
   name,
-  idRef,
-  proofRef,
-  selectedId,
-  setSelectedId,
-  selectedProof,
-  setSelectedProof,
+  // idRef,
+  // proofRef,
+  // selectedId,
+  // setSelectedId,
+  // selectedProof,
+  // setSelectedProof,
   required,
   onChange,
   value,
@@ -1101,17 +1232,18 @@ const CustomSelectInput = ({
         required={required}
         name={name}
         value={value}
-        onChange={(e) => {
-          if (name === "proof_of_address") {
-            setSelectedProof(e.target.value);
-            proofRef.current.click();
-          } else if (name === "means_of_identification") {
-            setSelectedId(e.target.value);
-            idRef.current.click();
-          } else {
-            onChange(e);
-          }
-        }}
+        onChange={onChange}
+        // onChange={(e) => {
+        //   if (name === "proof_of_address") {
+        //     setSelectedProof(e.target.value);
+        //     proofRef.current.click();
+        //   } else if (name === "means_of_identification") {
+        //     setSelectedId(e.target.value);
+        //     idRef.current.click();
+        //   } else {
+        //     onChange(e);
+        //   }
+        // }}
         className="outline-none border h-[50px] border-custom-primary placeholder:font-semibold bg-[#fff] p-3 w-full capitalize"
       >
         {options.map((item, idx) => (
@@ -1120,13 +1252,13 @@ const CustomSelectInput = ({
           </option>
         ))}
       </select>
-      <p className="italic text-xs sm:text-sm absolute top-1/2 -translate-y-1/2 right-5 sm:right-10">
+      {/* <p className="italic text-xs sm:text-sm absolute top-1/2 -translate-y-1/2 right-5 sm:right-10">
         {name === "proof_of_address" && selectedProof?.name
           ? `${selectedProof.name.slice(0, 15)}`
           : name === "means_of_identification" && selectedId?.name
           ? `${selectedId.name.slice(0, 15)}`
           : null}
-      </p>
+      </p> */}
     </div>
   );
 };

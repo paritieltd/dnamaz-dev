@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect } from "react";
 import Navbar from "../../components/Navbar/Navbar";
-import { MdKeyboardBackspace } from "react-icons/md";
+import { MdCalendarToday, MdCloudUpload, MdKeyboardBackspace } from "react-icons/md";
 import Footer from "../../components/Footer/Footer";
 import { useRouter } from "next/router";
 import {
@@ -78,8 +78,58 @@ const HalalFixed = () => {
   const isPhoneValid = (phone) =>
     /^\d{11}$/.test(phone.replace(/[\s\-\+]/g, ""));
 
-  // const isAnyValueEmpty = (values) =>
-  //   values.some((value) => value.trim() === "");
+  function isStepValid() {
+    if (activeStep === 1) {
+      const requiredFields = [
+        formData.title,
+        formData.surname,
+        formData.other_names,
+        formData.amount_paid,
+        formData.date_of_registration,
+        formData.postal_address,
+        formData.city,
+        formData.state,
+        formData.number_of_units,
+        formData.land_phone_number,
+        formData.mobile_phone_number,
+        formData.email_address,
+      ];
+      return (
+        !isAnyValueEmpty(requiredFields) &&
+        validMail(formData.email_address) &&
+        isPhoneValid(formData.land_phone_number) &&
+        isPhoneValid(formData.mobile_phone_number) &&
+        isValidDate(formData.date_of_registration)
+      );
+    }
+    if (activeStep === 2) {
+      const requiredFields = [formData.title_joint, formData.surname_joint];
+      return !isAnyValueEmpty(requiredFields);
+    }
+    if (activeStep === 3) {
+      const requiredFields = [formData.payment_method, formData.other_names_2];
+      return !isAnyValueEmpty(requiredFields);
+    }
+    if (activeStep === 4) {
+      const requiredFields = [
+        formData.bank_name,
+        formData.branch_name,
+        formData.bvn,
+        formData.tin,
+        formData.account_number,
+      ];
+      return (
+        !isAnyValueEmpty(requiredFields) &&
+        isBvnValid() &&
+        isTinValid() &&
+        isAccountNumberValid()
+      );
+    }
+    if (activeStep === 5) {
+      return !!selectedSignature;
+    }
+    return false;
+  }
 
   const isAnyValueEmpty = (array) => {
     return array.some((value) => {
@@ -587,23 +637,29 @@ const HalalFixed = () => {
                       max={new Date().toISOString().split("T")[0]}
                     /> */}
                     {mounted && (
-                      <DatePicker
-                        selected={formData.date_of_registration}
-                        onChange={(date) => {
-                          setErrorMsg("");
-                          setFormData((prev) => ({
-                            ...prev,
-                            date_of_registration: date,
-                          }));
-                        }}
-                        dateFormat="yyyy-MM-dd"
-                        maxDate={new Date()}
-                        showYearDropdown
-                        scrollableYearDropdown
-                        placeholderText="Date of Registration"
-                        className="px-3 outline-none border h-[50px] w-full border-custom-primary bg-[#fff]"
-                        required
-                      />
+                      <div className="relative">
+                        <DatePicker
+                          selected={formData.date_of_registration}
+                          onChange={(date) => {
+                            setErrorMsg("");
+                            setFormData((prev) => ({
+                              ...prev,
+                              date_of_registration: date,
+                            }));
+                          }}
+                          dateFormat="yyyy-MM-dd"
+                          maxDate={new Date()}
+                          showYearDropdown
+                          scrollableYearDropdown
+                          placeholderText="Date of Registration"
+                          className="px-3 outline-none border h-[50px] w-full border-custom-primary bg-[#fff] pr-10"
+                          required
+                        />
+                        <MdCalendarToday
+                          className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 pointer-events-none"
+                          size={22}
+                        />
+                      </div>
                     )}
                     {!isValidDate(formData.date_of_registration) &&
                       formData.date_of_registration && (
@@ -631,7 +687,8 @@ const HalalFixed = () => {
                       }
                     }}
                     type="button"
-                    className="text-white px-20 h-[50px] bg-custom-primary w-fit font-medium"
+                    className="text-white px-20 h-[50px] bg-custom-primary w-fit font-medium disabled:opacity-50"
+                    disabled={!isStepValid()}
                   >
                     Next
                   </button>
@@ -674,7 +731,8 @@ const HalalFixed = () => {
                       }
                     }}
                     type="button"
-                    className="text-white px-20 h-[50px] bg-custom-primary w-fit font-medium"
+                    className="text-white px-20 h-[50px] bg-custom-primary w-fit font-medium disabled:opacity-50"
+                    disabled={!isStepValid()}
                   >
                     Next
                   </button>
@@ -717,7 +775,8 @@ const HalalFixed = () => {
                       }
                     }}
                     type="button"
-                    className="text-white px-20 h-[50px] bg-custom-primary w-fit font-medium"
+                    className="text-white px-20 h-[50px] bg-custom-primary w-fit font-medium disabled:opacity-50"
+                    disabled={!isStepValid()}
                   >
                     Next
                   </button>
@@ -808,7 +867,8 @@ const HalalFixed = () => {
                       }
                     }}
                     type="button"
-                    className="text-white px-20 h-[50px] bg-custom-primary w-fit font-medium col-start-1 col-end-3"
+                    className="text-white px-20 h-[50px] bg-custom-primary w-fit font-medium col-start-1 col-end-3 disabled:opacity-50"
+                    disabled={!isStepValid()}
                   >
                     Next
                   </button>
@@ -843,10 +903,13 @@ const HalalFixed = () => {
                         }
                       }}
                     />
-                    <label htmlFor="signature">
+                    <label
+                      htmlFor="signature"
+                      className="relative mt-3 cursor-pointer"
+                    >
                       <div
                         role="button"
-                        className="bg-[#fff] flex justify-between items-center border border-custom-primary text-left w-full p-3"
+                        className="bg-[#fff] flex justify-between items-center border border-custom-primary text-left w-full p-3 pr-12"
                       >
                         Signature or Thumbprint Upload
                         {selectedSignature && (
@@ -857,6 +920,11 @@ const HalalFixed = () => {
                           </span>
                         )}
                       </div>
+                      {/* Upload icon */}
+                      <MdCloudUpload
+                        className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none"
+                        size={22}
+                      />
                     </label>
                     <p className="text-xs text-gray-500 mt-1">
                       Accepted formats: JPG, PNG (Max 2MB)

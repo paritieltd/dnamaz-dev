@@ -1,5 +1,9 @@
 import React, { useRef, useState, useEffect } from "react";
-import { MdKeyboardBackspace } from "react-icons/md";
+import {
+  MdCalendarToday,
+  MdCloudUpload,
+  MdKeyboardBackspace,
+} from "react-icons/md";
 import Footer from "../../components/Footer/Footer";
 import Navbar from "../../components/Navbar/Navbar";
 import { useRouter } from "next/router";
@@ -107,11 +111,81 @@ const SingleInvestee = () => {
     return /^\d{11}$/.test(phone.replace(/[\s\-\+]/g, ""));
   }
 
-  // function isValidDate(dateString) {
-  //   if (!dateString) return false;
-  //   const date = new Date(dateString);
-  //   return !isNaN(date.getTime()) && date <= new Date();
-  // }
+  function isStepValid() {
+    if (activeStep === 1) {
+      const requiredFields = [
+        formData.first_name,
+        formData.last_name,
+        formData.other_name,
+        formData.dob,
+        formData.email,
+        formData.gender,
+        formData.bvn,
+        formData.phone,
+        formData.mothers_maiden_name,
+        formData.occupation,
+      ];
+      return (
+        !isAnyValueEmpty(requiredFields) &&
+        validMail(formData.email) &&
+        isBvnValid() &&
+        isPhoneValid(formData.phone) &&
+        isValidDate(formData.dob) 
+        // (formData.employment_status !== "Employed" ||
+        //   formData.name_of_employer.trim())
+      );
+    }
+    if (activeStep === 2) {
+      const requiredFields = [
+        formData.kin_first_name,
+        formData.kin_other_name,
+        formData.kin_last_name,
+        formData.kin_email,
+        formData.kin_relationship,
+        formData.kin_address,
+        formData.kin_occupation,
+        formData.kin_phone,
+      ];
+      return (
+        !isAnyValueEmpty(requiredFields) &&
+        validMail(formData.kin_email) &&
+        isPhoneValid(formData.kin_phone)
+      );
+    }
+    if (activeStep === 3) {
+      const requiredFields = [
+        formData.address,
+        formData.street,
+        formData.city,
+        formData.state,
+        formData.country,
+      ];
+      return !isAnyValueEmpty(requiredFields);
+    }
+    if (activeStep === 4) {
+      const maxFileSize = 2 * 1024 * 1024;
+      return (
+        selectedId &&
+        selectedId.size <= maxFileSize &&
+        selectedProof &&
+        selectedProof.size <= maxFileSize &&
+        selectedSignature &&
+        selectedSignature.size <= maxFileSize
+      );
+    }
+    if (activeStep === 5) {
+      const requiredFields = [
+        formData.time_frame,
+        formData.specify,
+        formData.amount,
+      ];
+      return (
+        !isAnyValueEmpty(requiredFields) &&
+        /^₦[\d,]+(\.\d{2})?$/.test(formData.amount)
+      );
+    }
+    return false;
+  }
 
   function isValidDate(date) {
     if (!date) return false;
@@ -349,9 +423,9 @@ const SingleInvestee = () => {
     formDataToSubmit.append("created", new Date().toLocaleDateString("en-GB"));
     formDataToSubmit.append("form_category", "Single Investee");
 
-    for (let [key, value] of formDataToSubmit.entries()) {
-      console.log(`${key}:`, value);
-    }
+    // for (let [key, value] of formDataToSubmit.entries()) {
+    //   console.log(`${key}:`, value);
+    // }
 
     const sheetMonkeyUrl =
       process.env.NEXT_PUBLIC_SHEET_MONKEY_SINGLE_INVESTEE_URL;
@@ -367,7 +441,7 @@ const SingleInvestee = () => {
 
     try {
       setSubmissionStatus("submitting");
-      // console.log("Sending request to Sheet Monkey");
+      console.log("Sending request to Sheet Monkey");
       const response = await fetch(sheetMonkeyUrl, {
         method: "POST",
         body: formDataToSubmit,
@@ -386,7 +460,7 @@ const SingleInvestee = () => {
     } catch (error) {
       setSubmissionStatus("error");
       setErrorMsg(`Failed to submit the form: ${error.message}`);
-      console.error("Submission error:", error.message);
+      // console.error("Submission error:", error.message);
     }
   };
 
@@ -555,24 +629,30 @@ const SingleInvestee = () => {
                     </div> */}
 
                     {mounted && (
-                      <DatePicker
-                        selected={formData.dob}
-                        onChange={(date) => {
-                          setErrorMsg("");
-                          setFormData((prev) => ({
-                            ...prev,
-                            dob: date,
-                          }));
-                        }}
-                        dateFormat="yyyy-MM-dd"
-                        maxDate={new Date()}
-                        showYearDropdown
-                        scrollableYearDropdown
-                        yearDropdownItemNumber={100}
-                        placeholderText="Date of Birth"
-                        className="px-3 outline-none border h-[50px] w-full border-custom-primary bg-[#fff]"
-                        required
-                      />
+                      <div className="relative">
+                        <DatePicker
+                          selected={formData.dob}
+                          onChange={(date) => {
+                            setErrorMsg("");
+                            setFormData((prev) => ({
+                              ...prev,
+                              dob: date,
+                            }));
+                          }}
+                          dateFormat="yyyy-MM-dd"
+                          maxDate={new Date()}
+                          showYearDropdown
+                          scrollableYearDropdown
+                          yearDropdownItemNumber={100}
+                          placeholderText="Date of Birth"
+                          className="px-3 outline-none border h-[50px] w-full border-custom-primary bg-[#fff] pr-10"
+                          required
+                        />
+                        <MdCalendarToday
+                          className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 pointer-events-none"
+                          size={22}
+                        />
+                      </div>
                     )}
                     {!isValidDate(formData.dob) && formData.dob && (
                       <p className="text-xs sm:text-sm text-[coral]">
@@ -709,7 +789,8 @@ const SingleInvestee = () => {
                         }
                       }}
                       type="button"
-                      className="text-white px-20 h-[50px] bg-custom-primary w-fit font-medium"
+                      className="text-white px-20 h-[50px] bg-custom-primary w-fit font-medium disabled:opacity-50"
+                      disabled={!isStepValid()}
                     >
                       Next
                     </button>
@@ -830,7 +911,8 @@ const SingleInvestee = () => {
                         }
                       }}
                       type="button"
-                      className="text-white px-20 h-[50px] bg-custom-primary w-fit font-medium"
+                      className="text-white px-20 h-[50px] bg-custom-primary w-fit font-medium disabled:opacity-50"
+                      disabled={!isStepValid()}
                     >
                       Next
                     </button>
@@ -902,7 +984,8 @@ const SingleInvestee = () => {
                         }
                       }}
                       type="button"
-                      className="text-white px-20 h-[50px] bg-custom-primary w-fit font-medium"
+                      className="text-white px-20 h-[50px] bg-custom-primary w-fit font-medium disabled:opacity-50"
+                      disabled={!isStepValid()}
                     >
                       Next
                     </button>
@@ -940,12 +1023,12 @@ const SingleInvestee = () => {
                       {formData.means_of_identification &&
                         formData.means_of_identification !==
                           "Means of Identification" && (
-                          <div className="mt-3">
+                          <div className="mt-3 relative">
                             <label
                               htmlFor="means_of_id"
                               className="block cursor-pointer"
                             >
-                              <div className="bg-[#fff] flex justify-between items-center border border-custom-primary text-left w-full p-3">
+                              <div className="bg-[#fff] flex justify-between items-center border border-custom-primary text-left w-full p-3 pr-12">
                                 Upload {formData.means_of_identification}
                                 {selectedId && (
                                   <span className="ml-2 italic text-xs sm:text-sm">
@@ -953,6 +1036,11 @@ const SingleInvestee = () => {
                                   </span>
                                 )}
                               </div>
+                              {/* Upload icon */}
+                              <MdCloudUpload
+                                className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none"
+                                size={22}
+                              />
                             </label>
                             <input
                               required
@@ -1002,12 +1090,12 @@ const SingleInvestee = () => {
                       />
                       {formData.proof_of_address &&
                         formData.proof_of_address !== "Proof of Address" && (
-                          <div className="mt-3">
+                          <div className="mt-3 relative">
                             <label
                               htmlFor="proof_of_address_file"
                               className="block cursor-pointer"
                             >
-                              <div className="bg-[#fff] flex justify-between items-center border border-custom-primary text-left w-full p-3">
+                              <div className="bg-[#fff] flex justify-between items-center border border-custom-primary text-left w-full p-3 pr-12">
                                 Upload {formData.proof_of_address}
                                 {selectedProof && (
                                   <span className="ml-2 italic text-xs sm:text-sm">
@@ -1015,6 +1103,11 @@ const SingleInvestee = () => {
                                   </span>
                                 )}
                               </div>
+                              {/* Upload icon */}
+                              <MdCloudUpload
+                                className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none"
+                                size={22}
+                              />
                             </label>
                             <input
                               required
@@ -1158,10 +1251,13 @@ const SingleInvestee = () => {
                           }
                         }}
                       />
-                      <label htmlFor="signature">
+                      <label
+                        htmlFor="signature"
+                        className="relative cursor-pointer mt-3"
+                      >
                         <div
                           role="button"
-                          className="bg-[#fff] flex justify-between items-center border border-custom-primary text-left w-full p-3"
+                          className="bg-[#fff] flex justify-between items-center border border-custom-primary text-left w-full p-3 pr-12"
                         >
                           Signature Upload
                           {selectedSignature && (
@@ -1171,6 +1267,11 @@ const SingleInvestee = () => {
                             )})`}</span>
                           )}
                         </div>
+                        {/* Upload icon */}
+                        <MdCloudUpload
+                          className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none"
+                          size={22}
+                        />
                       </label>
                       <p className="text-xs text-gray-500 mt-1">
                         Accepted formats: JPG, PNG (Max 2MB)
@@ -1184,7 +1285,8 @@ const SingleInvestee = () => {
                         }
                       }}
                       type="button"
-                      className="text-white px-20 h-[50px] bg-custom-primary w-fit font-medium"
+                      className="text-white px-20 h-[50px] bg-custom-primary w-fit font-medium disabled:opacity-50"
+                      disabled={!isStepValid()}
                     >
                       Next
                     </button>

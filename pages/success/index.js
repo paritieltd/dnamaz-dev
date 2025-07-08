@@ -21,8 +21,8 @@ const Success = () => {
         <Subscribe />
         <Footer />
       </div>
-      <div className="fixed z-[1000] top-0 left-0 flex justify-center items-end sm:items-center w-screen h-screen bg-custom-primary bg-opacity-50">
-        <div className="bg-white py-10 w-full sm:w-[500px] sm:h-[500px] flex items-center">
+      <div className="fixed z-[1000] top-0 left-0 flex justify-center w-screen h-screen bg-custom-primary bg-opacity-50">
+        <div className="relative mt-20 sm:mt-32 bg-white p-5 w-full sm:w-[500px] sm:h-[400px] flex items-center">
           <div
             onClick={() => router.replace("/")}
             className="close-btn cursor-pointer"
@@ -32,15 +32,15 @@ const Success = () => {
           <div className="w-4/5 mx-auto flex items-center justify-center flex-col">
             <div>
               <img
-                className="w-20"
+                className="w-10 mb-6"
                 src="/images/successful.png"
                 alt="success"
               />
             </div>
-            <p className=" text-2xl lg:text-3xl py-8 font-bold">
+            <p className=" text-xl lg:text-2xl text-center mb-4 font-bold">
               Submitted successfully
             </p>
-            <p className="text-lg pb-6 font-normal tracking-wider text-center max-w-[600px]">
+            <p className="text-[14px] pb-6 font-normal tracking-wider text-center max-w-[600px]">
               We are glad to inform you that your form has been successfully
               submitted to our database and that we will reach out to you in due
               course.

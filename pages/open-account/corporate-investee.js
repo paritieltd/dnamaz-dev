@@ -1,5 +1,9 @@
 import React, { useRef, useState, useEffect } from "react";
-import { MdKeyboardBackspace } from "react-icons/md";
+import {
+  MdCalendarToday,
+  MdCloudUpload,
+  MdKeyboardBackspace,
+} from "react-icons/md";
 import Footer from "../../components/Footer/Footer";
 import Navbar from "../../components/Navbar/Navbar";
 import { useRouter } from "next/router";
@@ -87,14 +91,66 @@ const CorporateInvestee = () => {
     return /^\d{11}$/.test(formData.bvn);
   }
 
-  // function isValidDate(dateString, isExpiry = false) {
-  //   if (!dateString) return false;
-  //   const date = new Date(dateString);
-  //   if (isExpiry) {
-  //     return !isNaN(date.getTime());
-  //   }
-  //   return !isNaN(date.getTime()) && date <= new Date();
-  // }
+  function isStepValid() {
+    if (activeStep === 1) {
+      const requiredFields = [
+        formData.company_name,
+        formData.date_of_incorporation,
+        formData.biz_nature,
+        formData.company_email,
+        formData.rc,
+        formData.company_phone,
+        formData.company_address,
+        formData.postal_code,
+        formData.bvn,
+      ];
+      return (
+        !isAnyValueEmpty(requiredFields) &&
+        validMail(formData.company_email) &&
+        isPhoneValid(formData.company_phone) &&
+        isBvnValid() &&
+        isValidDate(formData.date_of_incorporation)
+      );
+    }
+    if (activeStep === 2) {
+      const requiredFields = [
+        formData.contact_person,
+        formData.designation,
+        formData.valid_id,
+        formData.id_no,
+        formData.issue_date,
+        formData.expiry_date,
+      ];
+      return (
+        !isAnyValueEmpty(requiredFields) &&
+        isValidDate(formData.issue_date) &&
+        isValidDate(formData.expiry_date, true)
+      );
+    }
+    if (activeStep === 3) {
+      const maxFileSize = 2 * 1024 * 1024;
+      return (
+        selectedId &&
+        selectedId.size <= maxFileSize &&
+        selectedProof &&
+        selectedProof.size <= maxFileSize &&
+        selectedSignature &&
+        selectedSignature.size <= maxFileSize
+      );
+    }
+    if (activeStep === 4) {
+      const requiredFields = [
+        formData.time_frame,
+        formData.specify,
+        formData.amount,
+      ];
+      return (
+        !isAnyValueEmpty(requiredFields) &&
+        /^₦[\d,]+(\.\d{2})?$/.test(formData.amount)
+      );
+    }
+    return false;
+  }
 
   function isValidDate(date, isExpiry = false) {
     if (!date) return false;
@@ -192,6 +248,10 @@ const CorporateInvestee = () => {
       }
       if (!isBvnValid()) {
         setErrorMsg("Note: BVN must be exactly 11 digits");
+        return false;
+      }
+      if (!/^\d{6,}$/.test(formData.postal_code)) {
+        setErrorMsg("Postal code must be at least 6 digits");
         return false;
       }
       if (!isValidDate(formData.date_of_incorporation)) {
@@ -330,9 +390,9 @@ const CorporateInvestee = () => {
         : ""
     );
 
-    for (let [key, value] of formDataToSubmit.entries()) {
-      console.log(`${key}:`, value);
-    }
+    // for (let [key, value] of formDataToSubmit.entries()) {
+    //   console.log(`${key}:`, value);
+    // }
 
     const sheetMonkeyUrl =
       process.env.NEXT_PUBLIC_SHEET_MONKEY_CORPORATE_INVESTEE_URL;
@@ -342,7 +402,7 @@ const CorporateInvestee = () => {
       setErrorMsg(
         "Sheet Monkey URL is not configured. Please contact support."
       );
-      console.error("Error: Sheet Monkey URL is undefined");
+      // console.error("Error: Sheet Monkey URL is undefined");
       return;
     }
 
@@ -367,7 +427,7 @@ const CorporateInvestee = () => {
     } catch (error) {
       setSubmissionStatus("error");
       setErrorMsg("Failed to submit the form. Please try again later.");
-      console.error("Submission error:", error.message);
+      // console.error("Submission error:", error.message);
     }
   };
 
@@ -502,23 +562,29 @@ const CorporateInvestee = () => {
                         max={new Date().toISOString().split("T")[0]}
                       /> */}
                       {mounted && (
-                        <DatePicker
-                          selected={formData.date_of_incorporation}
-                          onChange={(date) => {
-                            setErrorMsg("");
-                            setFormData((prev) => ({
-                              ...prev,
-                              date_of_incorporation: date,
-                            }));
-                          }}
-                          dateFormat="yyyy-MM-dd"
-                          maxDate={new Date()}
-                          showYearDropdown
-                          scrollableYearDropdown
-                          placeholderText="Date of Incorporation"
-                          className="px-3 outline-none border h-[50px] w-full border-custom-primary bg-[#fff]"
-                          required
-                        />
+                        <div className="relative">
+                          <DatePicker
+                            selected={formData.date_of_incorporation}
+                            onChange={(date) => {
+                              setErrorMsg("");
+                              setFormData((prev) => ({
+                                ...prev,
+                                date_of_incorporation: date,
+                              }));
+                            }}
+                            dateFormat="yyyy-MM-dd"
+                            maxDate={new Date()}
+                            showYearDropdown
+                            scrollableYearDropdown
+                            placeholderText="Date of Incorporation"
+                            className="px-3 outline-none border h-[50px] w-full border-custom-primary bg-[#fff] pr-10"
+                            required
+                          />
+                          <MdCalendarToday
+                            className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 pointer-events-none"
+                            size={22}
+                          />
+                        </div>
                       )}
                       {!isValidDate(formData.date_of_incorporation) &&
                         formData.date_of_incorporation && (
@@ -636,7 +702,8 @@ const CorporateInvestee = () => {
                         }
                       }}
                       type="button"
-                      className="text-white px-20 h-[50px] bg-custom-primary w-fit font-medium"
+                      className="text-white px-20 h-[50px] bg-custom-primary w-fit font-medium disabled:opacity-50"
+                      disabled={!isStepValid()}
                     >
                       Next
                     </button>
@@ -672,11 +739,19 @@ const CorporateInvestee = () => {
                       value={formData.designation}
                       onChange={(e) => handleTextInputChange(e, "designation")}
                     />
-                    <CustomTextInput
+                    <CustomSelectInput
                       required
-                      id="valid_id"
+                      // id="valid_id"
                       name="valid_id"
-                      placeholder="Valid ID"
+                      // placeholder="Valid ID"
+                      options={[
+                        "Select Valid ID",
+                        "National ID Card",
+                        "NIN",
+                        "Driver's License",
+                        "Voter's Card",
+                        "International Passport",
+                      ]}
                       value={formData.valid_id}
                       onChange={(e) => {
                         setErrorMsg("");
@@ -729,23 +804,29 @@ const CorporateInvestee = () => {
                         max={new Date().toISOString().split("T")[0]}
                       /> */}
                       {mounted && (
-                        <DatePicker
-                          selected={formData.issue_date}
-                          onChange={(date) => {
-                            setErrorMsg("");
-                            setFormData((prev) => ({
-                              ...prev,
-                              issue_date: date,
-                            }));
-                          }}
-                          dateFormat="yyyy-MM-dd"
-                          maxDate={new Date()}
-                          showYearDropdown
-                          scrollableYearDropdown
-                          placeholderText="Issue Date"
-                          className="px-3 outline-none border h-[50px] w-full border-custom-primary bg-[#fff]"
-                          required
-                        />
+                        <div className="relative">
+                          <DatePicker
+                            selected={formData.issue_date}
+                            onChange={(date) => {
+                              setErrorMsg("");
+                              setFormData((prev) => ({
+                                ...prev,
+                                issue_date: date,
+                              }));
+                            }}
+                            dateFormat="yyyy-MM-dd"
+                            maxDate={new Date()}
+                            showYearDropdown
+                            scrollableYearDropdown
+                            placeholderText="Issue Date"
+                            className="px-3 outline-none border h-[50px] w-full border-custom-primary bg-[#fff] pr-10"
+                            required
+                          />
+                          <MdCalendarToday
+                            className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 pointer-events-none"
+                            size={22}
+                          />
+                        </div>
                       )}
                       {!isValidDate(formData.issue_date) &&
                         formData.issue_date && (
@@ -783,22 +864,28 @@ const CorporateInvestee = () => {
                         }}
                       /> */}
                       {mounted && (
-                        <DatePicker
-                          selected={formData.expiry_date}
-                          onChange={(date) => {
-                            setErrorMsg("");
-                            setFormData((prev) => ({
-                              ...prev,
-                              expiry_date: date,
-                            }));
-                          }}
-                          dateFormat="yyyy-MM-dd"
-                          showYearDropdown
-                          scrollableYearDropdown
-                          placeholderText="Expiry Date"
-                          className="px-3 outline-none border h-[50px] w-full border-custom-primary bg-[#fff]"
-                          required
-                        />
+                        <div className="relative">
+                          <DatePicker
+                            selected={formData.expiry_date}
+                            onChange={(date) => {
+                              setErrorMsg("");
+                              setFormData((prev) => ({
+                                ...prev,
+                                expiry_date: date,
+                              }));
+                            }}
+                            dateFormat="yyyy-MM-dd"
+                            showYearDropdown
+                            scrollableYearDropdown
+                            placeholderText="Expiry Date"
+                            className="px-3 outline-none border h-[50px] w-full border-custom-primary bg-[#fff] pr-10"
+                            required
+                          />
+                          <MdCalendarToday
+                            className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 pointer-events-none"
+                            size={22}
+                          />
+                        </div>
                       )}
                       {!isValidDate(formData.expiry_date, true) &&
                         formData.expiry_date && (
@@ -815,7 +902,8 @@ const CorporateInvestee = () => {
                         }
                       }}
                       type="button"
-                      className="text-white px-20 h-[50px] bg-custom-primary w-fit font-medium"
+                      className="text-white px-20 h-[50px] bg-custom-primary w-fit font-medium disabled:opacity-50"
+                      disabled={!isStepValid()}
                     >
                       Next
                     </button>
@@ -856,12 +944,12 @@ const CorporateInvestee = () => {
                       {formData.means_of_identification &&
                         formData.means_of_identification !==
                           "Means of Identification" && (
-                          <div className="mt-3">
+                          <div className="mt-3 relative">
                             <label
                               htmlFor="means_of_id"
                               className="block cursor-pointer"
                             >
-                              <div className="bg-[#fff] flex justify-between items-center border border-custom-primary text-left w-full p-3">
+                              <div className="bg-[#fff] flex justify-between items-center border border-custom-primary text-left w-full p-3 pr-12">
                                 Upload {formData.means_of_identification}
                                 {selectedId && (
                                   <span className="ml-2 italic text-xs sm:text-sm">
@@ -869,6 +957,11 @@ const CorporateInvestee = () => {
                                   </span>
                                 )}
                               </div>
+                              {/* Upload icon */}
+                              <MdCloudUpload
+                                className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none"
+                                size={22}
+                              />
                             </label>
                             <input
                               required
@@ -918,12 +1011,12 @@ const CorporateInvestee = () => {
                       />
                       {formData.proof_of_address &&
                         formData.proof_of_address !== "Proof of Address" && (
-                          <div className="mt-3">
+                          <div className="mt-3 relative">
                             <label
                               htmlFor="proof_of_address_file"
                               className="block cursor-pointer"
                             >
-                              <div className="bg-[#fff] flex justify-between items-center border border-custom-primary text-left w-full p-3">
+                              <div className="bg-[#fff] flex justify-between items-center border border-custom-primary text-left w-full p-3 pr-12">
                                 Upload {formData.proof_of_address}
                                 {selectedProof && (
                                   <span className="ml-2 italic text-xs sm:text-sm">
@@ -931,6 +1024,11 @@ const CorporateInvestee = () => {
                                   </span>
                                 )}
                               </div>
+                              {/* Upload icon */}
+                              <MdCloudUpload
+                                className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none"
+                                size={22}
+                              />
                             </label>
                             <input
                               required
@@ -1073,10 +1171,13 @@ const CorporateInvestee = () => {
                           }
                         }}
                       />
-                      <label htmlFor="signature">
+                      <label
+                        htmlFor="signature"
+                        className="relative cursor-pointer mt-3"
+                      >
                         <div
                           role="button"
-                          className="bg-[#fff] flex justify-between items-center border border-custom-primary text-left w-full p-3"
+                          className="bg-[#fff] flex justify-between items-center border border-custom-primary text-left w-full p-3 pr-12"
                         >
                           Signature Upload
                           {selectedSignature && (
@@ -1086,6 +1187,11 @@ const CorporateInvestee = () => {
                             )})`}</span>
                           )}
                         </div>
+                        {/* Upload icon */}
+                        <MdCloudUpload
+                          className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none"
+                          size={22}
+                        />
                       </label>
                       <p className="text-xs text-gray-500 mt-1">
                         Accepted formats: JPG, PNG (Max 2MB)
@@ -1099,7 +1205,8 @@ const CorporateInvestee = () => {
                         }
                       }}
                       type="button"
-                      className="text-white px-20 h-[50px] bg-custom-primary w-fit font-medium"
+                      className="text-white px-20 h-[50px] bg-custom-primary w-fit font-medium disabled:opacity-50"
+                      disabled={!isStepValid()}
                     >
                       Next
                     </button>

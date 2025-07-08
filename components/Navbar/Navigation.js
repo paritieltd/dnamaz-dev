@@ -307,7 +307,7 @@ const Navigation = () => {
           {productDropdown && <Dropdown menuItems={ProductMenuItems} />}
         </li>
             <li className="flex w-full">
-              <Link href="/contact">
+              <Link href="/contact" passHref>
                 <Button text="Talk to US" />
               </Link>
             </li>

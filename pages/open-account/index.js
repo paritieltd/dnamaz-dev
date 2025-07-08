@@ -49,9 +49,9 @@ const OpenAccount = () => {
         <input type="hidden" id="dnamazCapital"/>
         <section id="dnamazCapital" className=" w-[70%] text-center mx-auto lg:py-[10rem] ">
           <h4 className="lg:text-[36px] max-sm:text-[20px] text-center my-5 mb-10 font-bold text-custom-primary">D'Namaz Capital Halal Fixed Income Fund</h4>
-          <div className=" grid grid-cols-2 gap-4 max-sm:grid-cols-1 max-sm:gap-4 lg:w-[90%] lg:mx-auto items-center justify-between">
+          <div className=" flex flex-col sm:flex-row flex-wrap justify-center gap-4">
           <button
-          className="hover:bg-custom-primary hover:text-white transition-all duration-500 text-custom-primary font-semibold border border-custom-primary h-16 w-full sm:w-[unset] sm:px-20 "
+          className="hover:bg-custom-primary hover:text-white transition-all duration-500 text-custom-primary font-semibold border border-custom-primary h-16 w-full sm:w-auto min-w-[180px] px-4 sm:px-8 "
           onClick={() => {
             router.push("open-account/halal-fixed")
             // console.log("hey");
@@ -59,7 +59,7 @@ const OpenAccount = () => {
           >Apply Here Online</button> 
           {/* <p>or</p> */}
           <button 
-          className="hover:bg-custom-primary hover:text-white transition-all duration-500 text-custom-primary font-semibold border border-custom-primary h-16 w-full sm:w-[unset] sm:px-20 "
+          className="hover:bg-custom-primary hover:text-white transition-all duration-500 text-custom-primary font-semibold border border-custom-primary h-16 w-full sm:w-auto min-w-[180px] px-4 sm:px-8 "
           onClick={() => {
             router.push("open-account/downloadreupload")
             // console.log("hey");
@@ -112,14 +112,14 @@ const OpenAccount = () => {
                 router.push("open-account/single-investor")
                 // console.log("hey");
               }}
-              className="hover:bg-custom-primary hover:text-white transition-all duration-500 text-custom-primary font-semibold border border-custom-primary h-16 w-full sm:w-[unset] sm:px-20 "
+              className="hover:bg-custom-primary hover:text-white transition-all duration-500 text-custom-primary font-semibold border border-custom-primary h-16 min-w-[150px] px-4 sm:px-8 "
             >
               Single Investor
             </button>
             <button
               // disabled
               onClick={() => router.push("open-account/corporate-investor")}
-              className="hover:bg-custom-primary hover:text-white transition-all duration-500 text-custom-primary font-semibold border border-custom-primary h-16 w-full sm:w-[unset] sm:px-20 "
+              className="hover:bg-custom-primary hover:text-white transition-all duration-500 text-custom-primary font-semibold border border-custom-primary h-16 min-w-[150px] px-4 sm:px-8 "
             >
               Corporate Investor
             </button>
@@ -128,14 +128,14 @@ const OpenAccount = () => {
             <button
               // disabled
               onClick={() => router.push("open-account/single-investee")}
-              className="hover:bg-custom-primary hover:text-white transition-all duration-500 text-custom-primary font-semibold border border-custom-primary h-16 w-full sm:w-[unset] sm:px-20 "
+              className="hover:bg-custom-primary hover:text-white transition-all duration-500 text-custom-primary font-semibold border border-custom-primary h-16 min-w-[150px] px-4 sm:px-8 "
             >
               Single Investee
             </button>
             <button
               // disabled
               onClick={() => router.push("open-account/corporate-investee")}
-              className="hover:bg-custom-primary hover:text-white transition-all duration-500 text-custom-primary font-semibold border border-custom-primary h-16 w-full sm:w-[unset] sm:px-20 "
+              className="hover:bg-custom-primary hover:text-white transition-all duration-500 text-custom-primary font-semibold border border-custom-primary h-16 min-w-[150px] px-4 sm:px-8 "
             >
               Corporate Investee
             </button>
